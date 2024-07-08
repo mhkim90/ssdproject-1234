@@ -22,9 +22,10 @@ class ReadCommandFixture : public ::testing::Test {
 public:
 	SSDMock ssdMock;
 	ReadCommand command{ ssdMock };
-	CommandArgs args;
+	CommandArgs normalArgs, abnormalArgs;
 
-	const int TEST_LBA = 99;
+	const int Success_LBA = 99;
+	const int Fail_LBA = 101;
 	const string TEST_DATA = "0x12345678";
 	const string strHelp = "\
 		LBA에 적힌 값을 읽어 화면에 출력한다.\n \
@@ -37,20 +38,25 @@ private:
 
 protected:
 	void SetUp() override {
-		args = { TEST_LBA, "" };
+		normalArgs = { Success_LBA, "" };
+		abnormalArgs = { Fail_LBA, "" };
 	}
 };
 
-TEST_F(ReadCommandFixture, Shell_Read_Execute) {
-	EXPECT_CALL(ssdMock, read(TEST_LBA))
+TEST_F(ReadCommandFixture, Shell_Read_Execute_Success) {
+	EXPECT_CALL(ssdMock, read(Success_LBA))
 		.Times(1)
 		.WillRepeatedly(Return(TEST_DATA));
 
-	command.excute(args);
-	EXPECT_EQ(args.value, TEST_DATA);
+	command.excute(normalArgs);
+	EXPECT_EQ(normalArgs.value, TEST_DATA);
+}
+
+TEST_F(ReadCommandFixture, Shell_Read_Execute_Fail) {
+
+	EXPECT_THROW(command.excute(abnormalArgs), std::invalid_argument);
 }
 
 TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {
-	cout << command.getHelp();
 	EXPECT_EQ(strHelp, command.getHelp());
 }
