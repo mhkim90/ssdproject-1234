@@ -14,6 +14,6 @@ struct CommandArgs {
 
 interface ICommand {
 	virtual void injectSSD(ISSD& ssd) = 0;
-	virtual void excute(CommandArgs& args) = 0;
+	virtual void execute(CommandArgs& args) = 0;
 	virtual const string& getHelp() = 0;
 };
