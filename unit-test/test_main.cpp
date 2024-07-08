@@ -18,8 +18,7 @@ protected:
 	}
 };
 
-
-TEST_F(SSDFixture, TestName) {
+TEST_F(SSDFixture, basicWriteTest) {
 	EXPECT_EQ(1, 1);
 	EXPECT_TRUE(true);
 }
