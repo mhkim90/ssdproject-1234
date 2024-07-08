@@ -48,12 +48,12 @@ TEST_F(ReadCommandFixture, Shell_Read_Execute_Success) {
 		.Times(1)
 		.WillRepeatedly(Return(TEST_DATA));
 
-	command.excute(normalArgs);
+	command.execute(normalArgs);
 	EXPECT_EQ(normalArgs.value, TEST_DATA);
 }
 
 TEST_F(ReadCommandFixture, Shell_Read_Execute_Fail) {
-	EXPECT_THROW(command.excute(abnormalArgs), std::invalid_argument);
+	EXPECT_THROW(command.execute(abnormalArgs), std::invalid_argument);
 }
 
 TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {

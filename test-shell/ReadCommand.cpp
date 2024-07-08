@@ -11,7 +11,7 @@ public:
 		this->ssd = &ssd;
 	}
 
-	void excute(CommandArgs& args) override
+	void execute(CommandArgs& args) override
 	{
 		validationCheck(args.addr);
 		args.value = ssd->read(args.addr);
