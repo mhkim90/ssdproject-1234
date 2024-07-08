@@ -99,6 +99,7 @@
     <ClCompile Include="..\packages\gmock.1.11.0\lib\native\src\gtest\src\gtest_main.cc" />
     <ClCompile Include="test_main.cpp" />
     <ClCompile Include="test_shell.cpp" />
+    <ClCompile Include="test_shell_read.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
