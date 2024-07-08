@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <unordered_map>
 using namespace std;
 using namespace testing;
 
@@ -61,4 +62,16 @@ TEST_F(FactoryFixture, TestInjectedWriteCommand) {
 		.Times(1);
 	ICommand* command = factory.getCommand("write");
 	command->execute(dummy_args);
+}
+
+TEST_F(FactoryFixture, TestgetAllCommands) {
+	EXPECT_CALL(readCMD, execute(_))
+		.Times(0);
+	EXPECT_CALL(writeCMD, execute(_))
+		.Times(1);
+	unordered_map<string, ICommand*> commands = factory.getAllCommand();
+	EXPECT_EQ(commands.size(), 2);
+	for (auto& command : commands) {
+		command->execute(dummy_args);
+	}
 }
