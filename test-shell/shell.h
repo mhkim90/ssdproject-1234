@@ -3,6 +3,10 @@
 #define interface struct
 #endif
 
-interface ISheel {
+interface IShell {
+
+};
+
+class Shell : public IShell {
 
 };

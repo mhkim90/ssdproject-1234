@@ -29,7 +29,7 @@
     <ClInclude Include="commnad_factory.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="sheel.h">
+    <ClInclude Include="shell.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
