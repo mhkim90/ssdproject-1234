@@ -1,3 +1,4 @@
+#pragma once
 #include "CmdHandler.h"
 
 class ReadCmdHandler : public CmdHandler
@@ -8,6 +9,10 @@ class ReadCmdHandler : public CmdHandler
 	}
 	void fileClose() override
 	{
+	}
+	bool sanityCheckPassed(int lba, string data) override
+	{
+		return true;
 	}
 	void execute(int lba, string data) override
 	{

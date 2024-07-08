@@ -1,3 +1,4 @@
+#pragma once
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -29,9 +30,6 @@ public:
 	void execute(int lba, string data) override
 	{
 		fileOpen();
-
-		if (lba >= 100 || lba < 0)
-			return;
 
 		buf[lba] = data;
 
@@ -67,6 +65,10 @@ public:
 		cout << "File Close\n";
 	}
 
+	bool sanityCheckPassed(int lba, string data) override
+	{
+		return (0 <= lba && lba < 100);
+	}
 private:
 	ofstream writeFile;
 	string buf[100];
