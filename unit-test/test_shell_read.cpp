@@ -2,7 +2,7 @@
 #include "gmock/gmock.h"
 
 #include "../test-shell/ssd.h"
-#include "../test-shell/sheel.h"
+#include "../test-shell/shell.h"
 #include "../test-shell/ReadCommand.cpp"
 
 #include <iostream>
