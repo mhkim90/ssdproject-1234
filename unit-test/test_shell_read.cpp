@@ -20,21 +20,26 @@ public:
 
 class ReadCommandFixture : public ::testing::Test {
 public:
-	
+	SSDMock ssdMock;
+	ReadCommand command{ ssdMock };
+	CommandArgs args;
+
+	const int TEST_LBA = 99;
+	const string TEST_DATA = "0x12345678";
+
 private:
 
 protected:
 	void SetUp() override {
-
+		args = { TEST_LBA, "" };
 	}
 };
 
 TEST_F(ReadCommandFixture, Shell_Read_Execute) {
-	SSDMock ssdMock;
-	ReadCommand command{ ssdMock };
-	CommandArgs args = { 3, "" };
-
-	EXPECT_CALL(ssdMock, read(3));
+	EXPECT_CALL(ssdMock, read(TEST_LBA))
+		.Times(1)
+		.WillRepeatedly(Return(TEST_DATA));
 
 	command.excute(args);
+	EXPECT_EQ(args.value, TEST_DATA);
 }
