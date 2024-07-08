@@ -56,14 +56,43 @@ TEST_F(WriteCommandFixture, WriteTestNormal) {
 	// assert
 }
 
+TEST_F(WriteCommandFixture, WriteTestInvalidAddress) {
+
+	// arrange
+	CommandArgs arg = { 105, "0xAAAABBBB" };
+
+	// act
+	EXPECT_THROW(wrCmd.excute(arg), invalid_argument);
+
+	// assert
+}
+
+TEST_F(WriteCommandFixture, WriteTestInvalidValue) {
+
+	// arrange
+	CommandArgs arg = { 99, "0xAAAABBB*" };
+
+	// act
+	EXPECT_THROW(wrCmd.excute(arg), invalid_argument);
+
+	// assert
+}
+
 TEST_F(WriteCommandFixture, WriteTestHelp) {
 
 	// arrange
+	string expectedString = "\
+		LBA에 입력 Value 를 기록한다.\n\
+		[Example] write [LBA] [Value]\n\
+		[Parameters]\n\
+		- LBA: 기록할 영역 주소값 (0~99)\n\
+		- Value: 기록할 값\n\
+		[Returns] 없음\n";
 
 	// act
 
 	// assert
-	EXPECT_EQ("write [LBA] [data]", wrCmd.getHelp());
+	EXPECT_EQ(expectedString, wrCmd.getHelp());
 }
 
 TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
@@ -80,11 +109,30 @@ TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
 	// assert
 }
 
-TEST_F(FullwriteCommandFixture, FullwriteTestHelp) {
+TEST_F(FullwriteCommandFixture, FullwriteTestInvalidValue) {
+
 	// arrange
+	CommandArgs arg = { 99, "0xAAA*BBBC" };
+
+	// act
+	EXPECT_THROW(fwrCmd.excute(arg), invalid_argument);
+
+	// assert
+}
+
+TEST_F(FullwriteCommandFixture, FullwriteTestHelp) {
+
+	// arrange
+	string expectedString ="\
+		LBA 0 번부터 99 번 까지 Write를 수행한다.\n\
+		[Example] fullwrite [any] [Value]\n\
+		[Parameters]\n\
+		- any\n\
+		- Value: 기록할 값\n\
+		[Returns] 없음\n";
 
 	// act
 
 	// assert
-	EXPECT_EQ("fullwrite [LBA] [data]", fwrCmd.getHelp());
+	EXPECT_EQ(expectedString, fwrCmd.getHelp());
 }
