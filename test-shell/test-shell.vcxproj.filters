@@ -19,9 +19,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="shell.cpp">
-		<Filter>소스 파일</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ReadCommand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="WriteCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="command_factory.cpp">
