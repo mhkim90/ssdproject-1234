@@ -50,7 +50,7 @@ TEST_F(WriteCommandFixture, WriteTestNormal) {
 
 	// act
 	EXPECT_CALL(ssdMock, write(5, "0xAAAABBBB"));
-	wrCmd.excute(arg);
+	wrCmd.execute(arg);
 
 	// assert
 }
@@ -61,7 +61,7 @@ TEST_F(WriteCommandFixture, WriteTestInvalidAddress) {
 	CommandArgs arg = { 105, "0xAAAABBBB" };
 
 	// act
-	EXPECT_THROW(wrCmd.excute(arg), std::invalid_argument);
+	EXPECT_THROW(wrCmd.execute(arg), std::invalid_argument);
 
 	// assert
 }
@@ -72,7 +72,7 @@ TEST_F(WriteCommandFixture, WriteTestInvalidValue) {
 	CommandArgs arg = { 99, "0xAAAABBB*" };
 
 	// act
-	EXPECT_THROW(wrCmd.excute(arg), std::invalid_argument);
+	EXPECT_THROW(wrCmd.execute(arg), std::invalid_argument);
 
 	// assert
 }
@@ -103,7 +103,7 @@ TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
 	EXPECT_CALL(ssdMock, write(_, "0xAAAABBBB"))
 		.Times(100);
 
-	fwrCmd.excute(arg);
+	fwrCmd.execute(arg);
 
 	// assert
 }
@@ -114,7 +114,7 @@ TEST_F(FullwriteCommandFixture, FullwriteTestInvalidValue) {
 	CommandArgs arg = { 99, "0xAAA*BBBC" };
 
 	// act
-	EXPECT_THROW(fwrCmd.excute(arg), std::invalid_argument);
+	EXPECT_THROW(fwrCmd.execute(arg), std::invalid_argument);
 
 	// assert
 }

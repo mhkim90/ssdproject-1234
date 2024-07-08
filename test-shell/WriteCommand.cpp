@@ -12,7 +12,7 @@ public:
 		this->ssd = ssd;
 	}
 
-	void excute(CommandArgs& args) override
+	void execute(CommandArgs& args) override
 	{
 		checkAddressValidity(args.addr);
 		checkValueValidity(args.value);
@@ -62,7 +62,7 @@ public:
 		this->ssd = ssd;
 	}
 
-	void excute(CommandArgs& args) override
+	void execute(CommandArgs& args) override
 	{
 		checkValueValidity(args.value);
 
