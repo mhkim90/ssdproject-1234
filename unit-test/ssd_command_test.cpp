@@ -11,6 +11,16 @@
 using namespace std;
 using namespace testing;
 
+class MockWriteCmdHandler : public WriteCmdHandler {
+public:
+	MOCK_METHOD(void, execute, (int lba, string data), (override));
+};
+
+class MockReadCmdHandler : public ReadCmdHandler {
+public:
+	MOCK_METHOD(void, execute, (int lba, string data), (override));
+};
+
 class SSD_IO_Fixture : public testing::Test {
 public:
 
@@ -20,11 +30,6 @@ protected:
 	void SetUp() override {
 
 	}
-};
-
-class MockWriteCmdHandler : public WriteCmdHandler {
-public:
-	MOCK_METHOD(void, execute, (int lba, string data), (override));
 };
 
 TEST(SSDCommandTest, WriteTest) {
@@ -40,6 +45,19 @@ TEST(SSDCommandTest, MockWriteTest) {
 		.Times(1);
 
 	write.execute(80, "0x1000");
+}
+
+TEST(SSDCommandTest, ReadTest) {
+	WriteCmdHandler write;
+	ReadCmdHandler read;
+
+	write.execute(80, "0x1000");
+	read.execute(80,"");
+}
+
+TEST(SSDCommandTest, MockReadTest) {
+	NiceMock<ReadCmdHandler> read;
+	read.execute(80,"");
 }
 
 // basic write test
