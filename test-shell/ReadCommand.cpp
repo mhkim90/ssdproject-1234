@@ -16,9 +16,10 @@ public:
 
 	const string& getHelp() override
 	{
-		return "";
+		return strHelp;
 	}
 
 private:
 	ISSD* ssd;
+	const string strHelp = "TEST";
 };

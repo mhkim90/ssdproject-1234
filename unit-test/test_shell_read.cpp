@@ -43,3 +43,7 @@ TEST_F(ReadCommandFixture, Shell_Read_Execute) {
 	command.excute(args);
 	EXPECT_EQ(args.value, TEST_DATA);
 }
+
+TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {
+	EXPECT_EQ("TEST", command.getHelp());
+}
