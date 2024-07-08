@@ -9,7 +9,8 @@ Shell::Shell(ICommandFactory& factory)
 }
 
 inline string Shell::waitForCommand() {
-	char rst[50] = { 0 };
-	cin.getline(rst, 50);
+	static constexpr int BUFFER_LENGTH = 50;
+	char rst[BUFFER_LENGTH] = { 0 };
+	cin.getline(rst, BUFFER_LENGTH);
 	return rst;
 }
