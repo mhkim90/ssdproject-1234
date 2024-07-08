@@ -26,6 +26,12 @@ public:
 
 	const int TEST_LBA = 99;
 	const string TEST_DATA = "0x12345678";
+	const string strHelp = "\
+		LBA에 적힌 값을 읽어 화면에 출력한다.\n \
+		[Example] read LBA\n \
+		[Parameters]\n \
+		- LBA: 값을 읽을 LBA 영역 값 (0~99)\n \
+		[Returns] LBA에서 읽은 데이터를 출력합니다.\n";
 
 private:
 
@@ -45,5 +51,6 @@ TEST_F(ReadCommandFixture, Shell_Read_Execute) {
 }
 
 TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {
-	EXPECT_EQ("TEST", command.getHelp());
+	cout << command.getHelp();
+	EXPECT_EQ(strHelp, command.getHelp());
 }
