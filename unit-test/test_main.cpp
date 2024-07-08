@@ -3,10 +3,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 using namespace std;
 using namespace testing;
 
-class SSDFixture : public ::testing::Test {
+class SSDFixture : public testing::Test {
 public:
 
 private:
