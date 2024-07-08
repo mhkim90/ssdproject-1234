@@ -19,6 +19,7 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="shell.cpp">
+    <ClCompile Include="command_factory.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,10 +27,10 @@
     <ClInclude Include="ssd.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="command.h">
+    <ClInclude Include="command_factory.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="commnad_factory.h">
+    <ClInclude Include="command.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="shell.h">

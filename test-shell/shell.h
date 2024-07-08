@@ -4,7 +4,7 @@
 #endif
 
 #include "command.h"
-#include "commnad_factory.h"
+#include "command_factory.h"
 
 interface IShell {
 

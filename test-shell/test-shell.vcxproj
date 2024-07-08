@@ -127,12 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="command_factory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="command.h" />
-    <ClInclude Include="commnad_factory.h" />
+    <ClInclude Include="command_factory.h" />
     <ClInclude Include="shell.h" />
     <ClInclude Include="ssd.h" />
   </ItemGroup>
