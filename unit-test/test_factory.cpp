@@ -38,6 +38,10 @@ protected:
 		factory.injectCommand("read", &readCMD);;
 		factory.injectCommand("write", &writeCMD);;
 	}
+
+	void TearDown() override {
+
+	}
 };
 
 

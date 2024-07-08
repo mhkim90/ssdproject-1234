@@ -8,6 +8,8 @@ using namespace testing;
 
 class MockCommandFactory : public ICommandFactory {
 public:
+	MOCK_METHOD(void, injectCommand, (const std::string&, ICommand*), (override));
+	MOCK_METHOD(ICommand*, getCommand, (const std::string&), (override));
 };
 
 class ShellFixutre : public Test {
