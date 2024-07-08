@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9e80140b-4bfd-49eb-96d5-a697780ce1fe}</ProjectGuid>
+    <ProjectGuid>{b6e9c635-9bc6-470c-81bc-a377fd2259d1}</ProjectGuid>
     <RootNamespace>ssd</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -127,7 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ReadCmdHandler.cpp" />
+    <ClCompile Include="CmdHandler.h" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SSDManager.cpp" />
+    <ClCompile Include="WriteCmdHandler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
