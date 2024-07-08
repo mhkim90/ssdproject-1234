@@ -1,8 +1,4 @@
 #pragma once
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
 #include "CmdHandler.h"
 
 using namespace std; 
@@ -50,6 +46,8 @@ public:
 		while (getline(in, tmp, '\n')){
 			buf[i++] = tmp;
 		}
+
+		in.close();
 	}
 
 	void fileClose() override
@@ -63,6 +61,8 @@ public:
 		}
 
 		cout << "File Close\n";
+
+		writeFile.close();
 	}
 
 	bool sanityCheckPassed(int lba, string data) override
