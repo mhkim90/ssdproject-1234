@@ -5,7 +5,6 @@
 #include <vector>
 #include "../test-shell/WriteCommand.cpp"
 
-using namespace std;
 using namespace testing;
 
 class SsdMock : public ISSD {
@@ -62,7 +61,7 @@ TEST_F(WriteCommandFixture, WriteTestInvalidAddress) {
 	CommandArgs arg = { 105, "0xAAAABBBB" };
 
 	// act
-	EXPECT_THROW(wrCmd.excute(arg), invalid_argument);
+	EXPECT_THROW(wrCmd.excute(arg), std::invalid_argument);
 
 	// assert
 }
@@ -73,7 +72,7 @@ TEST_F(WriteCommandFixture, WriteTestInvalidValue) {
 	CommandArgs arg = { 99, "0xAAAABBB*" };
 
 	// act
-	EXPECT_THROW(wrCmd.excute(arg), invalid_argument);
+	EXPECT_THROW(wrCmd.excute(arg), std::invalid_argument);
 
 	// assert
 }
@@ -115,7 +114,7 @@ TEST_F(FullwriteCommandFixture, FullwriteTestInvalidValue) {
 	CommandArgs arg = { 99, "0xAAA*BBBC" };
 
 	// act
-	EXPECT_THROW(fwrCmd.excute(arg), invalid_argument);
+	EXPECT_THROW(fwrCmd.excute(arg), std::invalid_argument);
 
 	// assert
 }

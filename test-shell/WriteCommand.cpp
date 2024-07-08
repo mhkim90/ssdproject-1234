@@ -3,8 +3,6 @@
 #include <regex>
 #include "command.h"
 
-using namespace std;
-
 class WriteCommand : public ICommand {
 public:
 	WriteCommand(ISSD& ssd) : ssd{ ssd } {}
@@ -24,13 +22,13 @@ public:
 
 	const string& getHelp() override
 	{
-		return HELP;
+		return WRITE_HELP;
 	}
 
 private:
 	ISSD& ssd;
 	//const string HELP = "write [LBA] [data]";
-	const string HELP = "\
+	const string WRITE_HELP = "\
 		LBA에 입력 Value 를 기록한다.\n\
 		[Example] write [LBA] [Value]\n\
 		[Parameters]\n\
@@ -43,14 +41,14 @@ private:
 
 	void checkAddressValidity(int addr) {
 		if (addr < START_LBA || addr > END_LBA) {
-			throw invalid_argument("addr is out of range");
+			throw std::invalid_argument("addr is out of range");
 		}
 	}
 	
 	void checkValueValidity(string value) {
 		std::regex reg("0x[0-9A-F]{8}$");
 		if (!regex_match(value, reg))
-			throw invalid_argument("value is not in A~F, 0~9");
+			throw std::invalid_argument("value is not in A~F, 0~9");
 	}
 	
 };
@@ -75,12 +73,12 @@ public:
 
 	const string& getHelp() override
 	{
-		return HELP;
+		return FULLWRITE_HELP;
 	}
 
 private:
 	ISSD& ssd;
-	const string HELP = "\
+	const string FULLWRITE_HELP = "\
 		LBA 0 번부터 99 번 까지 Write를 수행한다.\n\
 		[Example] fullwrite [any] [Value]\n\
 		[Parameters]\n\
@@ -93,13 +91,13 @@ private:
 
 	void checkAddressValidity(int addr) {
 		if (addr < START_LBA || addr > END_LBA) {
-			throw invalid_argument("addr is out of range");
+			throw std::invalid_argument("addr is out of range");
 		}
 	}
 
 	void checkValueValidity(string value) {
 		std::regex reg("0x[0-9A-F]{8}$");
 		if (!regex_match(value, reg))
-			throw invalid_argument("value is not in A~F, 0~9");
+			throw std::invalid_argument("value is not in A~F, 0~9");
 	}
 };
