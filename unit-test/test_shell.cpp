@@ -51,9 +51,20 @@ TEST_F(ShellFixutre, WAIT_FOR_COMMAND_READ_EXIT) {
 	EXPECT_EQ(shell.waitForCommand(), "exit");
 }
 
-
 TEST_F(ShellFixutre, WAIT_FOR_COMMAND_READ_HELP) {
 	inputCommand("help");
 
 	EXPECT_EQ(shell.waitForCommand(), "help");
+}
+
+TEST_F(ShellFixutre, WAIT_FOR_COMMAND_READ_WIRTE) {
+	inputCommand("write 0 0xAAAABBBB");
+
+	EXPECT_EQ(shell.waitForCommand(), "write 0 0xAAAABBBB");
+}
+
+TEST_F(ShellFixutre, WAIT_FOR_COMMAND_READ_READ) {
+	inputCommand("read 0");
+
+	EXPECT_EQ(shell.waitForCommand(), "read 0");
 }

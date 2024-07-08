@@ -9,7 +9,7 @@ Shell::Shell(ICommandFactory& factory)
 }
 
 inline string Shell::waitForCommand() {
-	string inputBuffer;
-	cin >> inputBuffer;
-	return inputBuffer;
+	char rst[50] = { 0 };
+	cin.getline(rst, 50);
+	return rst;
 }
