@@ -53,7 +53,6 @@ TEST_F(ReadCommandFixture, Shell_Read_Execute_Success) {
 }
 
 TEST_F(ReadCommandFixture, Shell_Read_Execute_Fail) {
-
 	EXPECT_THROW(command.excute(abnormalArgs), std::invalid_argument);
 }
 
