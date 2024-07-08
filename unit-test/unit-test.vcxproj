@@ -100,6 +100,7 @@
     <ClCompile Include="test_factory.cpp" />
     <ClCompile Include="test_main.cpp" />
     <ClCompile Include="test_shell.cpp" />
+    <ClCompile Include="test_shell_read.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

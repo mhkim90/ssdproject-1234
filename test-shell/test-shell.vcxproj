@@ -130,6 +130,7 @@
     <ClCompile Include="command_factory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shell.cpp" />
+    <ClCompile Include="ReadCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="command.h" />
