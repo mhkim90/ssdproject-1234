@@ -16,6 +16,7 @@ public:
 	virtual void fileOpen() = 0;
 	virtual void fileClose() = 0;
 	virtual void execute(int lba, string data ="") = 0;
+	virtual bool sanityCheckPassed(int lba, string data) = 0;
 	const string WRITEFILENAME = "nand.txt";
 	const string READFILENAME = "result.txt";
 };
