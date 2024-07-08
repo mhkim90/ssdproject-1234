@@ -1,4 +1,5 @@
 #include "command.h"
+#include <stdexcept>
 
 class ReadCommand : public ICommand {
 public:
@@ -11,6 +12,7 @@ public:
 
 	void excute(CommandArgs& args) override
 	{
+		if (args.addr < 0 || args.addr > 99) throw std::invalid_argument("");
 		args.value = ssd->read(args.addr);
 	}
 
