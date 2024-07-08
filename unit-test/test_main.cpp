@@ -3,10 +3,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 using namespace std;
 using namespace testing;
 
-class SSDFixture : public ::testing::Test {
+class SSDFixture : public testing::Test {
 public:
 
 private:
@@ -17,8 +18,7 @@ protected:
 	}
 };
 
-
-TEST_F(SSDFixture, TestName) {
+TEST_F(SSDFixture, basicWriteTest) {
 	EXPECT_EQ(1, 1);
 	EXPECT_TRUE(true);
 }
