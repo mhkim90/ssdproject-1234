@@ -132,6 +132,7 @@
     <ClCompile Include="Printer.cpp" />
     <ClCompile Include="shell.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
+    <ClCompile Include="TestApp2Command.cpp" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
