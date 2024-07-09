@@ -31,7 +31,7 @@ public:
 
 	void openNand()
 	{
-		// 파일 읽기 준비
+		// ready to file read
 		ifstream readFile(NANDFILE);
 		string tmp;
 

@@ -7,6 +7,7 @@
 #include "../ssd/WriteCmdHandler.cpp"
 #include "../ssd/ReadCmdHandler.cpp"
 #include "../ssd/SSDManager.cpp"
+#include "../ssd/CmdHandlerFactory.cpp"
 
 using namespace std;
 using namespace testing;
@@ -61,67 +62,73 @@ TEST(SSDCommandTest, MockReadTest) {
 }
 
 // basic write test
-TEST_F(SSD_IO_Fixture, basicWriteTest) {
-	SSDManager ssdManager("write");
-	ssdManager.runCommand(0, "0x12");
-	EXPECT_EQ(1, 1);
-	EXPECT_TRUE(true);
+TEST_F(SSD_IO_Fixture, cmdHandlerCreateUsingFactoryOfWriteCmd) {
+	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandler* cmdHandler = factory.createCmdHandler(WRITE_CMD);
+	SSDManager ssdManager(cmdHandler);
+	ssdManager.runCommand(3, "0x12");
 }
 
+
 // basic read test
-TEST_F(SSD_IO_Fixture, basicReadTest) {
-	SSDManager ssdManager("read");
+TEST_F(SSD_IO_Fixture, cmdHandlerCreateUsingFactoryOfReadCmd) {
+	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandler* cmdHandler = factory.createCmdHandler(READ_CMD);
+	SSDManager ssdManager(cmdHandler);
 	ssdManager.runCommand(3);
-	EXPECT_EQ(1, 1);
-	EXPECT_TRUE(true);
 }
 
-// basic read test
+// basic write and read
 TEST_F(SSD_IO_Fixture, basicReadWriteTest) {
-	SSDManager ssdManagerWrite("write");
-	ssdManagerWrite.runCommand(1, "0x1222222");
-	SSDManager ssdManagerRead("read");
-	ssdManagerRead.runCommand(1);
-	EXPECT_EQ(1, 1);
-	EXPECT_TRUE(true);
+	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandler* cmdHandlerForWrite = factory.createCmdHandler(WRITE_CMD);
+	SSDManager ssdManagerForWrite(cmdHandlerForWrite);
+	ssdManagerForWrite.runCommand(1, "0x1222222");
+
+	CmdHandler* cmdHandlerForRead = factory.createCmdHandler(READ_CMD);
+	SSDManager ssdManagerForRead(cmdHandlerForRead);
+	ssdManagerForRead.runCommand(1);
 }
 
 // write test over lba 100 (0~99 is allowed)
 TEST_F(SSD_IO_Fixture, checkWriteLbaRange) {
-	SSDManager ssdManager("write");
+	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandler* cmdHandler = factory.createCmdHandler(WRITE_CMD);
+	SSDManager ssdManager(cmdHandler);
+
 	EXPECT_THROW(ssdManager.runCommand(100, "0x12"), exception);
 }
 
 // read test over lba 100 (0~99 is allowed)
 TEST_F(SSD_IO_Fixture, checkReadLbaRange) {
-	SSDManager ssdManager("read");
+	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandler* cmdHandler = factory.createCmdHandler(READ_CMD);
+	SSDManager ssdManager(cmdHandler);
+
 	EXPECT_THROW(ssdManager.runCommand(100), exception);
 }
 
 // write should send data together
-// TODO : should be implemented in WriteCmdHandler
 TEST_F(SSD_IO_Fixture, wirteShouldSendDataTogether) {
-	SSDManager ssdManager("write");
+	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandler* cmdHandler = factory.createCmdHandler(WRITE_CMD);
+	SSDManager ssdManager(cmdHandler);
+
 	EXPECT_THROW(ssdManager.runCommand(3), exception);
 }
 
 // read shouldn't send data
-// TODO : should be implemented in ReadCmdHandler
 TEST_F(SSD_IO_Fixture, dataShouldNotSendData) {
-	SSDManager ssdManager("read");
+	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandler* cmdHandler = factory.createCmdHandler(READ_CMD);
+	SSDManager ssdManager(cmdHandler);
+
 	EXPECT_THROW(ssdManager.runCommand(3, "0x12"), exception);
 }
 
 // invalid opcode test
 TEST_F(SSD_IO_Fixture, checkInvalidOpcode) {
-	try
-	{
-		SSDManager ssdManager("compare");
-		FAIL();
-	}
-	catch (exception& e)
-	{
-		//cout << e.what() << endl;
-		EXPECT_EQ(string(e.what()), string("invalid opcode !! check code"));
-	}
+	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandler* cmdHandler = factory.createCmdHandler(MAX_NUM_OF_CMD);
+	EXPECT_EQ(cmdHandler, nullptr);
 }
