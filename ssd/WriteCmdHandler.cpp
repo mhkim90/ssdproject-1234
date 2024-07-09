@@ -1,6 +1,6 @@
 #pragma once
 #include "CmdHandler.h"
-
+#include <iostream>
 using namespace std; 
 
 class WriteCmdHandler : public CmdHandler
@@ -8,8 +8,28 @@ class WriteCmdHandler : public CmdHandler
 public:
 	WriteCmdHandler() {
 
+		CmdHandler::setOpcode(CmdOpcode::WRITE_CMD);
+
 		cout << "File Init\n";
 
+		initFile();
+	}
+
+	bool sanityCheckPassed(int lba, string data) override
+	{
+		// lba range check first
+		if (true == CmdHandler::sanityCheckPassed(lba, data))
+		{
+			// then write command should have data as input parameter
+			if (data.size() == 0) return false;
+			
+			return true;
+		}
+	}
+
+	// set file as zero
+	void initFile()
+	{
 		writeFile.open(WRITEFILENAME);
 		string tmp = "0x00000000\n";
 		if (writeFile.is_open())
@@ -65,10 +85,6 @@ public:
 		writeFile.close();
 	}
 
-	bool sanityCheckPassed(int lba, string data) override
-	{
-		return (0 <= lba && lba < 100);
-	}
 private:
 	ofstream writeFile;
 	string buf[100];
