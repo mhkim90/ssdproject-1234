@@ -57,7 +57,7 @@ void Shell::run()
 
 void Shell::help()
 {
-	cout << "< Shell Help >" << endl;
+	cout << "< Help >" << endl;
 	for (auto& cmd : _factory.getAllCommands()) {
 		cout << cmd.first << "\t\t: " << cmd.second->getHelp() << endl;
 	}

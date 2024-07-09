@@ -161,5 +161,5 @@ TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), makeOutputFormat("< Shell Help >\ncommand\t\t: HELP MESSAGE\n"));
+	EXPECT_EQ(getOutput(), makeOutputFormat("< Help >\ncommand\t\t: HELP MESSAGE\n"));
 }
