@@ -108,3 +108,11 @@ TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND) {
 
 	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
 }
+
+TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
+	inputCommand("exit");
+
+	shell.run();
+
+	EXPECT_EQ(getOutput(), "");
+}

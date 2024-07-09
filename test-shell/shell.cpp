@@ -35,6 +35,7 @@ void Shell::run()
 	string commandStr = waitForCommand();
 	try {
 		vector<string> parsed = parsingCommandStr(commandStr);
+		if (parsed.front() == "exit") return;
 	}
 	catch (invalid_argument& ex) {
 		cout << ex.what() << endl;
