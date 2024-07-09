@@ -16,9 +16,11 @@ interface IShell {
 class Shell : public IShell {
 public:
 	Shell(ICommandFactory& factory);
+	
+	void run();
+
 	virtual string waitForCommand();
 	vector<string> parsingCommandStr(const string& str);
-	void run();
 	void help();
 private:
 	ICommandFactory& _factory;
