@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
 
 using namespace std;
 using namespace testing;
@@ -43,6 +42,23 @@ protected:
 	}
 };
 
+class FullReadCommandFixture : public testing::Test {
+public:
+	SSDMock ssdMock;
+	FullReadCommand command{ ssdMock };
+	CommandArgs normalArgs, abnormalArgs;
+
+	const string strHelp = "";
+
+private:
+
+protected:
+	void SetUp() override {
+		normalArgs = {  };
+		abnormalArgs = {  };
+	}
+};
+
 TEST_F(ReadCommandFixture, Shell_Read_Execute_Success) {
 	EXPECT_CALL(ssdMock, read(Success_LBA))
 		.Times(1)
@@ -58,4 +74,14 @@ TEST_F(ReadCommandFixture, Shell_Read_Execute_Fail) {
 
 TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {
 	EXPECT_EQ(strHelp, command.getHelp());
+}
+
+TEST_F(FullReadCommandFixture, Shell_FullRead_Execute_Success) {
+	for (int i = 0; i < 100; i++) {
+		EXPECT_CALL(ssdMock, read(i))
+			.Times(1)
+			.WillOnce(Return("a"));
+	}
+
+	command.execute(normalArgs);
 }

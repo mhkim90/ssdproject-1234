@@ -1,6 +1,6 @@
 #include "command.h"
 #include <stdexcept>
-#include <regex>
+#include <iostream>
 
 class ReadCommand : public ICommand {
 public:
@@ -38,4 +38,32 @@ private:
 			throw std::invalid_argument("잘못된 LBA 값 입니다.");
 		}
 	}
+};
+
+class FullReadCommand : public ICommand {
+public:
+	FullReadCommand(ISSD& ssd) :ssd{ &ssd } {}
+	void injectSSD(ISSD& ssd) override
+	{
+		this->ssd = &ssd;
+	}
+
+	void execute(CommandArgs& args) override
+	{
+		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
+			std::cout << ssd->read(i) << "\n";
+		}
+	}
+
+	const string& getHelp() override
+	{
+		return strHelp;
+	}
+
+private:
+	ISSD* ssd;
+	const int LBA_MIN_VAL = 0;
+	const int LBA_MAX_VAL = 99;
+	const string strHelp = "";
+
 };
