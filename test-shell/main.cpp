@@ -20,7 +20,7 @@ int main() {
 	factory.injectCommand("write", new WriteCommand(*ssd));
 	factory.injectCommand("fullread", new FullReadCommand(*ssd));
 	factory.injectCommand("fullwrite", new FullWriteCommand(*ssd));
-	factory.injectCommand("testapp1", new TestApp1(*ssd,
+	factory.injectCommand("testapp1", new TestApp1Command(*ssd,
 		*fullReadCMD, *fullWriteCMD));
 	factory.injectCommand("testapp2", new TestApp2Command(*ssd));
 

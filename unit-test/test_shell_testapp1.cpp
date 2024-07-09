@@ -24,7 +24,7 @@ public:
 	SSDMock ssdMock;
 	FullReadCommand read{ ssdMock };
 	FullWriteCommand write{ ssdMock };
-	TestApp1 testApp1{ ssdMock, read, write };
+	TestApp1Command testApp1{ ssdMock, read, write };
 
 	const int LBA_MIN_VAL = 0;
 	const int LBA_MAX_VAL = 99;

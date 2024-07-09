@@ -1,9 +1,9 @@
 #include "command.h"
 #include "Printer.cpp"
 
-class TestApp1 : public ICommand {
+class TestApp1Command : public ICommand {
 public:
-	TestApp1(ISSD& ssd, ICommand& read, ICommand& write)
+	TestApp1Command(ISSD& ssd, ICommand& read, ICommand& write)
 		: ssd{ &ssd }, read{ &read }, write{ &write } {}
 	void injectSSD(ISSD& ssd) override
 	{
