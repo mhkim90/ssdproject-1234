@@ -28,12 +28,11 @@ private:
 	ISSD* ssd;
 	const int LBA_MIN_VAL = 0;
 	const int LBA_MAX_VAL = 99;
-	const string strHelp = "\
-		LBA에 적힌 값을 읽어 화면에 출력한다.\n \
-		[Example] read LBA\n \
-		[Parameters]\n \
-		- LBA: 값을 읽을 LBA 영역 값 (0~99)\n \
-		[Returns] LBA에서 읽은 데이터를 출력합니다.\n";
+	const string strHelp = "Reads the value written at LBA and displays it on the screen.\n\
+		[Example] read LBA\n\
+		[Parameters]\n\
+		- LBA: LBA area value to read(0~99)\n\
+		[Returns] Displays the data read from LBA.\n";
 
 	void validationCheck(int addr) {
 		if (addr < LBA_MIN_VAL || addr > LBA_MAX_VAL) {
@@ -67,10 +66,9 @@ private:
 	ISSD* ssd;
 	const int LBA_MIN_VAL = 0;
 	const int LBA_MAX_VAL = 99;
-	const string strHelp = "\
-		LBA 0 번부터 99 번 까지 값을 읽어 화면에 출력한다.\n \
-		[Parameter] None\n \
-		[Example] fullread\n \
-		[Returns] 각 LBA에서 읽은 데이터를 출력합니다.\n";
+	const string strHelp = "Reads and displays values from LBA 0 to 99 on the screen.\n\
+		[Example] fullread\n\
+		[Parameter] None\n\
+		[Returns] Displays the data read from each LBA.\n";
 
 };
