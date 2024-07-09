@@ -21,7 +21,7 @@ public:
 			return commands[command];
 		}
 		else {
-			throw std::invalid_argument("getCommand: cannot find" + command);
+			throw std::invalid_argument("INVALID COMMAND");
 		}
 	}
 
