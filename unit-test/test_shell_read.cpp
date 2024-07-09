@@ -86,9 +86,10 @@ TEST_F(FullReadCommandFixture, Shell_FullRead_Execute_Success) {
 	for (int i = 0; i < 100; i++) {
 		string str = to_string(i);
 		EXPECT_CALL(ssdMock, read(i))
-			.Times(1);
-    expected += str;
-    expected += "\n";
+			.Times(1)
+			.WillOnce(Return(str));
+		expected += str;
+		expected += "\n";
   }
   
 	testing::internal::CaptureStdout();
