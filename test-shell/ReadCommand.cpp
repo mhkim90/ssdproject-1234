@@ -36,7 +36,7 @@ private:
 
 	void validationCheck(int addr) {
 		if (addr < LBA_MIN_VAL || addr > LBA_MAX_VAL) {
-			throw std::invalid_argument("잘못된 LBA 값 입니다.");
+			throw std::invalid_argument("INVALID ARGUMENTS");
 		}
 	}
 };

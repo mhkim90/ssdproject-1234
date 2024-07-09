@@ -3,8 +3,7 @@
 
 class TestApp1 : public ICommand {
 public:
-	TestApp1(ISSD& ssd, ICommand& read, ICommand& write)
-		: ssd{ &ssd }, read{ &read }, write{ &write } {}
+	TestApp1(ISSD& ssd) : ssd{ &ssd } {}
 	void injectSSD(ISSD& ssd) override
 	{
 		this->ssd = &ssd;
@@ -14,7 +13,10 @@ public:
 	{
 		Printer& printer = Printer::getInstance();
 
-		write->execute({ TEST_VAL });
+		for (int addr = LBA_MIN_VAL; addr <= LBA_MAX_VAL; addr++) {
+			ssd->write(addr, TEST_VAL);
+		}
+
 		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
 			string tmp = ssd->read(i);
 			if (tmp != TEST_VAL) {
@@ -32,7 +34,6 @@ public:
 
 private:
 	ISSD* ssd;
-	ICommand *read, *write;
 	const int LBA_MIN_VAL = 0;
 	const int LBA_MAX_VAL = 99;
 	const string TEST_VAL = "0xAAAABBBB";
