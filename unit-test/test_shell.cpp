@@ -69,7 +69,7 @@ protected:
 	}
 
 private:
-	static constexpr char* SHELL_GUIDE = "Shell > ";
+	static constexpr char* SHELL_GUIDE = "SHELL > ";
 
 	istringstream _isstream;
 	ostringstream _osstream;
