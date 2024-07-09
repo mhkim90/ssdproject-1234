@@ -69,6 +69,7 @@ private:
 	const int LBA_MAX_VAL = 99;
 	const string strHelp = "\
 		LBA 0 번부터 99 번 까지 값을 읽어 화면에 출력한다.\n \
+		[Parameter] None\n \
 		[Example] fullread\n \
 		[Returns] 각 LBA에서 읽은 데이터를 출력합니다.\n";
 
