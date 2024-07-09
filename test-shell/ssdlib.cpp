@@ -6,6 +6,10 @@
 
 class SSDLib : public ISSD {
 public:
+	SSDLib() {
+		GetCurrentDirectoryA(256, current_path);
+	}
+
 	SSDLib(const std::string& directory_path)
 		: directory_path { directory_path } {
 		GetCurrentDirectoryA(256, current_path);
