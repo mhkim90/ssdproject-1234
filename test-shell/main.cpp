@@ -1,10 +1,10 @@
+#include "ssdlib.cpp"
 #include "shell.h"
 #include "command_factory.cpp"
 #include "ReadCommand.cpp"
 #include "WriteCommand.cpp"
 #include "TestApp1Command.cpp"
 #include "TestApp2Command.cpp"
-#include "ssdlib.cpp"
 
 int main() {
 	ICommandFactory& factory = CommandFactory::getInstance();
