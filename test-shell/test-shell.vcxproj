@@ -131,6 +131,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shell.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
+    <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="command.h" />
