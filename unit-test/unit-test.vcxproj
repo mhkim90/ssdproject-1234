@@ -102,6 +102,7 @@
     <ClCompile Include="test_main.cpp" />
     <ClCompile Include="test_shell.cpp" />
     <ClCompile Include="test_shell_read.cpp" />
+    <ClCompile Include="test_shell_testapp2.cpp" />
     <ClCompile Include="test_shell_write.cpp" />
   </ItemGroup>
   <ItemGroup>
