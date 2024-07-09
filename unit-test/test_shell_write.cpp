@@ -55,6 +55,20 @@ TEST_F(WriteCommandFixture, WriteTestNormal) {
 	// assert
 }
 
+TEST_F(WriteCommandFixture, WriteTestInvalidArgumentsLength) {
+
+	// arrange
+	vector<string> arg = { };
+
+	// act
+	EXPECT_CALL(ssdMock, write)
+		.Times(0);
+
+	EXPECT_THROW(wrCmd.execute(arg), std::invalid_argument);
+
+	// assert
+}
+
 TEST_F(WriteCommandFixture, WriteTestInvalidAddress) {
 
 	// arrange

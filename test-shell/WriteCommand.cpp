@@ -17,6 +17,8 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		if (args.size() < 2) throw std::invalid_argument("Not enough arguments. Check help.");
+
 		int addr = stoi(args[0]);
 		std::string value = args[1];
 

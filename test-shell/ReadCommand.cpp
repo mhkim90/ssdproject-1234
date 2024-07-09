@@ -13,6 +13,7 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		if (args.size() < 1) throw invalid_argument("Not enough arguments. Check help.");
 		Printer& printer = Printer::getInstance();
 		int addr = stoi(args[0]);
 		validationCheck(addr);
