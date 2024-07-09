@@ -26,12 +26,11 @@ public:
 	const int Success_LBA = 99;
 	const int Fail_LBA = 101;
 	const string TEST_DATA = "0x12345678";
-	const string strHelp = "\
-		LBA에 적힌 값을 읽어 화면에 출력한다.\n \
-		[Example] read LBA\n \
-		[Parameters]\n \
-		- LBA: 값을 읽을 LBA 영역 값 (0~99)\n \
-		[Returns] LBA에서 읽은 데이터를 출력합니다.\n";
+	const string strHelp = "Reads the value written at LBA and displays it on the screen.\n\
+		[Example] read LBA\n\
+		[Parameters]\n\
+		- LBA: LBA area value to read(0~99)\n\
+		[Returns] Displays the data read from LBA.\n";
 
 private:
 
@@ -49,10 +48,12 @@ public:
 	FullReadCommand command{ ssdMock };
 	vector<string> normalArgs, abnormalArgs;
 
-	const string strHelp = "\
-		LBA 0 번부터 99 번 까지 값을 읽어 화면에 출력한다.\n \
-		[Example] fullread\n \
-		[Returns] 각 LBA에서 읽은 데이터를 출력합니다.\n";
+	const int LBA_MIN_VAL = 0;
+	const int LBA_MAX_VAL = 99;
+	const string strHelp = "Reads and displays values from LBA 0 to 99 on the screen.\n\
+		[Example] fullread\n\
+		[Parameter] None\n\
+		[Returns] Displays the data read from each LBA.\n";
 
 private:
 
@@ -83,14 +84,14 @@ TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {
 
 TEST_F(FullReadCommandFixture, Shell_FullRead_Execute_Success) {
 	string expected = "";
-	for (int i = 0; i < 100; i++) {
+	for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
 		string str = to_string(i);
 		EXPECT_CALL(ssdMock, read(i))
 			.Times(1)
 			.WillOnce(Return(str));
 		expected += str;
 		expected += "\n";
-  }
+	}
   
 	testing::internal::CaptureStdout();
 	command.execute(normalArgs);

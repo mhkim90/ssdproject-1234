@@ -17,7 +17,12 @@ public:
 	}
 
 	ICommand* getCommand(const string& command) override {
-		return commands[command];
+		if (commands.count(command) == 1) {
+			return commands[command];
+		}
+		else {
+			throw std::invalid_argument("getCommand: cannot find" + command);
+		}
 	}
 
 	const std::unordered_map<std::string, ICommand*>& getAllCommands() const override {
