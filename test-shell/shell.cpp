@@ -1,7 +1,9 @@
 #include "shell.h"
 #include <iostream>
+#include <sstream>
+#include <stdexcept>
 
-using std::cin;
+using namespace std;
 
 Shell::Shell(ICommandFactory& factory)
 	: _factory { factory }
@@ -13,4 +15,11 @@ inline string Shell::waitForCommand() {
 	char rst[BUFFER_LENGTH] = { 0 };
 	cin.getline(rst, BUFFER_LENGTH);
 	return rst;
+}
+
+vector<string> Shell::parsingCommandStr(const string& str)
+{
+	if (str.empty()) throw invalid_argument("input string empty");
+	vector<string> rst;
+	return vector<string>();
 }

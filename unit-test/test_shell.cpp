@@ -68,3 +68,10 @@ TEST_F(ShellFixutre, WAIT_FOR_COMMAND_READ_READ) {
 
 	EXPECT_EQ(shell.waitForCommand(), "read 0");
 }
+
+TEST_F(ShellFixutre, COMMAND_STR_PARSING_INVALID_ARGUMENT) {
+	inputCommand("");
+
+	string commandStr = shell.waitForCommand();
+	EXPECT_THROW(shell.parsingCommandStr(commandStr), invalid_argument);
+}
