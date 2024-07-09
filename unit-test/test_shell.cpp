@@ -75,3 +75,15 @@ TEST_F(ShellFixutre, COMMAND_STR_PARSING_INVALID_ARGUMENT) {
 	string commandStr = shell.waitForCommand();
 	EXPECT_THROW(shell.parsingCommandStr(commandStr), invalid_argument);
 }
+
+TEST_F(ShellFixutre, COMMAND_STR_PARSING) {
+	inputCommand("write 0  0xAAAABBBB");
+
+	string commandStr = shell.waitForCommand();
+
+	vector<string> expect;
+	expect.push_back("write");
+	expect.push_back("0");
+	expect.push_back("0xAAAABBBB");
+	EXPECT_EQ(shell.parsingCommandStr(commandStr), expect);
+}

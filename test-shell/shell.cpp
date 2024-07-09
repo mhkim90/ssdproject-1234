@@ -21,5 +21,11 @@ vector<string> Shell::parsingCommandStr(const string& str)
 {
 	if (str.empty()) throw invalid_argument("input string empty");
 	vector<string> rst;
-	return vector<string>();
+	istringstream stream{ str };
+	string buffer;
+	while (getline(stream, buffer, ' ')) {
+		if (buffer.empty()) continue;
+		rst.push_back(buffer);
+	}
+	return rst;
 }
