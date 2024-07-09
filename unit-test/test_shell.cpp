@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "../test-shell/shell.cpp"
+#include <unordered_map>
+#include <string>
 
 
 using namespace std;
@@ -8,8 +10,9 @@ using namespace testing;
 
 class MockCommandFactory : public ICommandFactory {
 public:
-	MOCK_METHOD(void, injectCommand, (const std::string&, ICommand*), (override));
-	MOCK_METHOD(ICommand*, getCommand, (const std::string&), (override));
+	MOCK_METHOD(void, injectCommand, (const string&, ICommand*), (override));
+	MOCK_METHOD(ICommand*, getCommand, (const string&), (override));
+	MOCK_METHOD((unordered_map<string,ICommand*>&), getAllCommands, (), (override));
 };
 
 class ShellFixutre : public Test {

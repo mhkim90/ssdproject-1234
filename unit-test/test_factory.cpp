@@ -66,12 +66,12 @@ TEST_F(FactoryFixture, TestInjectedWriteCommand) {
 
 TEST_F(FactoryFixture, TestgetAllCommands) {
 	EXPECT_CALL(readCMD, execute(_))
-		.Times(0);
+		.Times(1);
 	EXPECT_CALL(writeCMD, execute(_))
 		.Times(1);
-	unordered_map<string, ICommand*> commands = factory.getAllCommand();
+	unordered_map<string, ICommand*>& commands = factory.getAllCommands();
 	EXPECT_EQ(commands.size(), 2);
 	for (auto& command : commands) {
-		command->execute(dummy_args);
+		command.second->execute(dummy_args);
 	}
 }

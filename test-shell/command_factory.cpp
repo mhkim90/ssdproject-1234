@@ -20,6 +20,10 @@ public:
 		return commands[command];
 	}
 
+	std::unordered_map<std::string, ICommand*>& getAllCommands() override {
+		return commands;
+	}
+
 private:
 	CommandFactory() {
 		setCommand();
