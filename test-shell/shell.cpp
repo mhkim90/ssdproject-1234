@@ -33,6 +33,7 @@ vector<string> Shell::parsingCommandStr(const string& str)
 void Shell::run()
 {
 	while (true) {
+		cout << "Shell > ";
 		string commandStr = waitForCommand();
 		try {
 			vector<string> parsed = parsingCommandStr(commandStr);

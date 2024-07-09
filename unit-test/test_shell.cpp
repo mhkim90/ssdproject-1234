@@ -118,7 +118,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_EMPTY) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
+	EXPECT_EQ(getOutput(), "Shell > INVALID COMMAND\nShell > ");
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_UNKNOWN) {
@@ -130,7 +130,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_UNKNOWN) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
+	EXPECT_EQ(getOutput(), "Shell > INVALID COMMAND\nShell > ");
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
@@ -138,7 +138,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "");
+	EXPECT_EQ(getOutput(), "Shell > ");
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
@@ -154,5 +154,5 @@ TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "< Shell Help >\ncommand\t\t: HELP MESSAGE\n");
+	EXPECT_EQ(getOutput(), "Shell > < Shell Help >\ncommand\t\t: HELP MESSAGE\nShell > ");
 }
