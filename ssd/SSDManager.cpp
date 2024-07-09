@@ -1,57 +1,20 @@
+#include <string>
+#include "SSDConfig.h"
 #include "CmdHandler.h"
+#include "FileManager.cpp"
 #include "ReadCmdHandler.cpp"
 #include "WriteCmdHandler.cpp"
-#include <string>
-#include <stdexcept>
+#include "Exception.cpp"
 using namespace std;
-
-class InvalidOpcodeException : public exception
-{
-public:
-	char const* what() const override
-	{
-		return "invalid opcode !! check code";
-	}
-};
-
-class LbaRangeOverException : public exception
-{
-public:
-	char const* what() const override
-	{
-		return "lba is invalid !!";
-	}
-};
 
 class SSDManager
 {
 public:
-	SSDManager(string opcode)
+	SSDManager(CmdHandler *cmd) : cmdHandler(cmd)
 	{
-		if (true == IsAvailableOpcode(opcode))
-		{
-			if (opcode == "read") cmdHandler = new ReadCmdHandler();
-			else if (opcode == "write") cmdHandler = new WriteCmdHandler();
-		}
-		else
-		{
-			throw InvalidOpcodeException();
-		}
 	}
-	bool IsAvailableOpcode(string opcode)
-	{
-		return (opcode == "write") || (opcode == "read");
-	}
-	SSDManager(CmdHandler *handler)
-		: cmdHandler(handler)
-	{
-		cmdHandler->fileOpen();
-	}
-	~SSDManager()
-	{
-		cmdHandler->fileClose();
-	}
-	void runCommand(int lba, string data = "0")
+
+	void runCommand(int lba, string data = "")
 	{
 		if (true == cmdHandler->sanityCheckPassed(lba, data))
 		{
@@ -62,6 +25,7 @@ public:
 			throw LbaRangeOverException();
 		}
 	}
+
 private:
 	CmdHandler *cmdHandler;
 };
