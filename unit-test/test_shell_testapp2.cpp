@@ -98,12 +98,11 @@ TEST_F(TestApp2Fixture, TestApp2TestFailure) {
 TEST_F(TestApp2Fixture, TestApp2TestHelp) {
 
 	// arrange
-	string expectedString = "\
-		Test script2 - testapp2. \n\
+	string expectedString = "Test script2 - testapp2. \n\
 		[Example] testapp2\n\
 		[Parameters]\n\
-		- 없음 \n\
-		[Returns] 없음\n";
+		- none \n\
+		[Returns] result SUCCESS/FAIL\n";
 
 	// act
 
