@@ -11,14 +11,12 @@ public:
 		this->ssd = &ssd;
 	}
 
-	void execute(CommandArgs& args) override
+	void execute(const vector<string>& args) override
 	{
-		validationCheck(args.addr);
-
 		Printer& printer = Printer::getInstance();
-		string result = ssd->read(args.addr);
-		args.value = result;
-		printer.print(result);
+		int addr = stoi(args[0]);
+		validationCheck(addr);
+		printer.print(ssd->read(args.addr));
 	}
 
 	const string& getHelp() override
@@ -52,7 +50,7 @@ public:
 		this->ssd = &ssd;
 	}
 
-	void execute(CommandArgs& args) override
+	void execute(const vector<string>& args) override
 	{
 		Printer& printer = Printer::getInstance();
 		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {

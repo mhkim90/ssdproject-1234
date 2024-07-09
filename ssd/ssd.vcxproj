@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{b6e9c635-9bc6-470c-81bc-a377fd2259d1}</ProjectGuid>
+    <ProjectGuid>{9E80140B-4BFD-49EB-96D5-A697780CE1FE}</ProjectGuid>
     <RootNamespace>ssd</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
