@@ -12,12 +12,13 @@ public:
 		this->ssd = ssd;
 	}
 
-	void execute(CommandArgs& args) override
+	void execute(const vector<string>& args) override
 	{
-		checkAddressValidity(args.addr);
-		checkValueValidity(args.value);
+		// TODO: hotfix 반영 부분 수정 필요
+		//checkAddressValidity(args.addr);
+		//checkValueValidity(args.value);
 
-		ssd.write(args.addr, args.value);
+		//ssd.write(args.addr, args.value);
 	}
 
 	const string& getHelp() override
@@ -62,13 +63,14 @@ public:
 		this->ssd = ssd;
 	}
 
-	void execute(CommandArgs& args) override
+	void execute(const vector<string>& args) override
 	{
-		checkValueValidity(args.value);
+		// TODO: hotfix 반영 부분 수정 필요
+		//checkValueValidity(args.value);
 
-		for (int addr = 0; addr <= END_LBA; addr++) {
-			ssd.write(addr, args.value);
-		}
+		//for (int addr = 0; addr <= END_LBA; addr++) {
+		//	ssd.write(addr, args.value);
+		//}
 	}
 
 	const string& getHelp() override

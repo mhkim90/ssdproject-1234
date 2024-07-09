@@ -11,10 +11,11 @@ public:
 		this->ssd = &ssd;
 	}
 
-	void execute(CommandArgs& args) override
+	void execute(const vector<string>& args) override
 	{
-		validationCheck(args.addr);
-		args.value = ssd->read(args.addr);
+		// TODO: hotfix 반영 부분 수정 필요
+		//validationCheck(args.addr);
+		//args.value = ssd->read(args.addr);
 	}
 
 	const string& getHelp() override
@@ -48,11 +49,12 @@ public:
 		this->ssd = &ssd;
 	}
 
-	void execute(CommandArgs& args) override
+	void execute(const vector<string>& args) override
 	{
-		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
-			std::cout << ssd->read(i) << "\n";
-		}
+		// TODO: hotfix 반영 부분 수정 필요
+		//for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
+		//	std::cout << ssd->read(i) << "\n";
+		//}
 	}
 
 	const string& getHelp() override
