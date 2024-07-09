@@ -34,7 +34,10 @@ void Shell::run()
 {
 	while (true) {
 		cout << "Shell > ";
+		
 		string commandStr = waitForCommand();
+		if (commandStr.empty()) continue;
+
 		try {
 			vector<string> parsed = parsingCommandStr(commandStr);
 			if (parsed.front() == "exit") return;

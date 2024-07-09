@@ -125,7 +125,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_EMPTY) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), makeOutputFormat("INVALID COMMAND\n"));
+	EXPECT_EQ(getOutput(), makeOutputFormat("") + makeOutputFormat(""));
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_UNKNOWN) {
