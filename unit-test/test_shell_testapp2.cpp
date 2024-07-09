@@ -32,37 +32,24 @@ TEST_F(TestApp2Fixture, TestApp2TestNormal) {
 
 	// arrange
 	CommandArgs arg = { 0, "" };
+	const int START_LBA = 0;
+	const int END_LBA = 5;
 
 	// act
 	{
 		InSequence seq;
+		for (int lba = START_LBA; lba <= END_LBA; lba++) {
+			EXPECT_CALL(ssdMock, write(lba, "0xAAAABBBB"))
+				.Times(30);
+		}
+		
+		for (int lba = START_LBA; lba <= END_LBA; lba++) {
+			EXPECT_CALL(ssdMock, write(lba, "0x12345678"));
+		}
 
-		EXPECT_CALL(ssdMock, write(0, "0xAAAABBBB"))
-			.Times(30);
-		EXPECT_CALL(ssdMock, write(1, "0xAAAABBBB"))
-			.Times(30);
-		EXPECT_CALL(ssdMock, write(2, "0xAAAABBBB"))
-			.Times(30);
-		EXPECT_CALL(ssdMock, write(3, "0xAAAABBBB"))
-			.Times(30);
-		EXPECT_CALL(ssdMock, write(4, "0xAAAABBBB"))
-			.Times(30);
-		EXPECT_CALL(ssdMock, write(5, "0xAAAABBBB"))
-			.Times(30);
-
-		EXPECT_CALL(ssdMock, write(0, "0x12345678"));
-		EXPECT_CALL(ssdMock, write(1, "0x12345678"));
-		EXPECT_CALL(ssdMock, write(2, "0x12345678"));
-		EXPECT_CALL(ssdMock, write(3, "0x12345678"));
-		EXPECT_CALL(ssdMock, write(4, "0x12345678"));
-		EXPECT_CALL(ssdMock, write(5, "0x12345678"));
-
-		EXPECT_CALL(ssdMock, read(0));
-		EXPECT_CALL(ssdMock, read(1));
-		EXPECT_CALL(ssdMock, read(2));
-		EXPECT_CALL(ssdMock, read(3));
-		EXPECT_CALL(ssdMock, read(4));
-		EXPECT_CALL(ssdMock, read(5));
+		for (int lba = START_LBA; lba <= END_LBA; lba++) {
+			EXPECT_CALL(ssdMock, read(lba));
+		}
 	}
 
 	ta2Cmd.execute(arg);
