@@ -13,9 +13,9 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
-		// TODO: hotfix 반영 부분 수정 필요
-		//validationCheck(args.addr);
-		//args.value = ssd->read(args.addr);
+		int addr = stoi(args[0]);
+		validationCheck(addr);
+		ssd->read(addr);
 	}
 
 	const string& getHelp() override
@@ -51,10 +51,9 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
-		// TODO: hotfix 반영 부분 수정 필요
-		//for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
-		//	std::cout << ssd->read(i) << "\n";
-		//}
+		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
+			ssd->read(i);
+		}
 	}
 
 	const string& getHelp() override
