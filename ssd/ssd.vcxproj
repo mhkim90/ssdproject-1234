@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Exception.cpp" />
     <ClCompile Include="ReadCmdHandler.cpp" />
     <ClCompile Include="CmdHandler.h" />
     <ClCompile Include="main.cpp" />

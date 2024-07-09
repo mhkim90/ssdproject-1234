@@ -2,26 +2,8 @@
 #include "ReadCmdHandler.cpp"
 #include "WriteCmdHandler.cpp"
 #include <string>
-#include <stdexcept>
+#include "Exception.cpp"
 using namespace std;
-
-class InvalidOpcodeException : public exception
-{
-public:
-	char const* what() const override
-	{
-		return "invalid opcode !! check code";
-	}
-};
-
-class LbaRangeOverException : public exception
-{
-public:
-	char const* what() const override
-	{
-		return "lba is invalid !!";
-	}
-};
 
 class SSDManager
 {
