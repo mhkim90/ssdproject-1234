@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="command_factory.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Printer.cpp" />
     <ClCompile Include="shell.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="WriteCommand.cpp" />

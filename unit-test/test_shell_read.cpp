@@ -68,7 +68,9 @@ TEST_F(ReadCommandFixture, Shell_Read_Execute_Success) {
 		.Times(1)
 		.WillRepeatedly(Return(TEST_DATA));
 
+	testing::internal::CaptureStdout();
 	command.execute(normalArgs);
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), TEST_DATA + "\n");
 }
 
 TEST_F(ReadCommandFixture, Shell_Read_Execute_Fail) {
@@ -85,8 +87,13 @@ TEST_F(FullReadCommandFixture, Shell_FullRead_Execute_Success) {
 		string str = to_string(i);
 		EXPECT_CALL(ssdMock, read(i))
 			.Times(1);
-	}
+    expected += str;
+    expected += "\n";
+  }
+  
+	testing::internal::CaptureStdout();
 	command.execute(normalArgs);
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), expected);
 }
 
 TEST_F(FullReadCommandFixture, Shell_FullRead_GetHelp) {

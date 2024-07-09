@@ -1,6 +1,6 @@
 #include "command.h"
+#include "Printer.cpp"
 #include <stdexcept>
-#include <iostream>
 
 class ReadCommand : public ICommand {
 public:
@@ -13,9 +13,10 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		Printer& printer = Printer::getInstance();
 		int addr = stoi(args[0]);
 		validationCheck(addr);
-		ssd->read(addr);
+		printer.print(ssd->read(args.addr));
 	}
 
 	const string& getHelp() override
@@ -51,8 +52,9 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		Printer& printer = Printer::getInstance();
 		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
-			ssd->read(i);
+			printer.print(ssd->read(i));
 		}
 	}
 
