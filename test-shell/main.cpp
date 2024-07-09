@@ -14,12 +14,12 @@ int main() {
 	ISSD* ssd = new SSDLib(path, app_name, result_path);
 
 	ICommand* fullReadCMD = new FullReadCommand(*ssd);
-	ICommand* fullWriteCMD = new FullwriteCommand(*ssd);
+	ICommand* fullWriteCMD = new FullWriteCommand(*ssd);
 
 	factory.injectCommand("read", new ReadCommand(*ssd));
 	factory.injectCommand("write", new WriteCommand(*ssd));
 	factory.injectCommand("fullread", new FullReadCommand(*ssd));
-	factory.injectCommand("fullwrite", new FullwriteCommand(*ssd));
+	factory.injectCommand("fullwrite", new FullWriteCommand(*ssd));
 	factory.injectCommand("testapp1", new TestApp1(*ssd,
 		*fullReadCMD, *fullWriteCMD));
 	factory.injectCommand("testapp2", new TestApp2Command(*ssd));

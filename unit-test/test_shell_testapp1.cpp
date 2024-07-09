@@ -23,7 +23,7 @@ class TestApp1Fixture : public testing::Test {
 public:
 	SSDMock ssdMock;
 	FullReadCommand read{ ssdMock };
-	FullwriteCommand write{ ssdMock };
+	FullWriteCommand write{ ssdMock };
 	TestApp1 testApp1{ ssdMock, read, write };
 
 	const int LBA_MIN_VAL = 0;

@@ -58,9 +58,9 @@ private:
 	
 };
 
-class FullwriteCommand : public WriteCommand {
+class FullWriteCommand : public WriteCommand {
 public:
-	FullwriteCommand(ISSD& ssd) : WriteCommand{ ssd } {}
+	FullWriteCommand(ISSD& ssd) : WriteCommand{ ssd } {}
 
 	void injectSSD(ISSD& ssd) override
 	{

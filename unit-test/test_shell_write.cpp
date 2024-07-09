@@ -34,7 +34,7 @@ public:
 	}
 
 	SsdMock ssdMock;
-	FullwriteCommand fwrCmd;
+	FullWriteCommand fwrCmd;
 private:
 
 protected:
