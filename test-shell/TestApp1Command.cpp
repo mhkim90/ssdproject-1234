@@ -36,6 +36,10 @@ private:
 	const int LBA_MIN_VAL = 0;
 	const int LBA_MAX_VAL = 99;
 	const string TEST_VAL = "0xAAAABBBB";
-	const string strHelp = "";
+	const string strHelp = "Test script1 - testapp1.\n\
+		[Example] testapp1\n\
+		[Parameters]\n\
+		- None \n\
+		[Returns] Display Pass or Fail\n";
 
 };

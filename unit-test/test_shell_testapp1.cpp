@@ -30,6 +30,11 @@ public:
 	const int LBA_MAX_VAL = 99;
 	const string TEST_VAL = "0xAAAABBBB";
 	const string TEST_VAL_DIFF = "0xAAAABBBC";
+	const string strHelp = "Test script1 - testapp1.\n\
+		[Example] testapp1\n\
+		[Parameters]\n\
+		- None \n\
+		[Returns] Display Pass or Fail\n";
 
 	string fullWrite(string val) {
 		string expected = "";
@@ -77,4 +82,8 @@ TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
 	testing::internal::CaptureStdout();
 	testApp1.execute({ });
 	EXPECT_EQ(testing::internal::GetCapturedStdout(), "FAIL\n");
+}
+
+TEST_F(TestApp1Fixture, Shell_TestApp1_GetHelp) {
+	EXPECT_EQ(strHelp, testApp1.getHelp());
 }
