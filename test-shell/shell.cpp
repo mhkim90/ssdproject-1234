@@ -32,14 +32,16 @@ vector<string> Shell::parsingCommandStr(const string& str)
 
 void Shell::run()
 {
-	string commandStr = waitForCommand();
-	try {
-		vector<string> parsed = parsingCommandStr(commandStr);
-		if (parsed.front() == "exit") return;
-		if (parsed.front() == "help") help();
-	}
-	catch (invalid_argument& ex) {
-		cout << ex.what() << endl;
+	while (true) {
+		string commandStr = waitForCommand();
+		try {
+			vector<string> parsed = parsingCommandStr(commandStr);
+			if (parsed.front() == "exit") return;
+			if (parsed.front() == "help") help();
+		}
+		catch (invalid_argument& ex) {
+			cout << ex.what() << endl;
+		}
 	}
 }
 

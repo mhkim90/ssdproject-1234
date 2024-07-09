@@ -13,6 +13,7 @@ public:
 	MOCK_METHOD(void, injectSSD, (ISSD&), (override));
 	MOCK_METHOD(void, execute, (const vector<string>&), (override));
 	MOCK_METHOD(const string&, getHelp, (), (override));
+	string _helpMessage = "HELP MESSAGE";
 };
 
 class MockCommandFactory : public ICommandFactory {
@@ -20,6 +21,7 @@ public:
 	MOCK_METHOD(void, injectCommand, (const string&, ICommand*), (override));
 	MOCK_METHOD(ICommand*, getCommand, (const string&), (override));
 	MOCK_METHOD((const unordered_map<string, ICommand*>&), getAllCommands, (), (const override));
+	unordered_map<string, ICommand*> _commands;
 };
 
 class ShellFixutre : public Test {
@@ -40,6 +42,7 @@ public:
 		return _osstream.str();
 	}
 
+	MockCommand mockCommand;
 	MockCommandFactory mockFactory;
 	Shell shell;
 
@@ -48,6 +51,8 @@ protected:
 		_inOldStreamBuf = cin.rdbuf();
 		_outOldStreamBuf = cout.rdbuf();
 		cout.set_rdbuf(_osstream.rdbuf());
+
+		mockFactory._commands["command"] = &mockCommand;
 	}
 	
 	void TearDown() override {
@@ -109,7 +114,7 @@ TEST_F(ShellFixutre, COMMAND_STR_PARSING) {
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND) {
-	inputCommand("");
+	inputCommand("\nexit");
 
 	shell.run();
 
@@ -124,21 +129,16 @@ TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
 	EXPECT_EQ(getOutput(), "");
 }
 
-//TODO: 테스트 필요
 TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
-	inputCommand("help");
+	inputCommand("help\nexit");
 
-	string helpMessage = "HELP MESSAGE";
-
-	MockCommand mockCommand;
 	EXPECT_CALL(mockCommand, getHelp)
-		.WillRepeatedly(ReturnRef(helpMessage));
-
-	unordered_map<string, ICommand*> _commands;
-	_commands["command"] = &mockCommand;
+		.Times(1)
+		.WillRepeatedly(ReturnRef(mockCommand._helpMessage));
 
 	EXPECT_CALL(mockFactory, getAllCommands)
-		.WillRepeatedly(ReturnRef(_commands));
+		.Times(1)
+		.WillRepeatedly(ReturnRef(mockFactory._commands));
 
 	shell.run();
 
