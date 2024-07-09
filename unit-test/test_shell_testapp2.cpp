@@ -28,12 +28,14 @@ protected:
 	}
 };
 
-TEST_F(TestApp2Fixture, TestApp2TestNormal) {
+TEST_F(TestApp2Fixture, TestApp2TestSuccess) {
 
 	// arrange
 	std::vector<string> arg = { "0", "" };
 	const int START_LBA = 0;
 	const int END_LBA = 5;
+
+	testing::internal::CaptureStdout();
 
 	// act
 	{
@@ -48,13 +50,49 @@ TEST_F(TestApp2Fixture, TestApp2TestNormal) {
 		}
 
 		for (int lba = START_LBA; lba <= END_LBA; lba++) {
-			EXPECT_CALL(ssdMock, read(lba));
+			EXPECT_CALL(ssdMock, read(lba))
+				.WillRepeatedly(Return("0x12345678"));
 		}
 	}
 
 	ta2Cmd.execute(arg);
 
 	// assert
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "SUCCESS\n");
+}
+
+
+TEST_F(TestApp2Fixture, TestApp2TestFailure) {
+
+	// arrange
+	std::vector<string> arg = { "0", "" };
+	const int START_LBA = 0;
+	const int END_LBA = 5;
+
+	testing::internal::CaptureStdout();
+
+	// act
+	{
+		InSequence seq;
+		for (int lba = START_LBA; lba <= END_LBA; lba++) {
+			EXPECT_CALL(ssdMock, write(lba, "0xAAAABBBB"))
+				.Times(30);
+		}
+
+		for (int lba = START_LBA; lba <= END_LBA; lba++) {
+			EXPECT_CALL(ssdMock, write(lba, "0x12345678"));
+		}
+
+		for (int lba = START_LBA; lba <= END_LBA; lba++) {
+			EXPECT_CALL(ssdMock, read(lba))
+				.WillRepeatedly(Return("0xCCCCFFFF"));
+		}
+	}
+
+	ta2Cmd.execute(arg);
+
+	// assert
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "FAIL\n");
 }
 
 TEST_F(TestApp2Fixture, TestApp2TestHelp) {
