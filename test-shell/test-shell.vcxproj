@@ -127,7 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="command_factory.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="shell.cpp" />
+    <ClCompile Include="ReadCommand.cpp" />
+    <ClCompile Include="WriteCommand.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="command.h" />
+    <ClInclude Include="command_factory.h" />
+    <ClInclude Include="shell.h" />
+    <ClInclude Include="ssd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
