@@ -5,6 +5,9 @@
 
 class WriteCommand : public ICommand {
 public:
+	const int START_LBA = 0;
+	const int END_LBA = 99;
+
 	WriteCommand(ISSD& ssd) : ssd{ ssd } {}
 
 	void injectSSD(ISSD& ssd) override
@@ -28,9 +31,24 @@ public:
 		return WRITE_HELP;
 	}
 
+	void checkAddressValidity(int addr) {
+		if (addr < START_LBA || addr > END_LBA) {
+			throw std::invalid_argument("addr is out of range");
+		}
+	}
+
+	void checkValueValidity(string value) {
+		std::regex reg("0x[0-9A-F]{8}$");
+		if (!regex_match(value, reg))
+			throw std::invalid_argument("value is not in A~F, 0~9");
+	}
+
+	ISSD& getSsd() {
+		return ssd;
+	}
+
 private:
 	ISSD& ssd;
-	//const string HELP = "write [LBA] [data]";
 	const string WRITE_HELP = "\
 		LBA에 입력 Value 를 기록한다.\n\
 		[Example] write [LBA] [Value]\n\
@@ -38,41 +56,31 @@ private:
 		- LBA: 기록할 영역 주소값 (0~99)\n\
 		- Value: 기록할 값\n\
 		[Returns] 없음\n";
-	const int START_LBA = 0;
-	const int END_LBA = 99;
-	const int NUM_OF_FIELD = END_LBA - (START_LBA - 1);
-
-	void checkAddressValidity(int addr) {
-		if (addr < START_LBA || addr > END_LBA) {
-			throw std::invalid_argument("addr is out of range");
-		}
-	}
-	
-	void checkValueValidity(string value) {
-		std::regex reg("0x[0-9A-F]{8}$");
-		if (!regex_match(value, reg))
-			throw std::invalid_argument("value is not in A~F, 0~9");
-	}
 	
 };
 
-class FullwriteCommand : public ICommand {
+class FullwriteCommand : public WriteCommand {
 public:
-	FullwriteCommand(ISSD& ssd) : ssd{ ssd } {}
+	FullwriteCommand(ISSD& ssd) : WriteCommand{ ssd } {}
 
 	void injectSSD(ISSD& ssd) override
 	{
-		this->ssd = ssd;
+		WriteCommand::injectSSD(ssd);
 	}
 
 	void execute(const vector<string>& args) override
 	{
-		std::string value = args[1];
+		std::string value = args[0];
 
 		checkValueValidity(value);
 
-		for (int addr = 0; addr <= END_LBA; addr++) {
-			ssd.write(addr, value);
+		writeAtAllSsdField(value);
+	}
+
+	void writeAtAllSsdField(std::string& value)
+	{
+		for (int addr = START_LBA; addr <= END_LBA; addr++) {
+			getSsd().write(addr, value);
 		}
 	}
 
@@ -82,7 +90,6 @@ public:
 	}
 
 private:
-	ISSD& ssd;
 	const string FULLWRITE_HELP = "\
 		LBA 0 번부터 99 번 까지 Write를 수행한다.\n\
 		[Example] fullwrite [any] [Value]\n\
@@ -90,19 +97,4 @@ private:
 		- any\n\
 		- Value: 기록할 값\n\
 		[Returns] 없음\n";
-	const int START_LBA = 0;
-	const int END_LBA = 99;
-	const int NUM_OF_FIELD = END_LBA - (START_LBA - 1);
-
-	void checkAddressValidity(int addr) {
-		if (addr < START_LBA || addr > END_LBA) {
-			throw std::invalid_argument("addr is out of range");
-		}
-	}
-
-	void checkValueValidity(string value) {
-		std::regex reg("0x[0-9A-F]{8}$");
-		if (!regex_match(value, reg))
-			throw std::invalid_argument("value is not in A~F, 0~9");
-	}
 };
