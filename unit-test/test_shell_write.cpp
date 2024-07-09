@@ -97,7 +97,7 @@ TEST_F(WriteCommandFixture, WriteTestHelp) {
 TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
 
 	// arrange
-	vector<string> arg = { "0", "0xAAAABBBB" };
+	vector<string> arg = { "0xAAAABBBB" };
 
 	// act
 	EXPECT_CALL(ssdMock, write(_, "0xAAAABBBB"))
@@ -111,7 +111,7 @@ TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
 TEST_F(FullwriteCommandFixture, FullwriteTestInvalidValue) {
 
 	// arrange
-	vector<string> arg = { "99", "0xAAA*BBBC" };
+	vector<string> arg = { "0xAAA*BBBC" };
 
 	// act
 	EXPECT_THROW(fwrCmd.execute(arg), std::invalid_argument);
