@@ -19,7 +19,7 @@ inline string Shell::waitForCommand() {
 
 vector<string> Shell::parsingCommandStr(const string& str)
 {
-	if (str.empty()) throw invalid_argument("input string empty");
+	if (str.empty()) throw invalid_argument("INVALID COMMAND");
 	vector<string> rst;
 	istringstream stream{ str };
 	string buffer;
@@ -37,6 +37,6 @@ void Shell::run()
 		vector<string> parsed = parsingCommandStr(commandStr);
 	}
 	catch (invalid_argument& ex) {
-		cout << "INVALID COMMAND" << endl;
+		cout << ex.what() << endl;
 	}
 }

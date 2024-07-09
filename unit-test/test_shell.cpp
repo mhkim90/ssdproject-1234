@@ -18,13 +18,19 @@ public:
 class ShellFixutre : public Test {
 public:
 	ShellFixutre()
-		: shell{ mockFactory }, _oldStreamBuf{ nullptr } {
+		: shell{ mockFactory }
+		, _inOldStreamBuf{ nullptr }
+		, _outOldStreamBuf{ nullptr } {
 
 	}
 
 	void inputCommand(const string& inputStr) {
-		_stringStream.str(inputStr);
-		cin.set_rdbuf(_stringStream.rdbuf());
+		_isstream.str(inputStr);
+		cin.set_rdbuf(_isstream.rdbuf());
+	}
+
+	string getOutput() {
+		return _osstream.str();
 	}
 
 	MockCommandFactory mockFactory;
@@ -32,17 +38,24 @@ public:
 
 protected:
 	void SetUp() override {
-		_oldStreamBuf = cin.rdbuf();
+		_inOldStreamBuf = cin.rdbuf();
+		_outOldStreamBuf = cout.rdbuf();
+		cout.set_rdbuf(_osstream.rdbuf());
 	}
 	
 	void TearDown() override {
-		cin.set_rdbuf(_oldStreamBuf);
+		cin.set_rdbuf(_inOldStreamBuf);
 		cin.clear();
+
+		cout.set_rdbuf(_outOldStreamBuf);
+		cout.clear();
 	}
 
 private:
-	istringstream _stringStream;
-	streambuf* _oldStreamBuf;
+	istringstream _isstream;
+	ostringstream _osstream;
+	streambuf* _inOldStreamBuf;
+	streambuf* _outOldStreamBuf;
 };
 
 TEST_F(ShellFixutre, WAIT_FOR_COMMAND_READ_EXIT) {
@@ -91,14 +104,7 @@ TEST_F(ShellFixutre, COMMAND_STR_PARSING) {
 TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND) {
 	inputCommand("");
 
-	ostringstream osstream;
-	auto oldStreamBuf = cout.rdbuf();
-	cout.set_rdbuf(osstream.rdbuf());
-
 	shell.run();
 
-	cout.set_rdbuf(oldStreamBuf);
-	cout.clear();
-
-	EXPECT_EQ(osstream.str(), "INVALID COMMAND\n");
+	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
 }
