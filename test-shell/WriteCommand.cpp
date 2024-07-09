@@ -49,13 +49,12 @@ public:
 
 private:
 	ISSD& ssd;
-	const string WRITE_HELP = "\
-		LBA에 입력 Value 를 기록한다.\n\
+	const string WRITE_HELP = "write Value at LBA address\n\
 		[Example] write [LBA] [Value]\n\
 		[Parameters]\n\
-		- LBA: 기록할 영역 주소값 (0~99)\n\
-		- Value: 기록할 값\n\
-		[Returns] 없음\n";
+		- LBA: address (0~99)\n\
+		- Value: a value to be recorded\n\
+		[Returns] none\n";
 	
 };
 
@@ -90,11 +89,10 @@ public:
 	}
 
 private:
-	const string FULLWRITE_HELP = "\
-		LBA 0 번부터 99 번 까지 Write를 수행한다.\n\
+	const string FULLWRITE_HELP = "Perform write from address 0 to 99.\n\
 		[Example] fullwrite [any] [Value]\n\
 		[Parameters]\n\
 		- any\n\
-		- Value: 기록할 값\n\
-		[Returns] 없음\n";
+		- Value: a value to be recorded\n\
+		[Returns] none\n";
 };
