@@ -19,6 +19,7 @@ public:
 	virtual string waitForCommand();
 	vector<string> parsingCommandStr(const string& str);
 	void run();
+	void help();
 private:
 	ICommandFactory& _factory;
 };

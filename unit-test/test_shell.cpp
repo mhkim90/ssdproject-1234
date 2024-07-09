@@ -8,11 +8,18 @@
 using namespace std;
 using namespace testing;
 
+class MockCommand : public ICommand {
+public:
+	MOCK_METHOD(void, injectSSD, (ISSD&), (override));
+	MOCK_METHOD(void, execute, (const vector<string>&), (override));
+	MOCK_METHOD(const string&, getHelp, (), (override));
+};
+
 class MockCommandFactory : public ICommandFactory {
 public:
 	MOCK_METHOD(void, injectCommand, (const string&, ICommand*), (override));
 	MOCK_METHOD(ICommand*, getCommand, (const string&), (override));
-	MOCK_METHOD((unordered_map<string, ICommand*>&), getAllCommands, (), (const override));
+	MOCK_METHOD((const unordered_map<string, ICommand*>&), getAllCommands, (), (const override));
 };
 
 class ShellFixutre : public Test {
@@ -115,4 +122,25 @@ TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
 	shell.run();
 
 	EXPECT_EQ(getOutput(), "");
+}
+
+//TODO: 테스트 필요
+TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
+	inputCommand("help");
+
+	string helpMessage = "HELP MESSAGE";
+
+	MockCommand mockCommand;
+	EXPECT_CALL(mockCommand, getHelp)
+		.WillRepeatedly(ReturnRef(helpMessage));
+
+	unordered_map<string, ICommand*> _commands;
+	_commands["command"] = &mockCommand;
+
+	EXPECT_CALL(mockFactory, getAllCommands)
+		.WillRepeatedly(ReturnRef(_commands));
+
+	shell.run();
+
+	EXPECT_EQ(getOutput(), "< Shell Help >\ncommand\t\t: HELP MESSAGE\n");
 }

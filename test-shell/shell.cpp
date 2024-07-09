@@ -36,8 +36,17 @@ void Shell::run()
 	try {
 		vector<string> parsed = parsingCommandStr(commandStr);
 		if (parsed.front() == "exit") return;
+		if (parsed.front() == "help") help();
 	}
 	catch (invalid_argument& ex) {
 		cout << ex.what() << endl;
+	}
+}
+
+void Shell::help()
+{
+	cout << "< Shell Help >" << endl;
+	for (auto& cmd : _factory.getAllCommands()) {
+		cout << cmd.first << "\t\t: " << cmd.second->getHelp() << endl;
 	}
 }
