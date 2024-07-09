@@ -80,13 +80,20 @@ TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {
 }
 
 TEST_F(FullReadCommandFixture, Shell_FullRead_Execute_Success) {
+	string expected = "";
 	for (int i = 0; i < 100; i++) {
+		string str = to_string(i);
 		EXPECT_CALL(ssdMock, read(i))
 			.Times(1)
-			.WillOnce(Return("i"));
+			.WillRepeatedly(Return(str));
+		expected += str;
+		expected += "\n";
 	}
-
+	testing::internal::CaptureStdout();
 	command.execute(normalArgs);
+	EXPECT_EQ(
+		testing::internal::GetCapturedStdout(),
+		expected);
 }
 
 TEST_F(FullReadCommandFixture, Shell_FullRead_GetHelp) {
