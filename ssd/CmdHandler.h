@@ -13,7 +13,9 @@ class CmdHandler
 {
 public:
 	CmdHandler() {};
+
 	virtual void execute(int lba, string data ="") = 0;
+
 	bool IsAvailableOpcode(CmdOpcode opcode)
 	{
 		return (opcode == READ_CMD) || (opcode == WRITE_CMD);
