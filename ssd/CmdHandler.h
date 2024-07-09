@@ -5,24 +5,28 @@
 #include <vector>
 #include "SSDConfig.h"
 #include "FileManager.cpp"
+#include "Exception.cpp"
 
 using namespace std;
-
-enum CmdOpcode
-{
-	READ_CMD = 1,
-	WRITE_CMD = 2,
-
-	MAX_NUM_OF_CMD = WRITE_CMD + 1,
-};
 
 class CmdHandler
 {
 public:
 	CmdHandler() {};
 	virtual void execute(int lba, string data ="") = 0;
+	bool IsAvailableOpcode(CmdOpcode opcode)
+	{
+		return (opcode == READ_CMD) || (opcode == WRITE_CMD);
+	}
 	virtual bool sanityCheckPassed(int lba, string data)
 	{
+		if (false == IsAvailableOpcode(opcode))
+		{
+			throw InvalidOpcodeException();
+		}
+
+		FileManager::getInstance().initNand();
+
 		return (MIN_LBA <= lba && lba < LBA_COUNT);
 	}
 

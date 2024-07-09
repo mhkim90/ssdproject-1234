@@ -19,7 +19,6 @@ public:
 
 	}
 
-	// CmdHandler을(를) 통해 상속됨
 	void execute(int lba, string data) override
 	{
 		FileManager::getInstance().openNand();
