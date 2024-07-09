@@ -67,6 +67,10 @@ TEST_F(FactoryFixture, TestInjectedWriteCommand) {
 	command->execute(dummy_args);
 }
 
+TEST_F(FactoryFixture, TestThrowgetCommand) {
+	EXPECT_THROW(factory.getCommand("test"), std::invalid_argument);
+}
+
 TEST_F(FactoryFixture, TestgetAllCommands) {
 	EXPECT_CALL(readCMD, execute(_))
 		.Times(1);

@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7a85cf34-dcf2-4052-aebc-e6b437dcc197}</ProjectGuid>
-    <RootNamespace>testshell</RootNamespace>
+    <ProjectGuid>{964b1c8b-2b96-4718-a3c7-e7c69c837f07}</ProjectGuid>
+    <RootNamespace>dummy</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,21 +127,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="command_factory.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Printer.cpp" />
-    <ClCompile Include="shell.cpp" />
-    <ClCompile Include="ReadCommand.cpp" />
-    <ClCompile Include="TestApp1Command.cpp" />
-    <ClCompile Include="TestApp2Command.cpp" />
-    <ClCompile Include="ssdlib.cpp" />
-    <ClCompile Include="WriteCommand.cpp" />
+    <Text Include="result.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="command.h" />
-    <ClInclude Include="command_factory.h" />
-    <ClInclude Include="shell.h" />
-    <ClInclude Include="ssd.h" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

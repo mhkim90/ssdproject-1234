@@ -105,6 +105,7 @@
     <ClCompile Include="test_shell_testapp1.cpp" />
     <ClCompile Include="test_shell_testapp2.cpp" />
     <ClCompile Include="test_shell_write.cpp" />
+    <ClCompile Include="test_ssdlib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
