@@ -87,3 +87,18 @@ TEST_F(ShellFixutre, COMMAND_STR_PARSING) {
 	expect.push_back("0xAAAABBBB");
 	EXPECT_EQ(shell.parsingCommandStr(commandStr), expect);
 }
+
+TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND) {
+	inputCommand("");
+
+	ostringstream osstream;
+	auto oldStreamBuf = cout.rdbuf();
+	cout.set_rdbuf(osstream.rdbuf());
+
+	shell.run();
+
+	cout.set_rdbuf(oldStreamBuf);
+	cout.clear();
+
+	EXPECT_EQ(osstream.str(), "INVALID COMMAND\n");
+}

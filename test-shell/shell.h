@@ -18,6 +18,7 @@ public:
 	Shell(ICommandFactory& factory);
 	virtual string waitForCommand();
 	vector<string> parsingCommandStr(const string& str);
+	void run();
 private:
 	ICommandFactory& _factory;
 };

@@ -29,3 +29,14 @@ vector<string> Shell::parsingCommandStr(const string& str)
 	}
 	return rst;
 }
+
+void Shell::run()
+{
+	string commandStr = waitForCommand();
+	try {
+		vector<string> parsed = parsingCommandStr(commandStr);
+	}
+	catch (invalid_argument& ex) {
+		cout << "INVALID COMMAND" << endl;
+	}
+}
