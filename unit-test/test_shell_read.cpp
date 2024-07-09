@@ -67,7 +67,9 @@ TEST_F(ReadCommandFixture, Shell_Read_Execute_Success) {
 		.Times(1)
 		.WillRepeatedly(Return(TEST_DATA));
 
+	testing::internal::CaptureStdout();
 	command.execute(normalArgs);
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), TEST_DATA + "\n");
 	EXPECT_EQ(normalArgs.value, TEST_DATA);
 }
 
@@ -89,11 +91,10 @@ TEST_F(FullReadCommandFixture, Shell_FullRead_Execute_Success) {
 		expected += str;
 		expected += "\n";
 	}
+
 	testing::internal::CaptureStdout();
 	command.execute(normalArgs);
-	EXPECT_EQ(
-		testing::internal::GetCapturedStdout(),
-		expected);
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), expected);
 }
 
 TEST_F(FullReadCommandFixture, Shell_FullRead_GetHelp) {
