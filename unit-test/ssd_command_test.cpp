@@ -82,29 +82,25 @@ TEST_F(SSD_IO_Fixture, checkWriteLbaRange) {
 	EXPECT_THROW(ssdManager.runCommand(100, "0x12"), exception);
 }
 
-#if TODO
 // read test over lba 100 (0~99 is allowed)
 TEST_F(SSD_IO_Fixture, checkReadLbaRange) {
 	SSDManager ssdManager("read");
 	EXPECT_THROW(ssdManager.runCommand(100), exception);
 }
-#endif
 
 // write should send data together
 // TODO : should be implemented in WriteCmdHandler
-#if TODO
-TEST_F(SSD_IO_Fixture, TestName) {
+TEST_F(SSD_IO_Fixture, wirteShouldSendDataTogether) {
 	SSDManager ssdManager("write");
 	EXPECT_THROW(ssdManager.runCommand(3), exception);
 }
 
 // read shouldn't send data
 // TODO : should be implemented in ReadCmdHandler
-TEST_F(SSD_IO_Fixture, TestName) {
+TEST_F(SSD_IO_Fixture, dataShouldNotSendData) {
 	SSDManager ssdManager("read");
 	EXPECT_THROW(ssdManager.runCommand(3, "0x12"), exception);
 }
-#endif
 
 // invalid opcode test
 TEST_F(SSD_IO_Fixture, checkInvalidOpcode) {

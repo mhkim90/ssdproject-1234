@@ -51,7 +51,7 @@ public:
 	{
 		cmdHandler->fileClose();
 	}
-	void runCommand(int lba, string data = "0")
+	void runCommand(int lba, string data = "")
 	{
 		if (true == cmdHandler->sanityCheckPassed(lba, data))
 		{
