@@ -12,7 +12,7 @@ public:
 		this->ssd = ssd;
 	}
 
-	void execute(CommandArgs& args) override
+	void execute(const vector<string>& args) override
 	{
 		// no argument to check
 

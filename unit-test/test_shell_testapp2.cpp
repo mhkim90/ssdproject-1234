@@ -31,7 +31,7 @@ protected:
 TEST_F(TestApp2Fixture, TestApp2TestNormal) {
 
 	// arrange
-	CommandArgs arg = { 0, "" };
+	std::vector<string> arg = { "0", "" };
 	const int START_LBA = 0;
 	const int END_LBA = 5;
 
