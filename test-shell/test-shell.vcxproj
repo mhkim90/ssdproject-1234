@@ -133,6 +133,7 @@
     <ClCompile Include="shell.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="TestApp2Command.cpp" />
+    <ClCompile Include="ssdlib.cpp" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
