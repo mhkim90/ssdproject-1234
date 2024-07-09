@@ -20,7 +20,7 @@ public:
 		return commands[command];
 	}
 
-	std::unordered_map<std::string, ICommand*>& getAllCommands() override {
+	const std::unordered_map<std::string, ICommand*>& getAllCommands() const override {
 		return commands;
 	}
 

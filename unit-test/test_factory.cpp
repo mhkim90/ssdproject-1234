@@ -28,6 +28,7 @@ class FactoryFixture : public ::testing::Test {
 public:
 	MockReadCMD readCMD;
 	MockWriteCMD writeCMD;
+	MockWriteCMD testCMD;
 
 	CommandArgs dummy_args{ 0, "0" };
 
@@ -69,7 +70,7 @@ TEST_F(FactoryFixture, TestgetAllCommands) {
 		.Times(1);
 	EXPECT_CALL(writeCMD, execute(_))
 		.Times(1);
-	unordered_map<string, ICommand*>& commands = factory.getAllCommands();
+	const unordered_map<string, ICommand*>& commands = factory.getAllCommands();
 	EXPECT_EQ(commands.size(), 2);
 	for (auto& command : commands) {
 		command.second->execute(dummy_args);

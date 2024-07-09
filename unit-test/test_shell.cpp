@@ -12,7 +12,7 @@ class MockCommandFactory : public ICommandFactory {
 public:
 	MOCK_METHOD(void, injectCommand, (const string&, ICommand*), (override));
 	MOCK_METHOD(ICommand*, getCommand, (const string&), (override));
-	MOCK_METHOD((unordered_map<string,ICommand*>&), getAllCommands, (), (override));
+	MOCK_METHOD((unordered_map<string, ICommand*>&), getAllCommands, (), (const override));
 };
 
 class ShellFixutre : public Test {
