@@ -14,11 +14,13 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
-		// TODO: hotfix 반영 부분 수정 필요
-		//checkAddressValidity(args.addr);
-		//checkValueValidity(args.value);
+		int addr = stoi(args[0]);
+		std::string value = args[1];
 
-		//ssd.write(args.addr, args.value);
+		checkAddressValidity(addr);
+		checkValueValidity(value);
+
+		ssd.write(addr, value);
 	}
 
 	const string& getHelp() override
@@ -65,12 +67,13 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
-		// TODO: hotfix 반영 부분 수정 필요
-		//checkValueValidity(args.value);
+		std::string value = args[1];
 
-		//for (int addr = 0; addr <= END_LBA; addr++) {
-		//	ssd.write(addr, args.value);
-		//}
+		checkValueValidity(value);
+
+		for (int addr = 0; addr <= END_LBA; addr++) {
+			ssd.write(addr, value);
+		}
 	}
 
 	const string& getHelp() override
