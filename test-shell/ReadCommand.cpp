@@ -16,7 +16,7 @@ public:
 		Printer& printer = Printer::getInstance();
 		int addr = stoi(args[0]);
 		validationCheck(addr);
-		printer.print(ssd->read(args.addr));
+		printer.print(ssd->read(addr));
 	}
 
 	const string& getHelp() override
