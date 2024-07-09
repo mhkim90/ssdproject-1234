@@ -76,6 +76,16 @@ TEST_F(SSD_IO_Fixture, basicReadTest) {
 	EXPECT_TRUE(true);
 }
 
+// basic read test
+TEST_F(SSD_IO_Fixture, basicReadWriteTest) {
+	SSDManager ssdManagerWrite("write");
+	ssdManagerWrite.runCommand(1, "0x1222222");
+	SSDManager ssdManagerRead("read");
+	ssdManagerRead.runCommand(1);
+	EXPECT_EQ(1, 1);
+	EXPECT_TRUE(true);
+}
+
 // write test over lba 100 (0~99 is allowed)
 TEST_F(SSD_IO_Fixture, checkWriteLbaRange) {
 	SSDManager ssdManager("write");
@@ -111,7 +121,7 @@ TEST_F(SSD_IO_Fixture, checkInvalidOpcode) {
 	}
 	catch (exception& e)
 	{
-		cout << e.what() << endl;
+		//cout << e.what() << endl;
 		EXPECT_EQ(string(e.what()), string("invalid opcode !! check code"));
 	}
 }

@@ -1,13 +1,16 @@
+#include <string>
+#include "SSDConfig.h"
 #include "CmdHandler.h"
+#include "FileManager.cpp"
 #include "ReadCmdHandler.cpp"
 #include "WriteCmdHandler.cpp"
-#include <string>
 #include "Exception.cpp"
 using namespace std;
 
 class SSDManager
 {
 public:
+
 	SSDManager(string opcode)
 	{
 		if (true == IsAvailableOpcode(opcode))
@@ -19,20 +22,14 @@ public:
 		{
 			throw InvalidOpcodeException();
 		}
+		FileManager::getInstance().initNand();
 	}
+
 	bool IsAvailableOpcode(string opcode)
 	{
 		return (opcode == "write") || (opcode == "read");
 	}
-	SSDManager(CmdHandler *handler)
-		: cmdHandler(handler)
-	{
-		cmdHandler->fileOpen();
-	}
-	~SSDManager()
-	{
-		cmdHandler->fileClose();
-	}
+
 	void runCommand(int lba, string data = "")
 	{
 		if (true == cmdHandler->sanityCheckPassed(lba, data))
@@ -44,6 +41,7 @@ public:
 			throw LbaRangeOverException();
 		}
 	}
+
 private:
 	CmdHandler *cmdHandler;
 };

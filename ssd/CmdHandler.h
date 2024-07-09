@@ -3,14 +3,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "SSDConfig.h"
+#include "FileManager.cpp"
 
 using namespace std;
-
-struct DataSet {
-public:
-	int lba;
-	string data;
-};
 
 enum CmdOpcode
 {
@@ -24,15 +20,11 @@ class CmdHandler
 {
 public:
 	CmdHandler() {};
-	virtual void fileOpen() = 0;
-	virtual void fileClose() = 0;
 	virtual void execute(int lba, string data ="") = 0;
 	virtual bool sanityCheckPassed(int lba, string data)
 	{
-		return (0 <= lba && lba < 100);
+		return (MIN_LBA <= lba && lba < LBA_COUNT);
 	}
-	const string WRITEFILENAME = "nand.txt";
-	const string READFILENAME = "result.txt";
 
 protected:
 	void setOpcode(CmdOpcode opcode)

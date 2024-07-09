@@ -128,11 +128,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="ReadCmdHandler.cpp" />
     <ClCompile Include="CmdHandler.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SSDManager.cpp" />
     <ClCompile Include="WriteCmdHandler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SSDConfig.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
