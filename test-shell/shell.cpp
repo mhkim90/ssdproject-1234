@@ -59,6 +59,9 @@ void Shell::help()
 {
 	cout << "< Help >" << endl;
 	for (auto& cmd : _factory.getAllCommands()) {
-		cout << cmd.first << "\t\t: " << cmd.second->getHelp() << endl;
+		string indent;
+		if (cmd.first.length() < 8) indent = "\t\t";
+		if (cmd.first.length() >= 8) indent = "\t";
+		cout << cmd.first << indent << ": " << cmd.second->getHelp() << endl;
 	}
 }
