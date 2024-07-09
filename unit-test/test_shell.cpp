@@ -113,8 +113,20 @@ TEST_F(ShellFixutre, COMMAND_STR_PARSING) {
 	EXPECT_EQ(shell.parsingCommandStr(commandStr), expect);
 }
 
-TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND) {
+TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_EMPTY) {
 	inputCommand("\nexit");
+
+	shell.run();
+
+	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
+}
+
+TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_UNKNOWN) {
+	inputCommand("unknown\nexit");
+
+	EXPECT_CALL(mockFactory, getCommand(_))
+		.Times(1)
+		.WillRepeatedly(Throw(invalid_argument("INVALID COMMAND")));
 
 	shell.run();
 
