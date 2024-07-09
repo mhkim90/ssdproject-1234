@@ -33,7 +33,7 @@ vector<string> Shell::parsingCommandStr(const string& str)
 void Shell::run()
 {
 	while (true) {
-		cout << "Shell > ";
+		cout << "SHELL > ";
 		
 		string commandStr = waitForCommand();
 		if (commandStr.empty()) continue;
