@@ -12,14 +12,14 @@ using namespace testing;
 
 class MockWriteCMD : public ICommand {
 public:
-	MOCK_METHOD(void, execute, (CommandArgs&), (override));
+	MOCK_METHOD(void, execute, (const vector<string>&), (override));
 	MOCK_METHOD(string&, getHelp, (), (override));
 	MOCK_METHOD(void, injectSSD, (ISSD&), (override));
 };
 
 class MockReadCMD : public ICommand {
 public:
-	MOCK_METHOD(void, execute, (CommandArgs&), (override));
+	MOCK_METHOD(void, execute, (const vector<string>&), (override));
 	MOCK_METHOD(string&, getHelp, (), (override));
 	MOCK_METHOD(void, injectSSD, (ISSD&), (override));
 };
@@ -30,13 +30,15 @@ public:
 	MockWriteCMD writeCMD;
 	MockWriteCMD testCMD;
 
-	CommandArgs dummy_args{ 0, "0" };
+	vector<string> dummy_args;
 
 	ICommandFactory& factory = CommandFactory::getInstance();
 private:
 
 protected:
 	void SetUp() override {
+		dummy_args = { "0", "0" };
+
 		factory.injectCommand("read", &readCMD);;
 		factory.injectCommand("write", &writeCMD);;
 	}

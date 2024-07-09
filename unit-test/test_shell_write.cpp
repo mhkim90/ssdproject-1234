@@ -46,7 +46,7 @@ protected:
 TEST_F(WriteCommandFixture, WriteTestNormal) {
 	
 	// arrange
-	CommandArgs arg = { 5, "0xAAAABBBB" };
+	vector<string> arg = { "5", "0xAAAABBBB"};
 
 	// act
 	EXPECT_CALL(ssdMock, write(5, "0xAAAABBBB"));
@@ -58,7 +58,7 @@ TEST_F(WriteCommandFixture, WriteTestNormal) {
 TEST_F(WriteCommandFixture, WriteTestInvalidAddress) {
 
 	// arrange
-	CommandArgs arg = { 105, "0xAAAABBBB" };
+	vector<string> arg = { "105", "0xAAAABBBB" };
 
 	// act
 	EXPECT_THROW(wrCmd.execute(arg), std::invalid_argument);
@@ -69,7 +69,7 @@ TEST_F(WriteCommandFixture, WriteTestInvalidAddress) {
 TEST_F(WriteCommandFixture, WriteTestInvalidValue) {
 
 	// arrange
-	CommandArgs arg = { 99, "0xAAAABBB*" };
+	vector<string> arg = { "99", "0xAAAABBB*" };
 
 	// act
 	EXPECT_THROW(wrCmd.execute(arg), std::invalid_argument);
@@ -97,7 +97,7 @@ TEST_F(WriteCommandFixture, WriteTestHelp) {
 TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
 
 	// arrange
-	CommandArgs arg = { 0, "0xAAAABBBB" };
+	vector<string> arg = { "0xAAAABBBB" };
 
 	// act
 	EXPECT_CALL(ssdMock, write(_, "0xAAAABBBB"))
@@ -111,7 +111,7 @@ TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
 TEST_F(FullwriteCommandFixture, FullwriteTestInvalidValue) {
 
 	// arrange
-	CommandArgs arg = { 99, "0xAAA*BBBC" };
+	vector<string> arg = { "0xAAA*BBBC" };
 
 	// act
 	EXPECT_THROW(fwrCmd.execute(arg), std::invalid_argument);
