@@ -1,5 +1,5 @@
 #include "command.h"
-#include <stdexcept>
+#include "Printer.cpp"
 
 class TestApp1 : public ICommand {
 public:
@@ -12,8 +12,17 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
-		write->execute(args);
-		read->execute(args);
+		Printer& printer = Printer::getInstance();
+
+		write->execute({ TEST_VAL });
+		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
+			string tmp = ssd->read(i);
+			if (tmp != TEST_VAL) {
+				printer.print("FAIL");
+				return;
+			}
+		}
+		printer.print("SUCCESS");
 	}
 
 	const string& getHelp() override

@@ -29,22 +29,25 @@ public:
 	const int LBA_MIN_VAL = 0;
 	const int LBA_MAX_VAL = 99;
 	const string TEST_VAL = "0xAAAABBBB";
+	const string TEST_VAL_DIFF = "0xAAAABBBC";
 
-	void fullWrite() {
-		EXPECT_CALL(ssdMock, write(_, TEST_VAL))
+	string fullWrite(string val) {
+		string expected = "";
+		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
+			expected += val;
+			expected += "\n";
+		}
+		EXPECT_CALL(ssdMock, write(_, val))
 			.Times(100);
+		return expected;
 	}
 
-	string fullRead() {
-		string expected = "";
+	void fullRead(string val) {
 		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
 			EXPECT_CALL(ssdMock, read(i))
 				.Times(1)
-				.WillOnce(Return(TEST_VAL));
-			expected += TEST_VAL;
-			expected += "\n";
+				.WillOnce(Return(val));
 		}
-		return expected;
 	}
 
 private:
@@ -55,11 +58,23 @@ protected:
 	}
 };
 
-TEST_F(TestApp1Fixture, Shell_TestApp1_Execute) {
-	fullWrite();
-	string expected = fullRead();
+TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Success) {
+	string expected = fullWrite(TEST_VAL);
+	fullRead(TEST_VAL);
 
 	testing::internal::CaptureStdout();
-	testApp1.execute({ TEST_VAL });
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), expected);
+	testApp1.execute({ });
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "SUCCESS\n");
+}
+
+TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
+	EXPECT_CALL(ssdMock, write(_, TEST_VAL))
+		.Times(100);
+	EXPECT_CALL(ssdMock, read(0))
+		.Times(1)
+		.WillOnce(Return(TEST_VAL_DIFF));
+
+	testing::internal::CaptureStdout();
+	testApp1.execute({ });
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "FAIL\n");
 }
