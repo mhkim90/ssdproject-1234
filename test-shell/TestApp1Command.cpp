@@ -7,7 +7,7 @@ public:
 		: ssd{ &ssd }, read{ &read }, write{ &write } {}
 	void injectSSD(ISSD& ssd) override
 	{
-
+		this->ssd = &ssd;
 	}
 
 	void execute(const vector<string>& args) override
