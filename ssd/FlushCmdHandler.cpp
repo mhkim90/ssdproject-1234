@@ -24,5 +24,7 @@ public:
 	void execute(int lba, string data) override
 	{
 		CommandBuffer::getInstance().flushBuffer();
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Flush Executed");
 	}
 };

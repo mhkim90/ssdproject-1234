@@ -28,5 +28,7 @@ public:
 	{
 		// update command buffer only
 		CommandBuffer::getInstance().updateCommandBuffer(CmdHandler::getOpcode() , lba, data);
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Write Executed");
 	}
 };

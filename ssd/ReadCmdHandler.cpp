@@ -31,5 +31,7 @@ public:
 
 			FileManager::getInstance().readNand(lba);
 		}
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Read Executed");
 	}
 };

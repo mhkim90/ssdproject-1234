@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../logger/Logger.h"
 #include "SSDConfig.h"
 #include "FileManager.cpp"
 #include "Exception.cpp"
@@ -44,6 +45,8 @@ protected:
 	{
 		return this->opcode;
 	}
+
+	ILogger& logger = Logger::getInstance("ssd");
 
 private:
 	CmdOpcode opcode;
