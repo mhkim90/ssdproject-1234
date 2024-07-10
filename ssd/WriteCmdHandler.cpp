@@ -26,13 +26,7 @@ public:
 
 	void execute(int lba, string data) override
 	{
-		CmdHandler::execute(lba, data);
-#if 0
-		FileManager::getInstance().openNand();
-
-		FileManager::getInstance().updateNand(lba, data);
-
-		FileManager::getInstance().writeNand();
-#endif
+		// update command buffer only
+		CommandBuffer::getInstance().updateCommandBuffer(CmdHandler::getOpcode() , lba, data);
 	}
 };

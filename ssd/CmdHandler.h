@@ -42,6 +42,11 @@ protected:
 		this->opcode = opcode;
 	}
 
+	CmdOpcode getOpcode()
+	{
+		return this->opcode;
+	}
+
 private:
 	CmdOpcode opcode;
 };

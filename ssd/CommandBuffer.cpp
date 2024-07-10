@@ -6,6 +6,15 @@
 #include "FileManager.cpp"
 using namespace std;
 
+#define DEBUG_MODE 1
+
+#define TRACE(message) \
+    do { \
+        if (DEBUG_MODE) { \
+            std::cout << (message) << std::endl; \
+        } \
+    } while (0)
+
 class CommandBuffer
 {
 public:
@@ -15,9 +24,33 @@ public:
 	}
 
 	// TODO
-	void ParseCmdBuf()
+	void ParseCmdBuf(string *cmdBuf)
 	{
+		vector<string> tokens;
 
+		for (int i = 0; i < cmdCnt; i++)
+		{
+			std::istringstream iss(cmdBuf[i]); // Initialize iss with buf
+			IoDataStruct dataStruct;
+			string tempBuffer;
+			iss >> tempBuffer;
+			dataStruct.opcode = static_cast<CmdOpcode>(stoi(tempBuffer));
+			iss >> tempBuffer;
+			dataStruct.lba = stoi(tempBuffer);
+			iss >> tempBuffer;
+			if (dataStruct.opcode != READ_CMD)
+			{
+				dataStruct.data = tempBuffer;
+			}
+
+			cmdList.push_back(dataStruct);
+		}
+
+		cout << "****** print cmd List *******" << endl;
+		for (const auto& cmd : cmdList) {
+			std::cout << "opcode: " << cmd.opcode << ", lba : " << cmd.lba
+				<< ", data: " << cmd.data << std::endl;
+		}
 	}
 
 	void updateCommandBuffer(CmdOpcode opcode, int lba, string data)
@@ -29,6 +62,12 @@ public:
 		FileManager::getInstance().writeFile(COMMAND_BUFFER_FILE, &tempBuffer);
 		cmdCnt++;
 
+		IoDataStruct item;
+		item.opcode = opcode;
+		item.lba = lba;
+		item.data = data;
+		cmdList.push_back(item);
+
 		// 10개되면 flush
 		//CmdBufCheckerMgr::getInstance().ArrangeBuffer();
 
@@ -37,12 +76,14 @@ public:
 private:
 	CommandBuffer()
 	{
+		string cmdBuf[1000];
+
 		// open and read file first from buffer.txt to cmdBuf
 		FileManager::getInstance().initFile(COMMAND_BUFFER_FILE);
 		FileManager::getInstance().openFile(COMMAND_BUFFER_FILE, cmdBuf, cmdCnt);
-		ParseCmdBuf();
+		ParseCmdBuf(cmdBuf);
 	}
-	string cmdBuf[1000];
+
 	int cmdCnt;
 	vector<IoDataStruct> cmdList;
 };

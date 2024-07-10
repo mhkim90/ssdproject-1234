@@ -75,6 +75,7 @@ public:
 		cmdCnt = 0;
 		while (getline(readFile, data, '\n')) {
 			buf[buf_index++] = data;
+			cout << "openFile str :" << buf[buf_index - 1] << endl;
 			cmdCnt++;
 		}
 
