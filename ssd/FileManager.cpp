@@ -32,16 +32,6 @@ public:
 		writeFile.close();
 	}
 
-	void initFile(const string file_name) {
-		// set file as zero
-		ifstream checkFile(file_name);
-
-		if (checkFile.good()) {
-			checkFile.close();
-			return;
-		}
-	}
-
 	void openNand()
 	{
 		// ready to file read
@@ -55,29 +45,6 @@ public:
 		while (getline(readFile, tmp, '\n')) {
 			buf[i++] = tmp;
 		}
-		readFile.close();
-	}
-
-	void openFile(const string file_name, string *buf, int &cmdCnt)
-	{
-		cout << "open file has to be called for once" << endl;
-		// ready to file read
-		ifstream readFile(file_name);
-
-		if (!readFile.is_open()) {
-			return;
-		}
-
-		// save data to buf
-		int buf_index = 0;
-		string data;
-		cmdCnt = 0;
-		while (getline(readFile, data, '\n')) {
-			buf[buf_index++] = data;
-			cout << "openFile str :" << buf[buf_index - 1] << endl;
-			cmdCnt++;
-		}
-
 		readFile.close();
 	}
 
@@ -155,6 +122,37 @@ public:
 			}
 		}
 		writeNand();
+	}
+
+	void openFile(const string file_name, string* buf)
+	{
+		cout << "open file has to be called for once" << endl;
+		// ready to file read
+		ifstream readFile(file_name);
+
+		if (!readFile.is_open()) {
+			return;
+		}
+
+		// save data to buf
+		int buf_index = 0;
+		string data;
+		while (getline(readFile, data, '\n')) {
+			buf[buf_index++] = data;
+			cout << "openFile str :" << buf[buf_index - 1] << endl;
+		}
+
+		readFile.close();
+	}
+
+	void initFile(const string file_name) {
+		// set file as zero
+		ifstream checkFile(file_name);
+
+		if (checkFile.good()) {
+			checkFile.close();
+			return;
+		}
 	}
 
 private:
