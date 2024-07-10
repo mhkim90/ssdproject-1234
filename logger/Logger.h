@@ -3,7 +3,7 @@
 
 class Logger : public ILogger {
 public:
-	static Logger& getInstance(const std::string& module_name);
+	static Logger& getInstance(const std::string& log_directory);
 
 	void printLog(PRINT_TYPE type,
 		const std::string& func_name,
@@ -11,7 +11,7 @@ public:
 
 
 private:
-	Logger(const std::string& module_name);
+	Logger(const std::string& log_directory);
 
 	Logger(const Logger&) = delete;
 	Logger& operator=(const Logger&) = delete;
