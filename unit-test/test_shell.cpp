@@ -1,8 +1,15 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "../test-shell/shell.cpp"
+#include "../test-shell/shell.h"
 #include "../test-shell/ssd.h"
-#include "../test-shell/command_factory.cpp"
+#include "../test-shell/ReadCommand.h"
+#include "../test-shell/WriteCommand.h"
+#include "../test-shell/TestApp1Command.h"
+#include "../test-shell/TestApp2Command.h"
+#include "../test-shell/FlushCommand.h"
+#include "../test-shell/EraseCommand.h"
+#include "../test-shell/EraseRangeCommand.h"
+#include "../test-shell/command_factory.h"
 #include <unordered_map>
 #include <string>
 
@@ -202,7 +209,7 @@ public:
 	}
 
 	Shell shell;
-	CommandFactory& factory;
+	ICommandFactory& factory;
 	TestApp1Command cmdTestApp1;
 	TestApp2Command cmdTestApp2;
 	MockSSD mockSSD;

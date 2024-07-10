@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "../test-shell/command_factory.cpp"
+#include "../test-shell/command_factory.h"
 #include "../test-shell/command.h"
 #include "../test-shell/ssdlib.cpp"
 #include <iostream>
