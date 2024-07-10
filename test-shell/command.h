@@ -5,6 +5,8 @@
 
 #include <vector>
 #include <string>
+#include <stdexcept>
+#include <regex>
 #include "ssd.h"
 using std::string;
 using std::vector;
@@ -18,25 +20,44 @@ interface ICommand {
 
 class CommandBase : public ICommand {
 public:
-	CommandBase(ISSD& ssd, const string&  helpMsg, int verifyArgsCount = 0);
+	CommandBase(ISSD& ssd, int verifyArgsCount = 0)
+		: _ssd{ ssd }
+		, _VERIFY_ARGS_COUNT{ verifyArgsCount }
+	{
+	}
+	virtual void execute(const vector<string>& args) override = 0;
+	virtual const string& getHelp() override = 0;
 
-	virtual void execute(const vector<string>& args) = 0;
-
-	virtual void injectSSD(ISSD& ssd) override;
-	virtual const string& getHelp() override;
-
+	virtual void injectSSD(ISSD& ssd) override {
+		_ssd = ssd;
+	}
 protected:
-	inline void verifyArgsCount(const vector<string>& args) const;
-	inline void verifyFormatAddress(const string& arg) const;
-	inline void verifyFormatValue(const string& arg) const;
-	inline void verifyAddressRange(int addr) const;
-	inline ISSD& getSSD() const;
+	inline void verifyArgsCount(const vector<string>& args) const {
+		if ((int)args.size() >= _VERIFY_ARGS_COUNT) return;
+		throw std::invalid_argument("Not enough arguments. Check help.");
+	}
+	inline void verifyFormatAddress(const string& arg) const {
+		static std::regex REGEX{ "^[0-9]+$" };
+		if (std::regex_match(arg, REGEX)) return;
+		throw std::invalid_argument("Invalid arguments. Check help.");
+	}
+	inline void verifyFormatValue(const string& arg) const {
+		static std::regex REGEX{ "^0x[A-Z]{8}$" };
+		if (std::regex_match(arg, REGEX)) return;
+		throw std::invalid_argument("Invalid arguments. Check help.");
+	}
+	inline void verifyAddressRange(int addr) const {
+		if (_ADDR_RANGE_MIN <= addr && addr <= _ADDR_RANGE_MAX) return;
+		throw std::invalid_argument("Invalid arguments. Check help.");
+	}
+	inline ISSD& getSSD() const {
+		return _ssd;
+	}
+
+	static constexpr int _ADDR_RANGE_MIN = 0;
+	static constexpr int _ADDR_RANGE_MAX = 99;
 
 private:
-	static constexpr int ADDR_RANGE_MIN = 0;
-	static constexpr int ADDR_RANGE_MAX = 99;
-
 	ISSD& _ssd;
 	const int _VERIFY_ARGS_COUNT;
-	const string _HELP_MSG;
 };

@@ -2,59 +2,47 @@
 #include "Printer.cpp"
 #include <stdexcept>
 
-class ReadCommand : public ICommand {
+class ReadCommand : public CommandBase {
 public:
-	ReadCommand(ISSD& ssd) :ssd{ &ssd } {}
-
-	void injectSSD(ISSD& ssd) override
+	ReadCommand(ISSD& ssd)
+		: CommandBase(ssd, 1)
 	{
-		this->ssd = &ssd;
 	}
 
 	void execute(const vector<string>& args) override
 	{
-		if (args.size() < 1) throw invalid_argument("Not enough arguments. Check help.");
+		verifyArgsCount(args);
+		verifyFormatAddress(args[0]);
 		Printer& printer = Printer::getInstance();
 		int addr = stoi(args[0]);
-		validationCheck(addr);
-		printer.print(ssd->read(addr));
+		verifyAddressRange(addr);
+		printer.print(getSSD().read(addr));
 	}
 
-	const string& getHelp() override
-	{
-		return strHelp;
+	const string& getHelp() override {
+		return _HELP_MESSAGE;
 	}
 
 private:
-	ISSD* ssd;
-	const int LBA_MIN_VAL = 0;
-	const int LBA_MAX_VAL = 99;
-	const string strHelp = "Reads the value written at LBA and displays it on the screen.\n\
+	const string _HELP_MESSAGE = "Reads the value written at LBA and displays it on the screen.\n\
 		[Example] read LBA\n\
 		[Parameters]\n\
 		- LBA: LBA area value to read(0~99)\n\
 		[Returns] Displays the data read from LBA.\n";
-
-	void validationCheck(int addr) {
-		if (addr < LBA_MIN_VAL || addr > LBA_MAX_VAL) {
-			throw std::invalid_argument("잘못된 LBA 값 입니다.");
-		}
-	}
 };
 
-class FullReadCommand : public ICommand {
+class FullReadCommand : public CommandBase {
 public:
-	FullReadCommand(ISSD& ssd) :ssd{ &ssd } {}
-	void injectSSD(ISSD& ssd) override
-	{
-		this->ssd = &ssd;
+	FullReadCommand(ISSD& ssd)
+		: CommandBase(ssd) {
+
 	}
 
 	void execute(const vector<string>& args) override
 	{
 		Printer& printer = Printer::getInstance();
-		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
-			printer.print(ssd->read(i));
+		for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
+			printer.print(getSSD().read(i));
 		}
 	}
 
@@ -64,9 +52,6 @@ public:
 	}
 
 private:
-	ISSD* ssd;
-	const int LBA_MIN_VAL = 0;
-	const int LBA_MAX_VAL = 99;
 	const string strHelp = "Reads and displays values from LBA 0 to 99 on the screen.\n\
 		[Example] fullread\n\
 		[Parameter] None\n\
