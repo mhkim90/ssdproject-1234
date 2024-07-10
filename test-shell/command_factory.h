@@ -13,4 +13,5 @@ interface ICommandFactory {
 	virtual ICommand* getCommand(const std::string& command) = 0;
 	virtual const std::unordered_map<std::string, ICommand*>&
 		getAllCommands() const = 0;
+	virtual void initialize(ISSD* ssd) = 0;
 };

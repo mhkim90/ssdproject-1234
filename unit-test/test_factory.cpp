@@ -2,6 +2,7 @@
 #include "gmock/gmock.h"
 #include "../test-shell/command_factory.cpp"
 #include "../test-shell/command.h"
+#include "../test-shell/ssdlib.cpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -39,15 +40,14 @@ protected:
 	void SetUp() override {
 		dummy_args = { "0", "0" };
 
-		factory.injectCommand("read", &readCMD);;
-		factory.injectCommand("write", &writeCMD);;
+		factory.injectCommand("read", &readCMD);
+		factory.injectCommand("write", &writeCMD);
 	}
 
 	void TearDown() override {
 
 	}
 };
-
 
 TEST_F(FactoryFixture, TestInjectedReadCommand) {
 	EXPECT_CALL(readCMD, execute(_))
