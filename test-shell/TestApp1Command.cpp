@@ -4,9 +4,7 @@
 class TestApp1Command : public ScriptBase {
 public:
 	TestApp1Command(ISSD& ssd)
-		: ScriptBase(ssd, "testapp1")
-		, _read{ read }
-		, _write{ write } {
+		: ScriptBase(ssd, "testapp1") {
 	}
 
 	void execute(const vector<string>& args) override

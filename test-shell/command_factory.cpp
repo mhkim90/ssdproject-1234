@@ -19,7 +19,7 @@ public:
 		injectCommand("read", new ReadCommand(*ssd));
 		injectCommand("write", new WriteCommand(*ssd));
 		injectCommand("fullread", new FullReadCommand(*ssd));
-		injectCommand("fullwrite", new FullwriteCommand(*ssd));
+		injectCommand("fullwrite", new FullWriteCommand(*ssd));
 		injectCommand("testapp1", new TestApp1Command(*ssd));
 		injectCommand("testapp2", new TestApp2Command(*ssd));
 	}
