@@ -3,6 +3,10 @@
 #include <unordered_map>
 #include <iostream>
 #include <memory>
+#include "ReadCommand.cpp"
+#include "WriteCommand.cpp"
+#include "TestApp1Command.cpp"
+#include "TestApp2Command.cpp"
 
 class CommandFactory : public ICommandFactory {
 public:
@@ -11,9 +15,20 @@ public:
 		return instance;
 	}
 
+	void initialize(ISSD* ssd) override {
+		injectCommand("read", new ReadCommand(*ssd));
+		injectCommand("write", new WriteCommand(*ssd));
+		injectCommand("fullread", new FullReadCommand(*ssd));
+		injectCommand("fullwrite", new FullwriteCommand(*ssd));
+		injectCommand("testapp1", new TestApp1(*ssd));
+		injectCommand("testapp2", new TestApp2Command(*ssd));
+	}
+
 	void injectCommand(const std::string& name, 
 			ICommand* command) override {
-		commands.insert({ name, command });
+		if (commands.count(name) == 0) {
+			commands.insert({ name, command });
+		}
 	}
 
 	ICommand* getCommand(const string& command) override {
@@ -21,7 +36,7 @@ public:
 			return commands[command];
 		}
 		else {
-			throw std::invalid_argument("getCommand: cannot find" + command);
+			throw std::invalid_argument("cannot find command : " + command);
 		}
 	}
 
@@ -30,13 +45,7 @@ public:
 	}
 
 private:
-	CommandFactory() {
-		setCommand();
-	}
-
-	void setCommand() {
-
-	}
+	CommandFactory() {}
 
 	CommandFactory(const CommandFactory&) = delete;
 	CommandFactory& operator=(const CommandFactory&) = delete;

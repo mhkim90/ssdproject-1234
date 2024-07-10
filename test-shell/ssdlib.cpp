@@ -51,7 +51,7 @@ private:
 	char current_path[256];
 	std::string directory_path = "\\..\\x64\\Debug";
 	std::string app_name = "\\ssd.exe";
-	std::string result_path = directory_path;
+	std::string result_path = "";
 	std::string result_name = "\\result.txt";
 
 	std::string getValue(const std::string& result_path) {

@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "../test-shell/shell.cpp"
+#include "../test-shell/ssd.h"
 #include <unordered_map>
 #include <string>
 
@@ -21,6 +22,7 @@ public:
 	MOCK_METHOD(void, injectCommand, (const string&, ICommand*), (override));
 	MOCK_METHOD(ICommand*, getCommand, (const string&), (override));
 	MOCK_METHOD((const unordered_map<string, ICommand*>&), getAllCommands, (), (const override));
+	MOCK_METHOD(void, initialize, (ISSD*), (override));
 	unordered_map<string, ICommand*> _commands;
 };
 
