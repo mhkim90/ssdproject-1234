@@ -17,9 +17,10 @@ enum CmdOpcode
 	READ_CMD = 1,
 	WRITE_CMD = 2,
 	ERASE_CMD = 3,
+	FLUSH_CMD = 4,
 
-	LAST_CMD = ERASE_CMD,
-	MAX_NUM_OF_CMD = LAST_CMD + 1,
+	LAST_CMD = FLUSH_CMD,
+	MAX_NUM_OF_CMD = LAST_CMD + 1
 };
 
 struct IoDataStruct

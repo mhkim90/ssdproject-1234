@@ -3,6 +3,7 @@
 #include "ReadCmdHandler.cpp"
 #include "WriteCmdHandler.cpp"
 #include "EraseCmdHandler.cpp"
+#include "FlushCmdHandler.cpp"
 
 class CmdHandlerFactory
 {
@@ -27,6 +28,10 @@ public:
         else if (opcode == ERASE_CMD)
         {
             cmdHandler = new EraseCmdHandler();
+        }
+        else if (opcode == FLUSH_CMD)
+        {
+            cmdHandler = new FlushCmdHandler();
         }
         return cmdHandler;
     }

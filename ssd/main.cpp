@@ -34,4 +34,10 @@ int main(int argc, char* argv[])
         SSDManager ssdManager(cmdHandler);
         ssdManager.runCommand(stoi(argv[2]), argv[3]);
     }
+    else if (*argv[1] == 'F' || *argv[1] == 'f')
+    {
+        CmdHandler* cmdHandler = factory.createCmdHandler(FLUSH_CMD);
+        SSDManager ssdManager(cmdHandler);
+        ssdManager.runCommand(stoi(argv[2]), argv[3]);
+    }
 }

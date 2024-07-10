@@ -124,6 +124,10 @@ public:
 		for (int i = 0; i < range; i++) {
 			buf[lba+i] = INIT_DATA;
 		}
+	}	
+	
+	void flushNand() {
+		// do flush
 	}
 
 private:
