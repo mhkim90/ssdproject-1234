@@ -43,7 +43,7 @@ protected:
 		throw std::invalid_argument("Invalid arguments. Check help.");
 	}
 	inline void verifyFormatValue(const string& arg) const {
-		static std::regex REGEX{ "^0x[A-Z]{8}$" };
+		static std::regex REGEX{ "^0x[0-9A-Z]{8}$" };
 		if (std::regex_match(arg, REGEX)) return;
 		throw std::invalid_argument("Invalid arguments. Check help.");
 	}

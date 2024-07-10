@@ -25,7 +25,7 @@ public:
 
 private:
 	const string _HELP_MESSAGE = "Reads the value written at LBA and displays it on the screen.\n\
-		[Example] read LBA\n\
+		[Example] read [LBA]\n\
 		[Parameters]\n\
 		- LBA: LBA area value to read(0~99)\n\
 		[Returns] Displays the data read from LBA.\n";
