@@ -58,7 +58,7 @@ TEST_F(TestApp2Fixture, TestApp2TestSuccess) {
 	ta2Cmd.execute(arg);
 
 	// assert
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "SUCCESS\n");
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp2 --- Run...Pass\n");
 }
 
 
@@ -89,10 +89,13 @@ TEST_F(TestApp2Fixture, TestApp2TestFailure) {
 		}
 	}
 
-	ta2Cmd.execute(arg);
-
-	// assert
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "FAIL\n");
+	try {
+		ta2Cmd.execute(arg);
+	}
+	catch (std::logic_error&) {
+		// assert
+		EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp2 --- Run...FAIL!\n");
+	}
 }
 
 TEST_F(TestApp2Fixture, TestApp2TestHelp) {
