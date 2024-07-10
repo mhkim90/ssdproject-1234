@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../test-shell/ssdlib.cpp"
+#include "../test-shell/ssdlib.h"
 
 using namespace testing;
 

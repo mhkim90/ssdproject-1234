@@ -11,3 +11,4 @@
 #include "../test-shell/EraseCommand.cpp"
 #include "../test-shell/command_factory.cpp"
 #include "../test-shell/shell.cpp"
+#include "../test-shell/ssdlib.cpp"

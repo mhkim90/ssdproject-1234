@@ -92,6 +92,9 @@
     <ClInclude Include="EraseCommand.h">
       <Filter>헤더 파일\Command</Filter>
     </ClInclude>
+    <ClInclude Include="ssdlib.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="run_list.lst">

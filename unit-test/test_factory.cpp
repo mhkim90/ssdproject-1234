@@ -2,7 +2,7 @@
 #include "gmock/gmock.h"
 #include "../test-shell/command_factory.h"
 #include "../test-shell/command.h"
-#include "../test-shell/ssdlib.cpp"
+#include "../test-shell/ssdlib.h"
 #include <iostream>
 #include <string>
 #include <vector>
