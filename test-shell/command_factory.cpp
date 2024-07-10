@@ -25,7 +25,7 @@ public:
 		injectCommand("testapp1", new TestApp1Command(*ssd));
 		injectCommand("testapp2", new TestApp2Command(*ssd));
 		injectCommand("erase", new EraseCommand(*ssd));
-		injectCommand("erase_range", new EraseCommand(*ssd));
+		injectCommand("erase_range", new EraseRangeCommand(*ssd));
 	}
 
 	void injectCommand(const std::string& name, 
