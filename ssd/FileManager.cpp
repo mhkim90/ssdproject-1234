@@ -24,7 +24,7 @@ public:
 		if (!writeFile.is_open())
 			return;
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < LBA_COUNT; i++) {
 			writeFile << INIT_DATA << endl;
 		}
 		writeFile.close();
