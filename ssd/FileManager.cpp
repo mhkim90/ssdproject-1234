@@ -3,6 +3,8 @@
 #include <iostream>
 #include "SSDConfig.h"
 
+using namespace std;
+
 class FileManager {
 public:
 	static FileManager& getInstance() {
@@ -58,14 +60,47 @@ public:
 		writeFile.close();
 	}
 
+	void writeFile(const string file_name, vector<IoDataStruct> cmdList) {
+
+		cout << "writeFile is called :" << *buf << endl;
+
+		ofstream writeFile;
+		writeFile.open(file_name);
+		if (!writeFile.is_open())
+			return;
+
+		for (auto cmd : cmdList) {
+			string tempBuffer = to_string(cmd.opcode) + " " + to_string(cmd.lba) + " " + cmd.data;
+			writeFile << tempBuffer << endl;
+		}
+		writeFile.close();
+	}
+
+	// read from nand and save it to result.txt
 	void readNand(int lba) {
 		ofstream resultFile;
 		resultFile.open(RESULTFILE);
-		if (resultFile.is_open())
-		{
-			resultFile << buf[lba] << endl;
-		}
+
+		if (!resultFile.is_open())
+			return;
+
+		resultFile << buf[lba] << endl;
+
 		resultFile.close();
+	}
+
+	bool updateResult(string data) {
+		ofstream resultFile;
+		resultFile.open(RESULTFILE);
+
+		if (!resultFile.is_open())
+			return false;
+
+		resultFile << data << endl;
+
+		resultFile.close();
+
+		return true;
 	}
 
 	void updateNand(int lba, string data) {
@@ -77,9 +112,56 @@ public:
 		for (int i = 0; i < range; i++) {
 			buf[lba+i] = INIT_DATA;
 		}
+	}	
+	
+	void flushNand(vector<IoDataStruct> cmdList) {
+		// do flush
+		openNand();
+		for (auto cmd : cmdList) {
+			if (cmd.opcode == WRITE_CMD) {
+				updateNand(cmd.lba, cmd.data);
+			}
+			else if (cmd.opcode == ERASE_CMD) {
+				// do erase
+				eraseNand(cmd.lba, cmd.data);
+			}
+		}
+		writeNand();
+	}
+
+	void openFile(const string file_name, string* buf,int &cmdBackupCount)
+	{
+		cout << "open file has to be called for once" << endl;
+		// ready to file read
+		ifstream readFile(file_name);
+
+		if (!readFile.is_open()) {
+			return;
+		}
+
+		// save data to buf
+		int buf_index = 0;
+		string data;
+		while (getline(readFile, data, '\n')) {
+			buf[buf_index++] = data;
+			cmdBackupCount++;
+			cout << "openFile str :" << buf[buf_index - 1] << endl;
+		}
+
+		readFile.close();
+	}
+
+	void initFile(const string file_name) {
+		// set file as zero
+		ifstream checkFile(file_name);
+
+		if (checkFile.good()) {
+			checkFile.close();
+			return;
+		}
 	}
 
 private:
 	FileManager() {}
-	string buf[100];
+	string buf[1000];
 };

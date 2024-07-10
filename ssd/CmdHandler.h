@@ -6,6 +6,7 @@
 #include "SSDConfig.h"
 #include "FileManager.cpp"
 #include "Exception.cpp"
+#include "CommandBuffer.cpp"
 
 using namespace std;
 
@@ -14,11 +15,14 @@ class CmdHandler
 public:
 	CmdHandler() {};
 
-	virtual void execute(int lba, string data ="") = 0;
+	virtual void execute(int lba, string data = "")
+	{
+		CommandBuffer::getInstance().updateCommandBuffer(opcode, lba, data);
+	}
 
 	bool IsAvailableOpcode(CmdOpcode opcode)
 	{
-		return (opcode == READ_CMD) || (opcode == WRITE_CMD) || (opcode == ERASE_CMD);
+		return (opcode == READ_CMD) || (opcode == WRITE_CMD) || (opcode == ERASE_CMD) || (opcode == FLUSH_CMD);
 	}
 	virtual bool sanityCheckPassed(int lba, string data)
 	{
@@ -27,8 +31,6 @@ public:
 			throw InvalidOpcodeException();
 		}
 
-		FileManager::getInstance().initNand();
-
 		return (MIN_LBA <= lba && lba < LBA_COUNT);
 	}
 
@@ -36,6 +38,11 @@ protected:
 	void setOpcode(CmdOpcode opcode)
 	{
 		this->opcode = opcode;
+	}
+
+	CmdOpcode getOpcode()
+	{
+		return this->opcode;
 	}
 
 private:
