@@ -69,7 +69,7 @@ TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Success) {
 
 	testing::internal::CaptureStdout();
 	testApp1.execute({ });
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "SUCCESS\n");
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp1 --- Run...Pass\n");
 }
 
 TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
@@ -81,7 +81,7 @@ TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
 
 	testing::internal::CaptureStdout();
 	testApp1.execute({ });
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "FAIL\n");
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp1 --- Run...FAIL!\n");
 }
 
 TEST_F(TestApp1Fixture, Shell_TestApp1_GetHelp) {

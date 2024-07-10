@@ -4,10 +4,10 @@
 #include "command.h"
 #include "Printer.cpp"
 
-class TestApp2Command : public CommandBase {
+class TestApp2Command : public ScriptBase {
 public:
 	TestApp2Command(ISSD& ssd)
-		: CommandBase(ssd) {
+		: ScriptBase(ssd, "testapp2") {
 
 	}
 
@@ -15,7 +15,8 @@ public:
 	{
 		std::string  agingString = "0xAAAABBBB";
 		std::string  originString = "0x12345678";
-		Printer& printer = Printer::getInstance();
+
+		printRun();
 
 		// no argument to check
 		// 
@@ -35,12 +36,11 @@ public:
 		// 3rd step
 		for (int lba = START_LBA_FOR_AGING; lba <= END_LBA_FOR_AGING; lba++) {
 			if (originString != getSSD().read(lba)) {
-				printer.print("FAIL");
-				return;
+				printResult(false); // 여기서 throw 발생
 			}
 		}
 
-		printer.print("SUCCESS");
+		printResult(true);
 	}
 
 	const string& getHelp() override
