@@ -1,22 +1,22 @@
 #include "command.h"
 #include "Printer.cpp"
 
-class TestApp1Command : public ICommand {
+class TestApp1Command : public CommandBase {
 public:
 	TestApp1Command(ISSD& ssd, ICommand& read, ICommand& write)
-		: ssd{ &ssd }, read{ &read }, write{ &write } {}
-	void injectSSD(ISSD& ssd) override
-	{
-		this->ssd = &ssd;
+		: CommandBase(ssd)
+		, _read{ read }
+		, _write{ write } {
+
 	}
 
 	void execute(const vector<string>& args) override
 	{
 		Printer& printer = Printer::getInstance();
 
-		write->execute({ TEST_VAL });
-		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
-			string tmp = ssd->read(i);
+		_write.execute({ TEST_VAL });
+		for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
+			string tmp = getSSD().read(i);
 			if (tmp != TEST_VAL) {
 				printer.print("FAIL");
 				return;
@@ -31,10 +31,7 @@ public:
 	}
 
 private:
-	ISSD* ssd;
-	ICommand *read, *write;
-	const int LBA_MIN_VAL = 0;
-	const int LBA_MAX_VAL = 99;
+	ICommand &_read, &_write;
 	const string TEST_VAL = "0xAAAABBBB";
 	const string strHelp = "Test script1 - testapp1.\n\
 		[Example] testapp1\n\
