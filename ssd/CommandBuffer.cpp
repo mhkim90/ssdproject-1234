@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -55,7 +56,7 @@ public:
 
 	void updateCommandBuffer(CmdOpcode opcode, int lba, string data)
 	{	
-		cout << "total command bufffer pool cmd count : " << cmdCnt << endl;
+		cout << "total command buffer pool cmd count : " << cmdCnt << endl;
 		// buffer.txt will be saved "[opcode] [lba] [data]" format
 		// [data] could be size in erase case, data in write case
 		string tempBuffer = to_string(opcode) + " " + to_string(lba) + " " + data;
@@ -73,6 +74,19 @@ public:
 
 		// E 되면 앞에꺼 scan해서 지우기
 	}
+
+	bool needFlush() {
+		return cmdCnt == MAX_BUFFER_COUNT;
+	}
+
+	void flushBuffer() {
+		FileManager::getInstance().flushNand(cmdList);
+
+		// buffer 초기화
+		cmdCnt = 0;
+		cmdList.clear();
+	}
+
 private:
 	CommandBuffer()
 	{
@@ -83,7 +97,6 @@ private:
 		FileManager::getInstance().openFile(COMMAND_BUFFER_FILE, cmdBuf, cmdCnt);
 		ParseCmdBuf(cmdBuf);
 	}
-
 	int cmdCnt;
 	vector<IoDataStruct> cmdList;
 };

@@ -22,7 +22,7 @@ public:
 
 	bool IsAvailableOpcode(CmdOpcode opcode)
 	{
-		return (opcode == READ_CMD) || (opcode == WRITE_CMD) || (opcode == ERASE_CMD);
+		return (opcode == READ_CMD) || (opcode == WRITE_CMD) || (opcode == ERASE_CMD) || (opcode == FLUSH_CMD);
 	}
 	virtual bool sanityCheckPassed(int lba, string data)
 	{
@@ -30,8 +30,6 @@ public:
 		{
 			throw InvalidOpcodeException();
 		}
-
-		FileManager::getInstance().initNand();
 
 		return (MIN_LBA <= lba && lba < LBA_COUNT);
 	}

@@ -3,7 +3,6 @@
 #include <iostream>
 #include "SSDConfig.h"
 
-#include <iostream>
 using namespace std;
 
 class FileManager {
@@ -108,10 +107,12 @@ public:
 	void readNand(int lba) {
 		ofstream resultFile;
 		resultFile.open(RESULTFILE);
-		if (resultFile.is_open())
-		{
-			resultFile << buf[lba] << endl;
-		}
+
+		if (!resultFile.is_open())
+			return;
+
+		resultFile << buf[lba] << endl;
+
 		resultFile.close();
 	}
 
@@ -124,6 +125,21 @@ public:
 		for (int i = 0; i < range; i++) {
 			buf[lba+i] = INIT_DATA;
 		}
+	}	
+	
+	void flushNand(vector<IoDataStruct> cmdList) {
+		// do flush
+		openNand();
+		for (auto cmd : cmdList) {
+			if (cmd.opcode == WRITE_CMD) {
+				updateNand(cmd.lba, cmd.data);
+			}
+			else if (cmd.opcode == ERASE_CMD) {
+				// do erase
+				eraseNand(cmd.lba, cmd.data);
+			}
+		}
+		writeNand();
 	}
 
 private:

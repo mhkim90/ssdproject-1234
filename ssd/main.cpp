@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include "SSDManager.cpp"
 #include "CmdHandlerFactory.cpp"
+#include "CommandBuffer.cpp"
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -13,6 +14,8 @@ int main(int argc, char* argv[])
     {
         arguments.push_back(argv[i]);
     }
+
+    FileManager::getInstance().initNand();
 
     CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
 
@@ -31,6 +34,12 @@ int main(int argc, char* argv[])
     else if (*argv[1] == 'E' || *argv[1] == 'e')
     {
         CmdHandler* cmdHandler = factory.createCmdHandler(ERASE_CMD);
+        SSDManager ssdManager(cmdHandler);
+        ssdManager.runCommand(stoi(argv[2]), argv[3]);
+    }
+    else if (*argv[1] == 'F' || *argv[1] == 'f')
+    {
+        CmdHandler* cmdHandler = factory.createCmdHandler(FLUSH_CMD);
         SSDManager ssdManager(cmdHandler);
         ssdManager.runCommand(stoi(argv[2]), argv[3]);
     }
