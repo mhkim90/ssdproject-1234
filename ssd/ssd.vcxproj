@@ -132,6 +132,7 @@
     <ClCompile Include="CommandBuffer.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="FileManager.cpp" />
+    <ClCompile Include="FlushCmdHandler.cpp" />
     <ClCompile Include="ReadCmdHandler.cpp" />
     <ClCompile Include="CmdHandler.h" />
     <ClCompile Include="main.cpp" />

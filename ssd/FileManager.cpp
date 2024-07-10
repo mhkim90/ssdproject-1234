@@ -108,10 +108,12 @@ public:
 	void readNand(int lba) {
 		ofstream resultFile;
 		resultFile.open(RESULTFILE);
-		if (resultFile.is_open())
-		{
-			resultFile << buf[lba] << endl;
-		}
+
+		if (!resultFile.is_open())
+			return;
+
+		resultFile << buf[lba] << endl;
+
 		resultFile.close();
 	}
 
