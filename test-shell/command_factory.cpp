@@ -7,6 +7,8 @@
 #include "WriteCommand.cpp"
 #include "TestApp1Command.cpp"
 #include "TestApp2Command.cpp"
+#include "EraseCommand.cpp"
+#include "EraseRangeCommand.cpp"
 
 class CommandFactory : public ICommandFactory {
 public:
@@ -22,6 +24,8 @@ public:
 		injectCommand("fullwrite", new FullWriteCommand(*ssd));
 		injectCommand("testapp1", new TestApp1Command(*ssd));
 		injectCommand("testapp2", new TestApp2Command(*ssd));
+		injectCommand("erase", new EraseCommand(*ssd));
+		injectCommand("erase_range", new EraseCommand(*ssd));
 	}
 
 	void injectCommand(const std::string& name, 

@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="command.cpp" />
     <ClCompile Include="command_factory.cpp" />
+    <ClCompile Include="EraseCommand.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Printer.cpp" />
     <ClCompile Include="shell.cpp" />
