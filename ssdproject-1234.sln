@@ -4,8 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ssd", "ssd\ssd.vcxproj", "{9E80140B-4BFD-49EB-96D5-A697780CE1FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{47779171-DD11-49CA-A0ED-7776E537F10F} = {47779171-DD11-49CA-A0ED-7776E537F10F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test-shell", "test-shell\test-shell.vcxproj", "{7A85CF34-DCF2-4052-AEBC-E6B437DCC197}"
+	ProjectSection(ProjectDependencies) = postProject
+		{47779171-DD11-49CA-A0ED-7776E537F10F} = {47779171-DD11-49CA-A0ED-7776E537F10F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit-test", "unit-test\unit-test.vcxproj", "{4C554216-3BBB-421F-B0CB-8221E7613369}"
 EndProject

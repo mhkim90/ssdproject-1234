@@ -1,5 +1,4 @@
 #include "EraseRangeCommand.h"
-
 EraseRangeCommand::EraseRangeCommand(ISSD& ssd, int argsCount)
 	: CommandBase(ssd, argsCount)
 	, _HELP_MESSAGE{ string{"Delete a specific range of SSD.\n\
