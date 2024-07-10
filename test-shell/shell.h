@@ -9,11 +9,7 @@
 
 using std::vector;
 
-interface IShell {
-
-};
-
-class Shell : public IShell {
+class Shell {
 public:
 	Shell(ICommandFactory& factory);
 	
