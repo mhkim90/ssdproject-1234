@@ -1,25 +1,25 @@
 #include <iostream>
-#include <windows.h>
 #include <string>
 #include <fstream>
 #include "ssd.h"
+#include <filesystem>
 
 class SSDLib : public ISSD {
 public:
 	SSDLib() {
-		GetCurrentDirectoryA(256, current_path);
+		current_path = std::filesystem::current_path();
 	}
 
 	SSDLib(const std::string& directory_path)
 		: directory_path { directory_path } {
-		GetCurrentDirectoryA(256, current_path);
+		current_path = std::filesystem::current_path();
 	}
 
 	SSDLib(const std::string& directory_path,
 		const std::string& app_name)
 		: directory_path{ directory_path }
 		, app_name{ app_name } {
-		GetCurrentDirectoryA(256, current_path);
+		current_path = std::filesystem::current_path();
 	}
 
 	SSDLib(const std::string& directory_path,
@@ -28,22 +28,22 @@ public:
 		: directory_path{ directory_path }
 		, app_name{ app_name } 
 		, result_path{ result_path } {
-		GetCurrentDirectoryA(256, current_path);
+		current_path = std::filesystem::current_path();
 	}
 
 	void write(int addr, const std::string& value) override {
-		std::string command = std::string(current_path) + 
+		std::string command = current_path.string() +
 			directory_path + app_name + " W " +
 			std::to_string(addr) + " " + value;
 		system(command.c_str());
 	}
 
 	std::string read(int addr) override {
-		std::string command = std::string(current_path) +
+		std::string command = current_path.string() +
 			directory_path + app_name + " R " +
 			std::to_string(addr);
 		system(command.c_str());
-		return getValue(std::string(current_path) + result_path +
+		return getValue(current_path.string() + result_path +
 						result_name);
 	}
 
@@ -66,7 +66,7 @@ public:
 	}
 
 private:
-	char current_path[256];
+	std::filesystem::path current_path;
 	std::string directory_path = "\\..\\x64\\Debug";
 	std::string app_name = "\\ssd.exe";
 	std::string result_path = "";
