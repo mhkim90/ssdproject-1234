@@ -47,6 +47,18 @@ public:
 						result_name);
 	}
 
+	void erase(int addr, int size) override {
+		std::string command = std::string(current_path) +
+			directory_path + app_name + " E " +
+			std::to_string(addr) + " " + std::to_string(size);
+		system(command.c_str());
+	}
+
+	std::string getResult() override {
+		return getValue(std::string(current_path) + result_path +
+			result_name);
+	}
+
 private:
 	char current_path[256];
 	std::string directory_path = "\\..\\x64\\Debug";
