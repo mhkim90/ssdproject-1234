@@ -25,7 +25,9 @@ public:
 
 	void execute(int lba, string data) override
 	{
-		// update command buffero only
+		// update command buffer only
 		CommandBuffer::getInstance().updateCommandBuffer(CmdHandler::getOpcode(), lba, data);
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Erase Executed");
 	}
 };
