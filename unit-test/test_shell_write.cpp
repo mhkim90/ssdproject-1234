@@ -138,10 +138,9 @@ TEST_F(FullWriteCommandFixture, FullwriteTestInvalidValue) {
 TEST_F(FullWriteCommandFixture, FullwriteTestHelp) {
 
 	// arrange
-	string expectedString = "\Perform write from address 0 to 99.\n\
-		[Example] fullwrite [any] [Value]\n\
+	string expectedString = "Perform write from address 0 to 99.\n\
+		[Example] fullwrite [Value]\n\
 		[Parameters]\n\
-		- any\n\
 		- Value: a value to be recorded\n\
 		[Returns] none\n";
 

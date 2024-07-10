@@ -7,7 +7,6 @@ class WriteCommand : public CommandBase {
 public:
 	WriteCommand(ISSD& ssd, int argsCount = 2)
 		: CommandBase(ssd, argsCount) {
-
 	}
 
 	void execute(const vector<string>& args) override
@@ -39,13 +38,10 @@ private:
 	
 };
 
-class FullWriteCommand : public WriteCommand {
+class FullWriteCommand : public CommandBase {
 public:
-	FullWriteCommand(ISSD& ssd) : WriteCommand{ ssd, 1 } {}
-
-	void injectSSD(ISSD& ssd) override
-	{
-		WriteCommand::injectSSD(ssd);
+	FullWriteCommand(ISSD& ssd, int argsCount = 1)
+		: CommandBase(ssd, argsCount) {
 	}
 
 	void execute(const vector<string>& args) override
@@ -72,9 +68,8 @@ public:
 
 private:
 	const string FULLWRITE_HELP = "Perform write from address 0 to 99.\n\
-		[Example] fullwrite [any] [Value]\n\
+		[Example] fullwrite [Value]\n\
 		[Parameters]\n\
-		- any\n\
 		- Value: a value to be recorded\n\
 		[Returns] none\n";
 };
