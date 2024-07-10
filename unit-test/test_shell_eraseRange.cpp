@@ -159,7 +159,7 @@ TEST_F(EraseRangeCommandFixture, EraseRangeTestFailure1) {
 	vector<string> arg = { "0", "0" };
 
 	// act
-	EXPECT_THROW(erCmd.execute(arg), invalid_argument);
+	EXPECT_THROW(erCmd.execute(arg), std::invalid_argument);
 
 	// assert
 }
@@ -170,7 +170,7 @@ TEST_F(EraseRangeCommandFixture, EraseRangeTestFailure2) {
 	vector<string> arg = { "100", "101" };
 
 	// act
-	EXPECT_THROW(erCmd.execute(arg), invalid_argument);
+	EXPECT_THROW(erCmd.execute(arg), std::invalid_argument);
 
 	// assert
 }
