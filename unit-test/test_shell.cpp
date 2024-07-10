@@ -166,8 +166,15 @@ TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
 	EXPECT_EQ(getOutput(), makeOutputFormat("< Help >\ncommand\t\t: HELP MESSAGE\n"));
 }
 
-TEST_F(ShellFixutre, COMMAND_RUN_SEQUENCE_INVALID_FILE_PATH) {
+TEST_F(ShellFixutre, RUN_SEQUENCE_INVALID_FILE_PATH) {
 	EXPECT_THROW(shell.runSequence("unknown.list"), invalid_argument);
 	EXPECT_THROW(shell.runSequence(""), invalid_argument);
 	EXPECT_THROW(shell.runSequence("."), invalid_argument);
+}
+
+TEST_F(ShellFixutre, LOAD_SEQ) {
+	EXPECT_NO_THROW(shell.loadSequence("run_list.lst"));
+	EXPECT_EQ(shell.getSequence().size(), 2);
+	EXPECT_THAT(shell.getSequence(), Contains("testapp1"));
+	EXPECT_THAT(shell.getSequence(), Contains("testapp2"));
 }

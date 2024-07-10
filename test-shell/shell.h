@@ -4,10 +4,12 @@
 #endif
 
 #include <vector>
+#include <list>
 #include "command.h"
 #include "command_factory.h"
 
 using std::vector;
+using std::list;
 
 class Shell {
 public:
@@ -19,6 +21,9 @@ public:
 	virtual string waitForCommand();
 	vector<string> parsingCommandStr(const string& str);
 	void help();
+	void loadSequence(const string& filePath);
+	const list<string>& getSequence() const;
 private:
 	ICommandFactory& _factory;
+	list<string> _sequence;
 };

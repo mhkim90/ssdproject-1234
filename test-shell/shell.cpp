@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <filesystem>
+#include <fstream>
 
 using namespace std;
 
@@ -62,6 +63,8 @@ void Shell::runSequence(const string& filePath)
 		throw invalid_argument("The file path could not be found.");
 	if (filesystem::exists(filePath) == false)
 		throw invalid_argument("The file path could not be found.");
+
+	loadSequence(filePath);
 }
 
 void Shell::help()
@@ -76,4 +79,29 @@ void Shell::help()
 
 		cout << ": " << cmd.second->getHelp() << endl;
 	}
+}
+
+void Shell::loadSequence(const string& filePath)
+{
+	_sequence = {};
+
+	ifstream ifile{ filePath };
+	if (ifile.fail()) throw invalid_argument("Faild of file open.");
+
+	stringstream streamBuffer;
+	streamBuffer << ifile.rdbuf();
+
+	ifile.close();
+
+	istringstream istream{ streamBuffer.str() };
+	string readBuffer;
+	while (getline(istream, readBuffer, '\n')) {
+		if (readBuffer.empty()) continue;
+		_sequence.push_back(readBuffer);
+	}
+}
+
+const list<string>& Shell::getSequence() const
+{
+	return _sequence;
 }
