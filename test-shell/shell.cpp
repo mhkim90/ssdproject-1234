@@ -59,10 +59,7 @@ void Shell::run()
 
 void Shell::runSequence(const string& filePath)
 {
-	if (filesystem::is_directory(filePath))
-		throw invalid_argument("The file path could not be found.");
-	if (filesystem::exists(filePath) == false)
-		throw invalid_argument("The file path could not be found.");
+	verifySequenceFilePath(filePath);
 
 	loadSequence(filePath);
 }
@@ -104,4 +101,12 @@ void Shell::loadSequence(const string& filePath)
 const list<string>& Shell::getSequence() const
 {
 	return _sequence;
+}
+
+void Shell::verifySequenceFilePath(const string& filePath) const
+{
+	if (filesystem::is_directory(filePath))
+		throw invalid_argument("The file path could not be found.");
+	if (filesystem::exists(filePath) == false)
+		throw invalid_argument("The file path could not be found.");
 }

@@ -23,6 +23,10 @@ public:
 	void help();
 	void loadSequence(const string& filePath);
 	const list<string>& getSequence() const;
+
+protected:
+	void verifySequenceFilePath(const string& filePath) const;
+
 private:
 	ICommandFactory& _factory;
 	list<string> _sequence;
