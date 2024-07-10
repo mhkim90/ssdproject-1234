@@ -23,6 +23,8 @@ public:
 		verifyAddressRange(addr);
 
 		getSSD().write(addr, value);
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
 
 	const string& getHelp() override
@@ -56,6 +58,8 @@ public:
 		verifyFormatValue(value);
 
 		writeAtAllSsdField(value);
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
 
 	void writeAtAllSsdField(const std::string& value)

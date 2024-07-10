@@ -17,6 +17,8 @@ public:
 		int addr = stoi(args[0]);
 		verifyAddressRange(addr);
 		std::cout << getSSD().read(addr) << "\n";
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
 
 	const string& getHelp() override {
@@ -45,6 +47,8 @@ public:
 		for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
 			std::cout << getSSD().read(i) << "\n";
 		}
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
 
 	const string& getHelp() override

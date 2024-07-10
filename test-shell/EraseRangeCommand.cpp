@@ -11,6 +11,8 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
 		verifyArgsCount(args);
 		verifyFormatAddress(args[0]);
 		verifyFormatAddress(args[1]);
@@ -35,6 +37,8 @@ public:
 
 			start_addr += ERASE_SIZE_AT_ONCE;
 		}
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
 
 	const string& getHelp() override {

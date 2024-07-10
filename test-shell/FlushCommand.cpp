@@ -10,6 +10,8 @@ class FlushCommand : public CommandBase {
 
 		verifyArgsCount(args);
 		getSSD().flush();
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
 
 	const string& getHelp() override
