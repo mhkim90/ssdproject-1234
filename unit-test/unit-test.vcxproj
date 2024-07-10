@@ -100,6 +100,7 @@
     <ClCompile Include="test_factory.cpp" />
     <ClCompile Include="ssd_command_test.cpp" />
     <ClCompile Include="ssd_manager_test.cpp" />
+    <ClCompile Include="test_logger.cpp" />
     <ClCompile Include="test_main.cpp" />
     <ClCompile Include="test_shell.cpp" />
     <ClCompile Include="test_shell_read.cpp" />

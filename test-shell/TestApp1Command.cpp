@@ -3,19 +3,21 @@
 
 class TestApp1Command : public ScriptBase {
 public:
-	TestApp1Command(ISSD& ssd, ICommand& read, ICommand& write)
+	TestApp1Command(ISSD& ssd)
 		: ScriptBase(ssd, "testapp1")
 		, _read{ read }
 		, _write{ write } {
-
 	}
 
 	void execute(const vector<string>& args) override
 	{
 		printRun();
-		_write.execute({ TEST_VAL });
+		for (int addr = _ADDR_RANGE_MIN; addr <= _ADDR_RANGE_MAX; addr++) {
+			getSSD().write(addr, TEST_VAL);
+		}
+
 		for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
-			string tmp = getSSD().read(i);
+			string tmp =getSSD().read(i);
 			if (tmp != TEST_VAL) {
 				printResult(false); // 여기서 throw 발생
 			}
@@ -29,7 +31,6 @@ public:
 	}
 
 private:
-	ICommand &_read, &_write;
 	const string TEST_VAL = "0xAAAABBBB";
 	const string strHelp = "Test script1 - testapp1.\n\
 		[Example] testapp1\n\
