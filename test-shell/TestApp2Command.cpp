@@ -2,7 +2,6 @@
 #include <stdexcept>
 #include <regex>
 #include "command.h"
-#include "Printer.cpp"
 
 class TestApp2Command : public ScriptBase {
 public:
@@ -13,6 +12,8 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
 		std::string  agingString = "0xAAAABBBB";
 		std::string  originString = "0x12345678";
 

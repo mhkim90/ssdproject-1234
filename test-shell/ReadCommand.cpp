@@ -1,6 +1,5 @@
 #include "command.h"
-#include "Printer.cpp"
-#include <stdexcept>
+#include "../logger/Logger.h"
 
 class ReadCommand : public CommandBase {
 public:
@@ -11,12 +10,13 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
 		verifyArgsCount(args);
 		verifyFormatAddress(args[0]);
-		Printer& printer = Printer::getInstance();
 		int addr = stoi(args[0]);
 		verifyAddressRange(addr);
-		printer.print(getSSD().read(addr));
+		std::cout << getSSD().read(addr) << "\n";
 	}
 
 	const string& getHelp() override {
@@ -40,19 +40,20 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
-		Printer& printer = Printer::getInstance();
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
 		for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
-			printer.print(getSSD().read(i));
+			std::cout << getSSD().read(i) << "\n";
 		}
 	}
 
 	const string& getHelp() override
 	{
-		return strHelp;
+		return _HELP_MESSAGE;
 	}
 
 private:
-	const string strHelp = "Reads and displays values from LBA 0 to 99 on the screen.\n\
+	const string _HELP_MESSAGE = "Reads and displays values from LBA 0 to 99 on the screen.\n\
 		[Example] fullread\n\
 		[Parameter] None\n\
 		[Returns] Displays the data read from each LBA.\n";

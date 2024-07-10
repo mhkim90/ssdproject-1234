@@ -11,6 +11,8 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
 		verifyArgsCount(args);
 		verifyFormatAddress(args[0]);
 		verifyFormatValue(args[1]);
@@ -46,6 +48,8 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
 		verifyArgsCount(args);
 
 		const std::string& value = args[0];
