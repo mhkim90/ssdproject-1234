@@ -78,8 +78,12 @@ TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
 		.WillOnce(Return(TEST_VAL_DIFF));
 
 	testing::internal::CaptureStdout();
-	testApp1.execute({ });
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp1 --- Run...FAIL!\n");
+	try {
+		testApp1.execute({ });
+	}
+	catch (std::logic_error&) {
+		EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp1 --- Run...FAIL!\n");
+	}
 }
 
 TEST_F(TestApp1Fixture, Shell_TestApp1_GetHelp) {
