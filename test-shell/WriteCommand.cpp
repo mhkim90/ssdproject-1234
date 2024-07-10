@@ -3,27 +3,25 @@
 #include <regex>
 #include "command.h"
 
-class WriteCommand : public ICommand {
+class WriteCommand : public CommandBase {
 public:
-	const int START_LBA = 0;
-	const int END_LBA = 99;
+	WriteCommand(ISSD& ssd, int argsCount = 2)
+		: CommandBase(ssd, argsCount) {
 
-	WriteCommand(ISSD& ssd) : ssd{ ssd } {}
-
-	void injectSSD(ISSD& ssd) override
-	{
-		this->ssd = ssd;
 	}
 
 	void execute(const vector<string>& args) override
 	{
+		verifyArgsCount(args);
+		verifyFormatAddress(args[0]);
+		verifyFormatValue(args[1]);
+
 		int addr = stoi(args[0]);
-		std::string value = args[1];
+		const std::string& value = args[1];
 
-		checkAddressValidity(addr);
-		checkValueValidity(value);
+		verifyAddressRange(addr);
 
-		ssd.write(addr, value);
+		getSSD().write(addr, value);
 	}
 
 	const string& getHelp() override
@@ -31,24 +29,7 @@ public:
 		return WRITE_HELP;
 	}
 
-	void checkAddressValidity(int addr) {
-		if (addr < START_LBA || addr > END_LBA) {
-			throw std::invalid_argument("addr is out of range");
-		}
-	}
-
-	void checkValueValidity(string value) {
-		std::regex reg("0x[0-9A-F]{8}$");
-		if (!regex_match(value, reg))
-			throw std::invalid_argument("value is not in A~F, 0~9");
-	}
-
-	ISSD& getSsd() {
-		return ssd;
-	}
-
 private:
-	ISSD& ssd;
 	const string WRITE_HELP = "write Value at LBA address\n\
 		[Example] write [LBA] [Value]\n\
 		[Parameters]\n\
@@ -58,9 +39,9 @@ private:
 	
 };
 
-class FullwriteCommand : public WriteCommand {
+class FullWriteCommand : public WriteCommand {
 public:
-	FullwriteCommand(ISSD& ssd) : WriteCommand{ ssd } {}
+	FullWriteCommand(ISSD& ssd) : WriteCommand{ ssd, 1 } {}
 
 	void injectSSD(ISSD& ssd) override
 	{
@@ -69,17 +50,18 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
-		std::string value = args[0];
+		verifyArgsCount(args);
 
-		checkValueValidity(value);
+		const std::string& value = args[0];
+		verifyFormatValue(value);
 
 		writeAtAllSsdField(value);
 	}
 
-	void writeAtAllSsdField(std::string& value)
+	void writeAtAllSsdField(const std::string& value)
 	{
-		for (int addr = START_LBA; addr <= END_LBA; addr++) {
-			getSsd().write(addr, value);
+		for (int addr = _ADDR_RANGE_MIN; addr <= _ADDR_RANGE_MAX; addr++) {
+			getSSD().write(addr, value);
 		}
 	}
 

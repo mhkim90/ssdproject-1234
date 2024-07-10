@@ -22,7 +22,7 @@ public:
 class TestApp1Fixture : public testing::Test {
 public:
 	SSDMock ssdMock;
-	TestApp1 testApp1{ ssdMock };
+	TestApp1Command testApp1{ ssdMock };
 
 	const int LBA_MIN_VAL = 0;
 	const int LBA_MAX_VAL = 99;
@@ -67,7 +67,7 @@ TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Success) {
 
 	testing::internal::CaptureStdout();
 	testApp1.execute({ });
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "SUCCESS\n");
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp1 --- Run...Pass\n");
 }
 
 TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
@@ -79,7 +79,7 @@ TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
 
 	testing::internal::CaptureStdout();
 	testApp1.execute({ });
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "FAIL\n");
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp1 --- Run...FAIL!\n");
 }
 
 TEST_F(TestApp1Fixture, Shell_TestApp1_GetHelp) {

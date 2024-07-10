@@ -33,7 +33,11 @@ vector<string> Shell::parsingCommandStr(const string& str)
 void Shell::run()
 {
 	while (true) {
+		cout << "SHELL > ";
+		
 		string commandStr = waitForCommand();
+		if (commandStr.empty()) continue;
+
 		try {
 			vector<string> parsed = parsingCommandStr(commandStr);
 			if (parsed.front() == "exit") return;
@@ -53,8 +57,14 @@ void Shell::run()
 
 void Shell::help()
 {
-	cout << "< Shell Help >" << endl;
+	cout << "< Help >" << endl;
 	for (auto& cmd : _factory.getAllCommands()) {
-		cout << cmd.first << "\t\t: " << cmd.second->getHelp() << endl;
+		cout << cmd.first;
+
+		for (float indent = 0; indent < ((float)8 / cmd.first.length()); ++indent) {
+			cout << '\t';
+		}
+
+		cout << ": " << cmd.second->getHelp() << endl;
 	}
 }

@@ -1,30 +1,26 @@
 #include "command.h"
 #include "Printer.cpp"
 
-class TestApp1 : public ICommand {
+class TestApp1Command : public ScriptBase {
 public:
-	TestApp1(ISSD& ssd) : ssd{ &ssd } {}
-	void injectSSD(ISSD& ssd) override
-	{
-		this->ssd = &ssd;
+	TestApp1Command(ISSD& ssd)
+		: ScriptBase(ssd, "testapp1") {
 	}
 
 	void execute(const vector<string>& args) override
 	{
-		Printer& printer = Printer::getInstance();
-
-		for (int addr = LBA_MIN_VAL; addr <= LBA_MAX_VAL; addr++) {
-			ssd->write(addr, TEST_VAL);
+		printRun();
+		for (int addr = _ADDR_RANGE_MIN; addr <= _ADDR_RANGE_MAX; addr++) {
+			getSSD().write(addr, TEST_VAL);
 		}
 
-		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
-			string tmp = ssd->read(i);
+		for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
+			string tmp =getSSD().read(i);
 			if (tmp != TEST_VAL) {
-				printer.print("FAIL");
-				return;
+				printResult(false); // 여기서 throw 발생
 			}
 		}
-		printer.print("SUCCESS");
+		printResult(true);
 	}
 
 	const string& getHelp() override
@@ -33,9 +29,6 @@ public:
 	}
 
 private:
-	ISSD* ssd;
-	const int LBA_MIN_VAL = 0;
-	const int LBA_MAX_VAL = 99;
 	const string TEST_VAL = "0xAAAABBBB";
 	const string strHelp = "Test script1 - testapp1.\n\
 		[Example] testapp1\n\

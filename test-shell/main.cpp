@@ -1,6 +1,6 @@
+#include "ssdlib.cpp"
 #include "shell.h"
 #include "command_factory.cpp"
-#include "ssdlib.cpp"
 
 int main() {
 	ICommandFactory& factory = CommandFactory::getInstance();

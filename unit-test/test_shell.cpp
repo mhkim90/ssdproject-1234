@@ -44,6 +44,11 @@ public:
 		return _osstream.str();
 	}
 
+	string makeOutputFormat(const string& value) {
+		if (value.empty()) return SHELL_GUIDE;
+		return SHELL_GUIDE + value + SHELL_GUIDE;
+	}
+
 	MockCommand mockCommand;
 	MockCommandFactory mockFactory;
 	Shell shell;
@@ -66,6 +71,8 @@ protected:
 	}
 
 private:
+	static constexpr char* SHELL_GUIDE = "SHELL > ";
+
 	istringstream _isstream;
 	ostringstream _osstream;
 	streambuf* _inOldStreamBuf;
@@ -120,7 +127,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_EMPTY) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
+	EXPECT_EQ(getOutput(), makeOutputFormat("") + makeOutputFormat(""));
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_UNKNOWN) {
@@ -132,7 +139,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_UNKNOWN) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
+	EXPECT_EQ(getOutput(), makeOutputFormat("INVALID COMMAND\n"));
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
@@ -140,7 +147,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "");
+	EXPECT_EQ(getOutput(), makeOutputFormat(""));
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
@@ -156,5 +163,5 @@ TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "< Shell Help >\ncommand\t\t: HELP MESSAGE\n");
+	EXPECT_EQ(getOutput(), makeOutputFormat("< Help >\ncommand\t\t: HELP MESSAGE\n"));
 }

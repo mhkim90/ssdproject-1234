@@ -82,6 +82,13 @@ TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {
 	EXPECT_EQ(strHelp, command.getHelp());
 }
 
+TEST_F(ReadCommandFixture, Shell_FullRead_Invalid_Arguments_Length) {
+	EXPECT_CALL(ssdMock, read)
+		.Times(0);
+
+	EXPECT_THROW(command.execute({}), invalid_argument);
+}
+
 TEST_F(FullReadCommandFixture, Shell_FullRead_Execute_Success) {
 	string expected = "";
 	for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {

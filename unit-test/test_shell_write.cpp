@@ -28,13 +28,13 @@ protected:
 	}
 };
 
-class FullwriteCommandFixture : public ::testing::Test {
+class FullWriteCommandFixture : public ::testing::Test {
 public:
-	FullwriteCommandFixture() : fwrCmd(ssdMock) {
+	FullWriteCommandFixture() : fwrCmd(ssdMock) {
 	}
 
 	SsdMock ssdMock;
-	FullwriteCommand fwrCmd;
+	FullWriteCommand fwrCmd;
 private:
 
 protected:
@@ -51,6 +51,20 @@ TEST_F(WriteCommandFixture, WriteTestNormal) {
 	// act
 	EXPECT_CALL(ssdMock, write(5, "0xAAAABBBB"));
 	wrCmd.execute(arg);
+
+	// assert
+}
+
+TEST_F(WriteCommandFixture, WriteTestInvalidArgumentsLength) {
+
+	// arrange
+	vector<string> arg = { };
+
+	// act
+	EXPECT_CALL(ssdMock, write)
+		.Times(0);
+
+	EXPECT_THROW(wrCmd.execute(arg), std::invalid_argument);
 
 	// assert
 }
@@ -93,7 +107,7 @@ TEST_F(WriteCommandFixture, WriteTestHelp) {
 	EXPECT_EQ(expectedString, wrCmd.getHelp());
 }
 
-TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
+TEST_F(FullWriteCommandFixture, FullwriteTestNormal) {
 
 	// arrange
 	vector<string> arg = { "0xAAAABBBB" };
@@ -107,7 +121,7 @@ TEST_F(FullwriteCommandFixture, FullwriteTestNormal) {
 	// assert
 }
 
-TEST_F(FullwriteCommandFixture, FullwriteTestInvalidValue) {
+TEST_F(FullWriteCommandFixture, FullwriteTestInvalidValue) {
 
 	// arrange
 	vector<string> arg = { "0xAAA*BBBC" };
@@ -118,7 +132,7 @@ TEST_F(FullwriteCommandFixture, FullwriteTestInvalidValue) {
 	// assert
 }
 
-TEST_F(FullwriteCommandFixture, FullwriteTestHelp) {
+TEST_F(FullWriteCommandFixture, FullwriteTestHelp) {
 
 	// arrange
 	string expectedString = "\Perform write from address 0 to 99.\n\
