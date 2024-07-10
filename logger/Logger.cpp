@@ -7,11 +7,11 @@
 #include <fstream>
 
 Logger::Logger(const std::string& module_name) {
-	m_module_name = module_name;
-	if (std::filesystem::exists(m_module_name)) {
-		std::filesystem::remove_all(m_module_name);
+	m_log_directory = module_name;
+	if (std::filesystem::exists(m_log_directory)) {
+		std::filesystem::remove_all(m_log_directory);
 	}
-	std::filesystem::create_directory(m_module_name);
+	std::filesystem::create_directory(m_log_directory);
 }
 
 Logger& Logger::getInstance(const std::string& module_name) {
@@ -40,16 +40,38 @@ void Logger::printLog(PRINT_TYPE type,
 	}
 }
 
-void Logger::saveLog(
-	const std::string& output) {
+int Logger::getFileSize(const std::string& file_path) {
+	if (std::filesystem::exists(file_path)) {
+		return static_cast<int>(std::filesystem::file_size(file_path));
+	}
+	return 0;
+}
+
+void Logger::saveLog(const std::string& output) {
+	if (getFileSize(m_log_directory + m_file_name) > m_ten_kb) {
+		std::string previous_file_path =
+			m_log_directory + m_past_log_file_name;
+
+		if (m_past_log_file_name != "" &&
+			std::filesystem::exists(previous_file_path + ".log")) {
+			std::filesystem::rename(
+				previous_file_path + ".log",
+				previous_file_path + ".zip");
+		}
+
+		m_past_log_file_name = getPastLogFileName();
+		std::filesystem::rename(m_log_directory + m_file_name,
+			m_log_directory + m_past_log_file_name + ".log");
+	}
+
 	std::ofstream file;
-	file.open(m_module_name + "\\latest.log",
+	file.open(m_log_directory + m_file_name,
 		std::ios::out | std::ios::app);
 	file << output << "\n";
 	file.close();
 }
 
-std::string Logger::expandName(const std::string& func_name) {
+std::string Logger::expandName(const std::string& func_name) const {
 	if (func_name.size() < m_name_buffer) {
 		std::string expanded_func_name = func_name;
 		for (size_t i = 0; i < m_name_buffer - func_name.size(); i++) {
@@ -60,13 +82,31 @@ std::string Logger::expandName(const std::string& func_name) {
 	return func_name;
 }
 
-std::string Logger::getTime() {
+std::string Logger::getPastLogFileName() {
+	std::string file_name =
+		"\\until_" + getTime("%Y%m%d_%Hh_%Mm_%Ss", true);
+	return file_name;
+}
+
+std::string Logger::getTime(const std::string& format,
+		bool add_ms) {
+	auto time_now = std::chrono::system_clock::now();
+	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>
+		(time_now.time_since_epoch()) % 1000;
     time_t current_time_t = std::chrono::system_clock::to_time_t(
-		std::chrono::system_clock::now());
+		time_now);
     tm current_time;
     localtime_s(&current_time, &current_time_t);
 	std::stringstream converted_time;
 	converted_time << std::put_time(
-		&current_time, "[%Y.%m.%d %H:%M] ");
+		&current_time, format.c_str());
+	if (add_ms) {
+		converted_time << '_' << std::setfill('0') << std::setw(3) << ms.count() << "ms";
+		return converted_time.str();
+	}
 	return converted_time.str();
+}
+
+std::string Logger::getTime() {
+	return getTime("[%Y.%m.%d %H:%M] ", false);
 }
