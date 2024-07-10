@@ -3,6 +3,7 @@
 #define interface struct
 #endif
 
+#include <iostream>
 #include <vector>
 #include <string>
 #include <stdexcept>
@@ -60,4 +61,29 @@ protected:
 private:
 	ISSD& _ssd;
 	const int _VERIFY_ARGS_COUNT;
+};
+
+class ScriptBase : public CommandBase {
+public:
+	ScriptBase(ISSD& ssd, const string& scriptName)
+		: CommandBase(ssd) {
+
+	}
+
+	virtual void execute(const vector<string>& args) override = 0;
+	virtual const string& getHelp() override = 0;
+
+protected:
+	inline void printRun() const {
+		std::cout << _SCRIPT_NAME << " --- Run...";
+	}
+
+	inline void printResult(bool isPass) const {
+		std::cout << (isPass ? "Pass" : "FAIL!") << std::endl;
+		if (isPass) return;
+		throw std::logic_error("Faild of Script!");
+	}
+
+private:
+	const string _SCRIPT_NAME;
 };
