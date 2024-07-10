@@ -16,6 +16,9 @@
     <Filter Include="소스 파일\Command">
       <UniqueIdentifier>{14bb5eb5-7392-4e4f-af4d-cb1d2351c133}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Command">
+      <UniqueIdentifier>{da545144-2729-467a-980f-c40c07bc8649}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,10 +72,10 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="WriteCommand.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
     <ClInclude Include="ReadCommand.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Command</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
