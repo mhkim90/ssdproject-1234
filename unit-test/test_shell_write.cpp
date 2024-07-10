@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../test-shell/WriteCommand.cpp"
+#include "../test-shell/WriteCommand.h"
 
 using namespace testing;
 

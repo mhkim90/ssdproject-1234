@@ -1,79 +1,67 @@
-#include <string>
-#include <stdexcept>
-#include <regex>
-#include "command.h"
+#include "WriteCommand.h"
 
-class WriteCommand : public CommandBase {
-public:
-	WriteCommand(ISSD& ssd, int argsCount = 2)
-		: CommandBase(ssd, argsCount) {
-	}
-
-	void execute(const vector<string>& args) override
-	{
-		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
-
-		verifyArgsCount(args);
-		verifyFormatAddress(args[0]);
-		verifyFormatValue(args[1]);
-
-		int addr = stoi(args[0]);
-		const std::string& value = args[1];
-
-		verifyAddressRange(addr);
-
-		getSSD().write(addr, value);
-	}
-
-	const string& getHelp() override
-	{
-		return WRITE_HELP;
-	}
-
-private:
-	const string WRITE_HELP = "write Value at LBA address\n\
+WriteCommand::WriteCommand(ISSD& ssd, int argsCount)
+	: CommandBase(ssd, argsCount)
+	, WRITE_HELP{ string{"write Value at LBA address\n\
 		[Example] write [LBA] [Value]\n\
 		[Parameters]\n\
 		- LBA: address (0~99)\n\
 		- Value: a value to be recorded\n\
-		[Returns] none\n";
-	
-};
+		[Returns] none\n"} }
+{
+}
 
-class FullWriteCommand : public CommandBase {
-public:
-	FullWriteCommand(ISSD& ssd, int argsCount = 1)
-		: CommandBase(ssd, argsCount) {
-	}
+void WriteCommand::execute(const vector<string>& args)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
 
-	void execute(const vector<string>& args) override
-	{
-		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+	verifyArgsCount(args);
+	verifyFormatAddress(args[0]);
+	verifyFormatValue(args[1]);
 
-		verifyArgsCount(args);
+	int addr = stoi(args[0]);
+	const std::string& value = args[1];
 
-		const std::string& value = args[0];
-		verifyFormatValue(value);
+	verifyAddressRange(addr);
 
-		writeAtAllSsdField(value);
-	}
+	getSSD().write(addr, value);
+}
 
-	void writeAtAllSsdField(const std::string& value)
-	{
-		for (int addr = _ADDR_RANGE_MIN; addr <= _ADDR_RANGE_MAX; addr++) {
-			getSSD().write(addr, value);
-		}
-	}
+const string& WriteCommand::getHelp()
+{
+	return WRITE_HELP;
+}
 
-	const string& getHelp() override
-	{
-		return FULLWRITE_HELP;
-	}
-
-private:
-	const string FULLWRITE_HELP = "Perform write from address 0 to 99.\n\
+FullWriteCommand::FullWriteCommand(ISSD& ssd, int argsCount)
+	: CommandBase(ssd, argsCount)
+	, FULLWRITE_HELP{ string{"Perform write from address 0 to 99.\n\
 		[Example] fullwrite [Value]\n\
 		[Parameters]\n\
 		- Value: a value to be recorded\n\
-		[Returns] none\n";
-};
+		[Returns] none\n"} }
+{
+}
+
+void FullWriteCommand::execute(const vector<string>& args)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
+	verifyArgsCount(args);
+
+	const std::string& value = args[0];
+	verifyFormatValue(value);
+
+	writeAtAllSsdField(value);
+}
+
+void FullWriteCommand::writeAtAllSsdField(const std::string& value)
+{
+	for (int addr = _ADDR_RANGE_MIN; addr <= _ADDR_RANGE_MAX; addr++) {
+		getSSD().write(addr, value);
+	}
+}
+
+const string& FullWriteCommand::getHelp()
+{
+	return FULLWRITE_HELP;
+}

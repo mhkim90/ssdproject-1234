@@ -4,7 +4,7 @@
 #include <iostream>
 #include <memory>
 #include "ReadCommand.cpp"
-#include "WriteCommand.cpp"
+#include "WriteCommand.h"
 #include "TestApp1Command.cpp"
 #include "TestApp2Command.cpp"
 #include "EraseCommand.cpp"

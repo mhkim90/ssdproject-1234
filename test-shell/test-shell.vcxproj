@@ -177,6 +177,7 @@
     <ClInclude Include="command_factory.h" />
     <ClInclude Include="shell.h" />
     <ClInclude Include="ssd.h" />
+    <ClInclude Include="WriteCommand.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="run_list.lst" />
