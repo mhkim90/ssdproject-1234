@@ -168,4 +168,6 @@ TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
 
 TEST_F(ShellFixutre, COMMAND_RUN_SEQUENCE_INVALID_FILE_PATH) {
 	EXPECT_THROW(shell.runSequence("unknown.list"), invalid_argument);
+	EXPECT_THROW(shell.runSequence(""), invalid_argument);
+	EXPECT_THROW(shell.runSequence("."), invalid_argument);
 }

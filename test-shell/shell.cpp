@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <filesystem>
 
 using namespace std;
 
@@ -57,7 +58,10 @@ void Shell::run()
 
 void Shell::runSequence(const string& filePath)
 {
-	throw invalid_argument("The file path could not be found.");
+	if (filesystem::is_directory(filePath))
+		throw invalid_argument("The file path could not be found.");
+	if (filesystem::exists(filePath) == false)
+		throw invalid_argument("The file path could not be found.");
 }
 
 void Shell::help()
