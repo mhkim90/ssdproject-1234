@@ -5,7 +5,7 @@
 #include <memory>
 #include "ReadCommand.h"
 #include "WriteCommand.h"
-#include "TestApp1Command.cpp"
+#include "TestApp1Command.h"
 #include "TestApp2Command.cpp"
 #include "EraseCommand.cpp"
 #include "EraseRangeCommand.cpp"

@@ -5,3 +5,4 @@
 #include "../test-shell/command.cpp"
 #include "../test-shell/WriteCommand.cpp"
 #include "../test-shell/ReadCommand.cpp"
+#include "../test-shell/TestApp1Command.cpp"
