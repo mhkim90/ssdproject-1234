@@ -15,6 +15,9 @@ class SSDMock : public ISSD {
 public:
 	MOCK_METHOD(void, write, (int addr, const string& value), (override));
 	MOCK_METHOD(string, read, (int addr), (override));
+	MOCK_METHOD(void, erase, (int addr, int size), (override));
+	MOCK_METHOD(void, flush, (), (override));
+	MOCK_METHOD(string, getResult, (), (override));
 };
 
 class ReadCommandFixture : public ::testing::Test {
