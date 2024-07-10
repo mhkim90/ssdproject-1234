@@ -8,7 +8,7 @@
 #include "TestApp1Command.h"
 #include "TestApp2Command.h"
 #include "EraseCommand.cpp"
-#include "EraseRangeCommand.cpp"
+#include "EraseRangeCommand.h"
 
 class CommandFactory : public ICommandFactory {
 public:

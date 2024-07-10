@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../test-shell/EraseRangeCommand.cpp"
+#include "../test-shell/EraseRangeCommand.h"
 
 using namespace testing;
 

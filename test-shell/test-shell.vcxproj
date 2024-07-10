@@ -179,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="command.h" />
     <ClInclude Include="command_factory.h" />
+    <ClInclude Include="EraseRangeCommand.h" />
     <ClInclude Include="FlushCommand.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="shell.h" />
