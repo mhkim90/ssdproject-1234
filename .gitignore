@@ -396,3 +396,12 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Log files
+*.log
+*.zip
+
+# SSD files
+buffer.txt
+nand.txt
+result.txt
