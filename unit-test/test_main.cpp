@@ -4,3 +4,4 @@
 /*Test target cpp files*/
 #include "../test-shell/command.cpp"
 #include "../test-shell/WriteCommand.cpp"
+#include "../test-shell/ReadCommand.cpp"

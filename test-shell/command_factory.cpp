@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <memory>
-#include "ReadCommand.cpp"
+#include "ReadCommand.h"
 #include "WriteCommand.h"
 #include "TestApp1Command.cpp"
 #include "TestApp2Command.cpp"
