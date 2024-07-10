@@ -9,8 +9,9 @@ int main(int argc, char* argv[]) {
 
 	Shell* shell = new Shell(factory);
 
-	if (argc > 0) {
-		shell->runSequence(argv[0]);
+	if (argc > 1) {
+		shell->runSequence(argv[1]);
+		return 0;
 	}
 
 	shell->run();

@@ -59,9 +59,13 @@ void Shell::run()
 
 void Shell::runSequence(const string& filePath)
 {
-	verifySequenceFilePath(filePath);
-
-	loadSequence(filePath);
+	try {
+		loadSequence(filePath);
+	}
+	catch (exception& ex) {
+		cout << ex.what() << endl;
+		return;
+	}
 
 	while (_sequence.size() > 0) {
 		try {
@@ -97,6 +101,8 @@ void Shell::help()
 void Shell::loadSequence(const string& filePath)
 {
 	_sequence = {};
+
+	verifySequenceFilePath(filePath);
 
 	ifstream ifile{ filePath };
 	if (ifile.fail()) throw invalid_argument("Faild of file open.");
