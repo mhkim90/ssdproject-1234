@@ -2,12 +2,22 @@
 #include "gmock/gmock.h"
 #include "../test-shell/shell.cpp"
 #include "../test-shell/ssd.h"
+#include "../test-shell/command_factory.cpp"
 #include <unordered_map>
 #include <string>
 
 
 using namespace std;
 using namespace testing;
+
+class MockSSD : public ISSD {
+public:
+	MOCK_METHOD(void, write, (int, const string&), (override));
+	MOCK_METHOD(string, read, (int), (override));
+	MOCK_METHOD(void, erase, (int, int), (override));
+	MOCK_METHOD(void, flush, (), (override));
+	MOCK_METHOD(string, getResult, (), (override));
+};
 
 class MockCommand : public ICommand {
 public:
@@ -164,4 +174,50 @@ TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
 	shell.run();
 
 	EXPECT_EQ(getOutput(), makeOutputFormat("< Help >\ncommand\t\t: HELP MESSAGE\n"));
+}
+
+TEST_F(ShellFixutre, RUN_SEQUENCE_INVALID_FILE_PATH) {
+	EXPECT_THROW(shell.loadSequence("unknown.list"), invalid_argument);
+	EXPECT_THROW(shell.loadSequence(""), invalid_argument);
+	EXPECT_THROW(shell.loadSequence("."), invalid_argument);
+}
+
+TEST_F(ShellFixutre, LOAD_SEQ) {
+	EXPECT_NO_THROW(shell.loadSequence("run_list.lst"));
+	EXPECT_EQ(shell.getSequence().size(), 2);
+	EXPECT_THAT(shell.getSequence(), Contains("testapp1"));
+	EXPECT_THAT(shell.getSequence(), Contains("testapp2"));
+}
+
+class ShellRunSeqFixutre : public Test {
+public:
+	ShellRunSeqFixutre()
+		: factory{ CommandFactory::getInstance() }
+		, shell(factory)
+		, cmdTestApp1(mockSSD)
+		, cmdTestApp2(mockSSD)
+	{
+		factory.injectCommand("testapp1", &cmdTestApp1);
+		factory.injectCommand("testapp2", &cmdTestApp2);
+	}
+
+	Shell shell;
+	CommandFactory& factory;
+	TestApp1Command cmdTestApp1;
+	TestApp2Command cmdTestApp2;
+	MockSSD mockSSD;
+};
+
+TEST_F(ShellRunSeqFixutre, RUN_SEQ) {
+	EXPECT_CALL(mockSSD, read(_))
+		.Times(100)
+		.WillRepeatedly(Return("0xAAAABBBB"));
+
+	EXPECT_CALL(mockSSD, read(_))
+		.WillRepeatedly(Return("0x12345678"));
+
+	internal::CaptureStdout();
+	EXPECT_NO_THROW(shell.runSequence("run_list.lst"));
+
+	EXPECT_EQ(internal::GetCapturedStdout(), "testapp1 --- Run...Pass\ntestapp2 --- Run...Pass\n");
 }
