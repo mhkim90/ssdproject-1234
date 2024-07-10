@@ -23,10 +23,6 @@ public:
 
 	void execute(int lba, string data) override
 	{
-		FileManager::getInstance().openNand();
-
-		FileManager::getInstance().flushNand();
-
-		FileManager::getInstance().writeNand();
+		CommandBuffer::getInstance().flushBuffer();
 	}
 };

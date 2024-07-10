@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -11,6 +12,7 @@ const int LBA_COUNT = 100;
 const int MIN_LBA = 0;
 const int MAX_LBA = 99;
 const int MAX_ERASE_COUNT = 10;
+const int MAX_BUFFER_COUNT = 10;
 
 enum CmdOpcode
 {

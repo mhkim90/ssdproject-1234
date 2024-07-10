@@ -3,7 +3,6 @@
 #include <iostream>
 #include "SSDConfig.h"
 
-#include <iostream>
 using namespace std;
 
 class FileManager {
@@ -128,8 +127,19 @@ public:
 		}
 	}	
 	
-	void flushNand() {
+	void flushNand(vector<IoDataStruct> cmdList) {
 		// do flush
+		openNand();
+		for (auto cmd : cmdList) {
+			if (cmd.opcode == WRITE_CMD) {
+				updateNand(cmd.lba, cmd.data);
+			}
+			else if (cmd.opcode == ERASE_CMD) {
+				// do erase
+				eraseNand(cmd.lba, cmd.data);
+			}
+		}
+		writeNand();
 	}
 
 private:

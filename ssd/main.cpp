@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include "SSDManager.cpp"
 #include "CmdHandlerFactory.cpp"
+#include "CommandBuffer.cpp"
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -13,6 +14,8 @@ int main(int argc, char* argv[])
     {
         arguments.push_back(argv[i]);
     }
+
+    FileManager::getInstance().initNand();
 
     CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
 

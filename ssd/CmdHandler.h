@@ -31,8 +31,6 @@ public:
 			throw InvalidOpcodeException();
 		}
 
-		FileManager::getInstance().initNand();
-
 		return (MIN_LBA <= lba && lba < LBA_COUNT);
 	}
 
