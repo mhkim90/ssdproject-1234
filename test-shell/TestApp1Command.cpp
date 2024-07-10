@@ -1,10 +1,10 @@
 #include "command.h"
 #include "Printer.cpp"
 
-class TestApp1Command : public CommandBase {
+class TestApp1Command : public ScriptBase {
 public:
 	TestApp1Command(ISSD& ssd, ICommand& read, ICommand& write)
-		: CommandBase(ssd)
+		: ScriptBase(ssd, "testapp1")
 		, _read{ read }
 		, _write{ write } {
 
@@ -12,17 +12,15 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
-		Printer& printer = Printer::getInstance();
-
+		printRun();
 		_write.execute({ TEST_VAL });
 		for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
 			string tmp = getSSD().read(i);
 			if (tmp != TEST_VAL) {
-				printer.print("FAIL");
-				return;
+				printResult(false); // 여기서 throw 발생
 			}
 		}
-		printer.print("SUCCESS");
+		printResult(true);
 	}
 
 	const string& getHelp() override

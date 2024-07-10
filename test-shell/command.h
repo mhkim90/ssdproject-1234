@@ -66,7 +66,7 @@ private:
 class ScriptBase : public CommandBase {
 public:
 	ScriptBase(ISSD& ssd, const string& scriptName)
-		: CommandBase(ssd) {
+		: CommandBase(ssd), _SCRIPT_NAME{ scriptName } {
 
 	}
 
