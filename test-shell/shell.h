@@ -14,6 +14,7 @@ public:
 	Shell(ICommandFactory& factory);
 	
 	void run();
+	void runSequence(const string& filePath);
 
 	virtual string waitForCommand();
 	vector<string> parsingCommandStr(const string& str);

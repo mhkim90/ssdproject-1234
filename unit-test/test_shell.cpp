@@ -165,3 +165,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
 
 	EXPECT_EQ(getOutput(), makeOutputFormat("< Help >\ncommand\t\t: HELP MESSAGE\n"));
 }
+
+TEST_F(ShellFixutre, COMMAND_RUN_SEQUENCE_INVALID_FILE_PATH) {
+	EXPECT_THROW(shell.runSequence("unknown.list"), invalid_argument);
+}

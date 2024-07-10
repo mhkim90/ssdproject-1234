@@ -55,6 +55,11 @@ void Shell::run()
 	}
 }
 
+void Shell::runSequence(const string& filePath)
+{
+	throw invalid_argument("The file path could not be found.");
+}
+
 void Shell::help()
 {
 	cout << "< Help >" << endl;
