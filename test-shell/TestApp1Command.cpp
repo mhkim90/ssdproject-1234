@@ -1,5 +1,4 @@
 #include "command.h"
-#include "Printer.cpp"
 
 class TestApp1Command : public ScriptBase {
 public:
@@ -9,6 +8,8 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
 		printRun();
 		for (int addr = _ADDR_RANGE_MIN; addr <= _ADDR_RANGE_MAX; addr++) {
 			getSSD().write(addr, TEST_VAL);

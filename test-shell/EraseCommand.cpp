@@ -7,6 +7,8 @@ public:
 
 	void execute(const vector<string>& args) override
 	{
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+
 		verifyArgsCount(args);
 		verifyFormatAddress(args[0]);
 		verifyFormatAddress(args[1]);

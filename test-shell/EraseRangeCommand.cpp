@@ -1,7 +1,6 @@
 #include <string>
 #include <stdexcept>
 #include "command.h"
-#include "Printer.cpp"
 
 class EraseRangeCommand : public CommandBase {
 public:
