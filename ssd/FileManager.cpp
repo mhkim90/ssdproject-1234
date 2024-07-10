@@ -60,13 +60,18 @@ public:
 		writeFile.close();
 	}
 
-	void writeFile(const string file_name, string *buf) {
+	void writeFile(const string file_name, vector<IoDataStruct> cmdList) {
+
 		cout << "writeFile is called :" << *buf << endl;
+
 		ofstream writeFile;
-		writeFile.open(file_name, std::ios::out | std::ios::app);
-		if (writeFile.is_open())
-		{
-			writeFile << *buf << endl;
+		writeFile.open(file_name);
+		if (!writeFile.is_open())
+			return;
+
+		for (auto cmd : cmdList) {
+			string tempBuffer = to_string(cmd.opcode) + " " + to_string(cmd.lba) + " " + cmd.data;
+			writeFile << tempBuffer << endl;
 		}
 		writeFile.close();
 	}
@@ -124,7 +129,7 @@ public:
 		writeNand();
 	}
 
-	void openFile(const string file_name, string* buf)
+	void openFile(const string file_name, string* buf,int &cmdBackupCount)
 	{
 		cout << "open file has to be called for once" << endl;
 		// ready to file read
@@ -139,6 +144,7 @@ public:
 		string data;
 		while (getline(readFile, data, '\n')) {
 			buf[buf_index++] = data;
+			cmdBackupCount++;
 			cout << "openFile str :" << buf[buf_index - 1] << endl;
 		}
 
