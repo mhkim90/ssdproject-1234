@@ -9,6 +9,8 @@
 #include <stdexcept>
 #include <regex>
 #include "ssd.h"
+#include "../logger/Logger.h"
+
 using std::string;
 using std::vector;
 
@@ -57,6 +59,7 @@ protected:
 
 	static constexpr int _ADDR_RANGE_MIN = 0;
 	static constexpr int _ADDR_RANGE_MAX = 99;
+	ILogger& logger = Logger::getInstance("shell");
 
 private:
 	ISSD& _ssd;
