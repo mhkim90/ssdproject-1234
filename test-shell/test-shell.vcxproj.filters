@@ -83,6 +83,9 @@
     <ClInclude Include="TestApp2Command.h">
       <Filter>헤더 파일\Command</Filter>
     </ClInclude>
+    <ClInclude Include="FlushCommand.h">
+      <Filter>헤더 파일\Command</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="run_list.lst">
