@@ -87,6 +87,48 @@ public:
 		cmdList.clear();
 	}
 
+	bool IsEraseLbaRangeIncluded(int findLba, int startAddr, int endAddr)
+	{
+		for (int address = startAddr; address < endAddr; address++)
+		{
+			if (findLba == address)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	// if there is write data, then it returns written data
+	// if there is erase data, then it checks the lba is included
+	bool searchPassedLatestDataForRead(int lba)
+	{
+		string data = INIT_DATA;
+		bool searchResult = false;
+		for (size_t i = 0; i < cmdList.size(); ++i)
+		{
+			if (cmdList[i].lba == lba && cmdList[i].opcode == WRITE_CMD)
+			{
+				data = cmdList[i].data;
+				searchResult = true;
+			}
+			else if (cmdList[i].opcode == ERASE_CMD)
+			{
+				if (true == IsEraseLbaRangeIncluded(lba, cmdList[i].lba, stoi(cmdList[i].data)))
+				{
+					data = INIT_DATA;
+					searchResult = true;
+				}
+			}
+		}
+
+		return (searchResult == true) ? FileManager::getInstance().updateResult(data) : false;
+	}
+
+	vector<IoDataStruct> &getCmdList()
+	{
+		return cmdList;
+	}
+
 private:
 	CommandBuffer()
 	{

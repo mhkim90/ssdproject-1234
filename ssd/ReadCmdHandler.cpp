@@ -21,11 +21,15 @@ public:
 
 	void execute(int lba, string data) override
 	{
-		CmdHandler::execute(lba, data);
-#if 0
-		FileManager::getInstance().openNand();
+		// it searches through cmdList without searching file
+		// if there is write data, then it returns written data
+		// if there is erase data, then it checks the lba is included
+		// otherwise, read nand data and save to result file
+		if (false == CommandBuffer::getInstance().searchPassedLatestDataForRead(lba))
+		{
+			FileManager::getInstance().openNand();
 
-		FileManager::getInstance().readNand(lba);
-#endif
+			FileManager::getInstance().readNand(lba);
+		}
 	}
 };

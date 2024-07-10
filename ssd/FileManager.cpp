@@ -104,6 +104,7 @@ public:
 		writeFile.close();
 	}
 
+	// read from nand and save it to result.txt
 	void readNand(int lba) {
 		ofstream resultFile;
 		resultFile.open(RESULTFILE);
@@ -114,6 +115,20 @@ public:
 		resultFile << buf[lba] << endl;
 
 		resultFile.close();
+	}
+
+	bool updateResult(string data) {
+		ofstream resultFile;
+		resultFile.open(RESULTFILE);
+
+		if (!resultFile.is_open())
+			return false;
+
+		resultFile << data << endl;
+
+		resultFile.close();
+
+		return true;
 	}
 
 	void updateNand(int lba, string data) {
