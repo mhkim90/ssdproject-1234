@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../test-shell/TestApp2Command.cpp"
+#include "../test-shell/TestApp2Command.h"
 
 using namespace testing;
 

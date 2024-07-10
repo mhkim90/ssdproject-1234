@@ -183,6 +183,7 @@
     <ClInclude Include="shell.h" />
     <ClInclude Include="ssd.h" />
     <ClInclude Include="TestApp1Command.h" />
+    <ClInclude Include="TestApp2Command.h" />
     <ClInclude Include="WriteCommand.h" />
   </ItemGroup>
   <ItemGroup>

@@ -6,3 +6,4 @@
 #include "../test-shell/WriteCommand.cpp"
 #include "../test-shell/ReadCommand.cpp"
 #include "../test-shell/TestApp1Command.cpp"
+#include "../test-shell/TestApp2Command.cpp"
