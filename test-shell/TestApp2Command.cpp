@@ -19,9 +19,6 @@ public:
 
 		printRun();
 
-		// no argument to check
-		// 
-		// act
 		// 1st step
 		for (int lba = START_LBA_FOR_AGING; lba <= END_LBA_FOR_AGING; lba++) {
 			for (int tryCount = 0; tryCount < WRITE_TRY_MAX; tryCount++) {
@@ -42,6 +39,8 @@ public:
 		}
 
 		printResult(true);
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
 
 	const string& getHelp() override

@@ -29,6 +29,8 @@ public:
 				tmpSize = 0;
 			}
 		}
+
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
 
 	const string& getHelp() override
