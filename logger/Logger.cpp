@@ -6,16 +6,16 @@
 #include <sstream>
 #include <fstream>
 
-Logger::Logger(const std::string& module_name) {
-	m_log_directory = module_name;
+Logger::Logger(const std::string& log_directory) {
+	m_log_directory = log_directory;
 	if (std::filesystem::exists(m_log_directory)) {
 		std::filesystem::remove_all(m_log_directory);
 	}
 	std::filesystem::create_directory(m_log_directory);
 }
 
-Logger& Logger::getInstance(const std::string& module_name) {
-	static Logger instance(module_name);
+Logger& Logger::getInstance(const std::string& log_directory) {
+	static Logger instance(log_directory);
 	return instance;
 }
 
