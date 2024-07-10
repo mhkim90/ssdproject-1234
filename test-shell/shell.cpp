@@ -62,6 +62,22 @@ void Shell::runSequence(const string& filePath)
 	verifySequenceFilePath(filePath);
 
 	loadSequence(filePath);
+
+	while (_sequence.size() > 0) {
+		try {
+			_factory.getCommand(_sequence.front())->execute({});
+		}
+		catch (invalid_argument& ex) {
+			cout << ex.what() << endl;
+		}
+		catch (logic_error&) {
+			return;
+		}
+		catch (exception& ex) {
+			cout << "Unknown Error : " << ex.what() << endl;
+		}
+		_sequence.pop_front();
+	}
 }
 
 void Shell::help()
