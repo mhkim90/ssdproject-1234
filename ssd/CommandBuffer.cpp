@@ -29,7 +29,7 @@ public:
 	{
 		vector<string> tokens;
 
-		for (int i = 0; i < cmdCnt; i++)
+		for (int i = 0; i < cmdBackupCount; i++)
 		{
 			std::istringstream iss(cmdBuf[i]); // Initialize iss with buf
 			IoDataStruct dataStruct;
@@ -56,34 +56,77 @@ public:
 
 	void updateCommandBuffer(CmdOpcode opcode, int lba, string data)
 	{	
-		cout << "total command buffer pool cmd count : " << cmdCnt << endl;
+		cout << "total command buffer pool cmd count : " << cmdList.size() << endl;
 		// buffer.txt will be saved "[opcode] [lba] [data]" format
 		// [data] could be size in erase case, data in write case
-		string tempBuffer = to_string(opcode) + " " + to_string(lba) + " " + data;
-		FileManager::getInstance().writeFile(COMMAND_BUFFER_FILE, &tempBuffer);
-		cmdCnt++;
+		bool commandBuffered = false;
 
-		IoDataStruct item;
-		item.opcode = opcode;
-		item.lba = lba;
-		item.data = data;
-		cmdList.push_back(item);
+		// merge erase
+		if (opcode == CmdOpcode::ERASE_CMD && !cmdList.empty()) {
 
-		// 10개되면 flush
-		//CmdBufCheckerMgr::getInstance().ArrangeBuffer();
+			if (cmdList.back().opcode == CmdOpcode::ERASE_CMD) {
+				if (cmdList.back().lba <= lba + stoi(data) - 1 && cmdList.back().lba + stoi(cmdList.back().data) - 1 >= lba) {
+					int startLBA = min(cmdList.back().lba, lba);
+					int endLBA = max(lba + stoi(data) - 1, cmdList.back().lba + stoi(cmdList.back().data) - 1);
+					cmdList.back().lba = startLBA;
+					cmdList.back().data = to_string(endLBA+1-startLBA);
+					commandBuffered = true;
+				}
+			}
+		}
 
-		// E 되면 앞에꺼 scan해서 지우기
+		if (!commandBuffered) {
+			// Ignore write 1
+			for (int i = 0; i < cmdList.size(); i++) {
+
+				if (cmdList[i].opcode == CmdOpcode::WRITE_CMD && cmdList[i].lba == lba) {
+					cmdList[i].data = data;
+
+					commandBuffered = true;
+				}
+			}
+
+			// Ignore write 2
+			int eraseRange = stoi(data);
+			for (int i = 0; i < cmdList.size(); i++) {
+
+				if (cmdList[i].opcode == CmdOpcode::WRITE_CMD && opcode == CmdOpcode::ERASE_CMD
+					&& cmdList[i].lba >= lba && cmdList[i].lba < lba + eraseRange) {
+					cmdList.erase(cmdList.begin() + i);
+					IoDataStruct item;
+					item.opcode = opcode;
+					item.lba = lba;
+					item.data = data;
+					cmdList.push_back(item);
+					commandBuffered = true;
+				}
+			}
+
+		}
+
+		if (commandBuffered == false) {
+			IoDataStruct item;
+			item.opcode = opcode;
+			item.lba = lba;
+			item.data = data;
+			cmdList.push_back(item);
+		}
+
+		FileManager::getInstance().writeFile(COMMAND_BUFFER_FILE, cmdList);
+
+		if (needFlush()) {
+			flushBuffer();
+		}
 	}
 
 	bool needFlush() {
-		return cmdCnt == MAX_BUFFER_COUNT;
+		return cmdList.size() == MAX_BUFFER_COUNT;
 	}
 
 	void flushBuffer() {
 		FileManager::getInstance().flushNand(cmdList);
 
-		// buffer 초기화
-		cmdCnt = 0;
+		// init buffer
 		cmdList.clear();
 	}
 
@@ -132,14 +175,14 @@ public:
 private:
 	CommandBuffer()
 	{
-		string cmdBuf[1000];
-
+		string cmdBuf[MAX_BUFFER_COUNT];
 		// open and read file first from buffer.txt to cmdBuf
 		FileManager::getInstance().initFile(COMMAND_BUFFER_FILE);
-		FileManager::getInstance().openFile(COMMAND_BUFFER_FILE, cmdBuf, cmdCnt);
+		FileManager::getInstance().openFile(COMMAND_BUFFER_FILE, cmdBuf, cmdBackupCount);
 		ParseCmdBuf(cmdBuf);
 	}
-	int cmdCnt;
+
+	int cmdBackupCount=0;
 	vector<IoDataStruct> cmdList;
 };
 

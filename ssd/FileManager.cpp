@@ -32,16 +32,6 @@ public:
 		writeFile.close();
 	}
 
-	void initFile(const string file_name) {
-		// set file as zero
-		ifstream checkFile(file_name);
-
-		if (checkFile.good()) {
-			checkFile.close();
-			return;
-		}
-	}
-
 	void openNand()
 	{
 		// ready to file read
@@ -58,29 +48,6 @@ public:
 		readFile.close();
 	}
 
-	void openFile(const string file_name, string *buf, int &cmdCnt)
-	{
-		cout << "open file has to be called for once" << endl;
-		// ready to file read
-		ifstream readFile(file_name);
-
-		if (!readFile.is_open()) {
-			return;
-		}
-
-		// save data to buf
-		int buf_index = 0;
-		string data;
-		cmdCnt = 0;
-		while (getline(readFile, data, '\n')) {
-			buf[buf_index++] = data;
-			cout << "openFile str :" << buf[buf_index - 1] << endl;
-			cmdCnt++;
-		}
-
-		readFile.close();
-	}
-
 	void writeNand() {
 		ofstream writeFile;
 		writeFile.open(NANDFILE);
@@ -93,13 +60,18 @@ public:
 		writeFile.close();
 	}
 
-	void writeFile(const string file_name, string *buf) {
+	void writeFile(const string file_name, vector<IoDataStruct> cmdList) {
+
 		cout << "writeFile is called :" << *buf << endl;
+
 		ofstream writeFile;
-		writeFile.open(file_name, std::ios::out | std::ios::app);
-		if (writeFile.is_open())
-		{
-			writeFile << *buf << endl;
+		writeFile.open(file_name);
+		if (!writeFile.is_open())
+			return;
+
+		for (auto cmd : cmdList) {
+			string tempBuffer = to_string(cmd.opcode) + " " + to_string(cmd.lba) + " " + cmd.data;
+			writeFile << tempBuffer << endl;
 		}
 		writeFile.close();
 	}
@@ -155,6 +127,38 @@ public:
 			}
 		}
 		writeNand();
+	}
+
+	void openFile(const string file_name, string* buf,int &cmdBackupCount)
+	{
+		cout << "open file has to be called for once" << endl;
+		// ready to file read
+		ifstream readFile(file_name);
+
+		if (!readFile.is_open()) {
+			return;
+		}
+
+		// save data to buf
+		int buf_index = 0;
+		string data;
+		while (getline(readFile, data, '\n')) {
+			buf[buf_index++] = data;
+			cmdBackupCount++;
+			cout << "openFile str :" << buf[buf_index - 1] << endl;
+		}
+
+		readFile.close();
+	}
+
+	void initFile(const string file_name) {
+		// set file as zero
+		ifstream checkFile(file_name);
+
+		if (checkFile.good()) {
+			checkFile.close();
+			return;
+		}
 	}
 
 private:
