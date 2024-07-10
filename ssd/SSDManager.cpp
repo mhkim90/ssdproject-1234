@@ -4,6 +4,7 @@
 #include "FileManager.cpp"
 #include "ReadCmdHandler.cpp"
 #include "WriteCmdHandler.cpp"
+#include "EraseCmdHandler.cpp"
 #include "Exception.cpp"
 using namespace std;
 

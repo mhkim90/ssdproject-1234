@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CmdHandlerFactory.cpp" />
+    <ClCompile Include="EraseCmdHandler.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="ReadCmdHandler.cpp" />

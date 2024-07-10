@@ -6,6 +6,7 @@
 #include "../ssd/CmdHandler.h"
 #include "../ssd/WriteCmdHandler.cpp"
 #include "../ssd/ReadCmdHandler.cpp"
+#include "../ssd/EraseCmdHandler.cpp"
 using namespace std;
 using namespace testing;
 
