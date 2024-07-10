@@ -4,13 +4,11 @@
 #include "command.h"
 #include "Printer.cpp"
 
-class TestApp2Command : public ICommand {
+class TestApp2Command : public CommandBase {
 public:
-	TestApp2Command(ISSD& ssd) : ssd{ ssd } {}
+	TestApp2Command(ISSD& ssd)
+		: CommandBase(ssd) {
 
-	void injectSSD(ISSD& ssd) override
-	{
-		this->ssd = ssd;
 	}
 
 	void execute(const vector<string>& args) override
@@ -25,18 +23,18 @@ public:
 		// 1st step
 		for (int lba = START_LBA_FOR_AGING; lba <= END_LBA_FOR_AGING; lba++) {
 			for (int tryCount = 0; tryCount < WRITE_TRY_MAX; tryCount++) {
-				ssd.write(lba, agingString);
+				getSSD().write(lba, agingString);
 			}
 		}
 
 		// 2nd step
 		for (int lba = START_LBA_FOR_AGING; lba <= END_LBA_FOR_AGING; lba++) {
-			ssd.write(lba, originString);
+			getSSD().write(lba, originString);
 		}
 
 		// 3rd step
 		for (int lba = START_LBA_FOR_AGING; lba <= END_LBA_FOR_AGING; lba++) {
-			if (originString != ssd.read(lba)) {
+			if (originString != getSSD().read(lba)) {
 				printer.print("FAIL");
 				return;
 			}
@@ -51,8 +49,6 @@ public:
 	}
 
 private:
-	ISSD& ssd;
-
 	const string WRITE_HELP = "Test script2 - testapp2. \n\
 		[Example] testapp2\n\
 		[Parameters]\n\
