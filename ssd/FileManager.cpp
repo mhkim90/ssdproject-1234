@@ -3,6 +3,9 @@
 #include <iostream>
 #include "SSDConfig.h"
 
+#include <iostream>
+using namespace std;
+
 class FileManager {
 public:
 	static FileManager& getInstance() {
@@ -30,6 +33,16 @@ public:
 		writeFile.close();
 	}
 
+	void initFile(const string file_name) {
+		// set file as zero
+		ifstream checkFile(file_name);
+
+		if (checkFile.good()) {
+			checkFile.close();
+			return;
+		}
+	}
+
 	void openNand()
 	{
 		// ready to file read
@@ -46,6 +59,28 @@ public:
 		readFile.close();
 	}
 
+	void openFile(const string file_name, string *buf, int &cmdCnt)
+	{
+		cout << "open file has to be called for once" << endl;
+		// ready to file read
+		ifstream readFile(file_name);
+
+		if (!readFile.is_open()) {
+			return;
+		}
+
+		// save data to buf
+		int buf_index = 0;
+		string data;
+		cmdCnt = 0;
+		while (getline(readFile, data, '\n')) {
+			buf[buf_index++] = data;
+			cmdCnt++;
+		}
+
+		readFile.close();
+	}
+
 	void writeNand() {
 		ofstream writeFile;
 		writeFile.open(NANDFILE);
@@ -54,6 +89,17 @@ public:
 
 		for (int i = 0; i < LBA_COUNT; i++) {
 			writeFile << buf[i] << endl;
+		}
+		writeFile.close();
+	}
+
+	void writeFile(const string file_name, string *buf) {
+		cout << "writeFile is called :" << *buf << endl;
+		ofstream writeFile;
+		writeFile.open(file_name, std::ios::out | std::ios::app);
+		if (writeFile.is_open())
+		{
+			writeFile << *buf << endl;
 		}
 		writeFile.close();
 	}
@@ -81,5 +127,5 @@ public:
 
 private:
 	FileManager() {}
-	string buf[100];
+	string buf[1000];
 };

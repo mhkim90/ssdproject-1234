@@ -97,6 +97,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\packages\gmock.1.11.0\lib\native\src\gtest\src\gtest_main.cc" />
+    <ClCompile Include="test_commnad_buffer.cpp" />
     <ClCompile Include="test_factory.cpp" />
     <ClCompile Include="ssd_command_test.cpp" />
     <ClCompile Include="ssd_manager_test.cpp" />

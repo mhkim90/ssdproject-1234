@@ -6,6 +6,7 @@
 #include "SSDConfig.h"
 #include "FileManager.cpp"
 #include "Exception.cpp"
+#include "CommandBuffer.cpp"
 
 using namespace std;
 
@@ -14,7 +15,10 @@ class CmdHandler
 public:
 	CmdHandler() {};
 
-	virtual void execute(int lba, string data ="") = 0;
+	virtual void execute(int lba, string data = "")
+	{
+		CommandBuffer::getInstance().updateCommandBuffer(opcode, lba, data);
+	}
 
 	bool IsAvailableOpcode(CmdOpcode opcode)
 	{
