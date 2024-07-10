@@ -8,3 +8,4 @@
 #include "../test-shell/TestApp1Command.cpp"
 #include "../test-shell/TestApp2Command.cpp"
 #include "../test-shell/EraseRangeCommand.cpp"
+#include "../test-shell/EraseCommand.cpp"
