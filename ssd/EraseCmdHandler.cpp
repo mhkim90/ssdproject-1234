@@ -1,14 +1,13 @@
 #pragma once
 #include "CmdHandler.h"
 #include <iostream>
-using namespace std; 
+using namespace std;
 
-class WriteCmdHandler : public CmdHandler
+class EraseCmdHandler : public CmdHandler
 {
 public:
-	WriteCmdHandler() {
-
-		CmdHandler::setOpcode(CmdOpcode::WRITE_CMD);
+	EraseCmdHandler() {
+		CmdHandler::setOpcode(CmdOpcode::ERASE_CMD);
 	}
 
 	bool sanityCheckPassed(int lba, string data) override
@@ -17,8 +16,8 @@ public:
 		if (true == CmdHandler::sanityCheckPassed(lba, data))
 		{
 			// then write command should have data as input parameter
-			if (data.size() == 0) return false;
-			
+			if (stoi(data) > MAX_ERASE_COUNT) return false;
+
 			return true;
 		}
 		return false;
@@ -28,7 +27,7 @@ public:
 	{
 		FileManager::getInstance().openNand();
 
-		FileManager::getInstance().updateNand(lba, data);
+		FileManager::getInstance().eraseNand(lba, data);
 
 		FileManager::getInstance().writeNand();
 	}

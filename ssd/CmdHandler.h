@@ -18,7 +18,7 @@ public:
 
 	bool IsAvailableOpcode(CmdOpcode opcode)
 	{
-		return (opcode == READ_CMD) || (opcode == WRITE_CMD);
+		return (opcode == READ_CMD) || (opcode == WRITE_CMD) || (opcode == ERASE_CMD);
 	}
 	virtual bool sanityCheckPassed(int lba, string data)
 	{

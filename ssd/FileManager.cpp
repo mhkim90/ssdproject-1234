@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <iostream>
 #include "SSDConfig.h"
 
 class FileManager {
@@ -20,11 +21,11 @@ public:
 
 		ofstream writeFile;
 		writeFile.open(NANDFILE);
-		if (writeFile.is_open())
-		{
-			for (int i = 0; i < 100; i++) {
-				writeFile << INIT_DATA;
-			}
+		if (!writeFile.is_open())
+			return;
+
+		for (int i = 0; i < LBA_COUNT; i++) {
+			writeFile << INIT_DATA << endl;
 		}
 		writeFile.close();
 	}
@@ -42,18 +43,17 @@ public:
 		while (getline(readFile, tmp, '\n')) {
 			buf[i++] = tmp;
 		}
-
 		readFile.close();
 	}
 
 	void writeNand() {
 		ofstream writeFile;
 		writeFile.open(NANDFILE);
-		if (writeFile.is_open())
-		{
-			for (int i = 0; i < LBA_COUNT; i++) {
-				writeFile << buf[i] + "\n";
-			}
+		if (!writeFile.is_open())
+			return;
+
+		for (int i = 0; i < LBA_COUNT; i++) {
+			writeFile << buf[i] << endl;
 		}
 		writeFile.close();
 	}
@@ -70,6 +70,13 @@ public:
 
 	void updateNand(int lba, string data) {
 		buf[lba] = data;
+	}	
+	
+	void eraseNand(int lba, string data) {
+		int range = stoi(data);
+		for (int i = 0; i < range; i++) {
+			buf[lba+i] = INIT_DATA;
+		}
 	}
 
 private:

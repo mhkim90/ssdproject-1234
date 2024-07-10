@@ -2,6 +2,7 @@
 #include "CmdHandler.h"
 #include "ReadCmdHandler.cpp"
 #include "WriteCmdHandler.cpp"
+#include "EraseCmdHandler.cpp"
 
 class CmdHandlerFactory
 {
@@ -22,6 +23,10 @@ public:
         else if (opcode == WRITE_CMD)
         {
             cmdHandler = new WriteCmdHandler();
+        }
+        else if (opcode == ERASE_CMD)
+        {
+            cmdHandler = new EraseCmdHandler();
         }
         return cmdHandler;
     }
