@@ -75,11 +75,8 @@ ScriptLauncher& ScriptLauncher::compile()
 			_seq.push_back(invoker);
 		}
 	}
-	catch (exception& ex) {
-		throw logic_error{ ex.what() };
-	}
-	catch (...) {
-		throw logic_error("script json data load failed.");
+	catch (exception&) {
+		throw logic_error("script json data compile failed.");
 	}
 
 	return *this;
