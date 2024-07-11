@@ -2,6 +2,7 @@
 #include <string>
 #include <filesystem>
 #include "ssd.h"
+#include "../logger/Logger.h"
 
 class SSDLib : public ISSD {
 public:
@@ -22,6 +23,7 @@ private:
 	std::string app_name = "\\ssd.exe";
 	std::string result_path = "";
 	std::string result_name = "\\result.txt";
+	ILogger& logger;
 
 	virtual void execute(const std::string& command_str);
 	virtual std::string getValue(const std::string& result_path);

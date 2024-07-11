@@ -5,6 +5,7 @@
 #include "TestApp2Command.h"
 #include "EraseCommand.h"
 #include "EraseRangeCommand.h"
+#include "FlushCommand.h"
 
 ICommandFactory& CommandFactory::getInstance()
 {
@@ -22,6 +23,7 @@ void CommandFactory::initialize(ISSD* ssd)
 	injectCommand("testapp2", new TestApp2Command(*ssd));
 	injectCommand("erase", new EraseCommand(*ssd));
 	injectCommand("erase_range", new EraseRangeCommand(*ssd));
+	injectCommand("flush", new FlushCommand(*ssd));
 }
 
 void CommandFactory::injectCommand(const std::string& name, ICommand* command)

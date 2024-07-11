@@ -14,6 +14,7 @@ EraseRangeCommand::EraseRangeCommand(ISSD& ssd, int argsCount)
 
 void EraseRangeCommand::execute(const vector<string>& args)
 {
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
 	verifyArgsCount(args);
 	verifyFormatAddress(args[0]);
 	verifyFormatAddress(args[1]);
@@ -27,6 +28,7 @@ void EraseRangeCommand::execute(const vector<string>& args)
 	}
 
 	if (start_addr >= end_addr) {
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Exception: Invalid Argument");
 		throw std::invalid_argument("wrong range. Check help.");
 	}
 
@@ -38,6 +40,8 @@ void EraseRangeCommand::execute(const vector<string>& args)
 
 		start_addr += ERASE_SIZE_AT_ONCE;
 	}
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 }
 
 const string& EraseRangeCommand::getHelp()

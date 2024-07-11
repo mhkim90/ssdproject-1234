@@ -15,6 +15,8 @@ void FlushCommand::execute(const vector<string>& args)
 
 	verifyArgsCount(args);
 	getSSD().flush();
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 }
 
 const string& FlushCommand::getHelp()

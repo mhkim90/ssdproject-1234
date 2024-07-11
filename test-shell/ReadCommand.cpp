@@ -19,6 +19,8 @@ void ReadCommand::execute(const vector<string>& args)
 	int addr = stoi(args[0]);
 	verifyAddressRange(addr);
 	std::cout << getSSD().read(addr) << "\n";
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 }
 
 const string& ReadCommand::getHelp()

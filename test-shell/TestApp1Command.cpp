@@ -23,10 +23,12 @@ void TestApp1Command::execute(const vector<string>& args)
 	for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
 		string tmp = getSSD().read(i);
 		if (tmp != TEST_VAL) {
-			printResult(false); // 여기서 throw 발생
+			printResult(false);
 		}
 	}
 	printResult(true);
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 }
 
 const string& TestApp1Command::getHelp()
