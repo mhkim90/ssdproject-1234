@@ -4,8 +4,8 @@
 
 int main(int argc, char* argv[]) {
 	ICommandFactory& factory = CommandFactory::getInstance();
-	ISSD* ssd = new SSDLib();
-	factory.initialize(ssd);
+	ISSD& ssd = SSDLib::getInstance();
+	factory.initialize(&ssd);
 
 	Shell* shell = new Shell(factory);
 

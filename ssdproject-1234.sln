@@ -22,8 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루�
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dummy", "dummy\dummy.vcxproj", "{964B1C8B-2B96-4718-A3C7-E7C69C837F07}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "logger", "logger\logger.vcxproj", "{47779171-DD11-49CA-A0ED-7776E537F10F}"
 EndProject
 Global
@@ -58,14 +56,6 @@ Global
 		{4C554216-3BBB-421F-B0CB-8221E7613369}.Release|x64.Build.0 = Release|x64
 		{4C554216-3BBB-421F-B0CB-8221E7613369}.Release|x86.ActiveCfg = Release|Win32
 		{4C554216-3BBB-421F-B0CB-8221E7613369}.Release|x86.Build.0 = Release|Win32
-		{964B1C8B-2B96-4718-A3C7-E7C69C837F07}.Debug|x64.ActiveCfg = Debug|x64
-		{964B1C8B-2B96-4718-A3C7-E7C69C837F07}.Debug|x64.Build.0 = Debug|x64
-		{964B1C8B-2B96-4718-A3C7-E7C69C837F07}.Debug|x86.ActiveCfg = Debug|Win32
-		{964B1C8B-2B96-4718-A3C7-E7C69C837F07}.Debug|x86.Build.0 = Debug|Win32
-		{964B1C8B-2B96-4718-A3C7-E7C69C837F07}.Release|x64.ActiveCfg = Release|x64
-		{964B1C8B-2B96-4718-A3C7-E7C69C837F07}.Release|x64.Build.0 = Release|x64
-		{964B1C8B-2B96-4718-A3C7-E7C69C837F07}.Release|x86.ActiveCfg = Release|Win32
-		{964B1C8B-2B96-4718-A3C7-E7C69C837F07}.Release|x86.Build.0 = Release|Win32
 		{47779171-DD11-49CA-A0ED-7776E537F10F}.Debug|x64.ActiveCfg = Debug|x64
 		{47779171-DD11-49CA-A0ED-7776E537F10F}.Debug|x64.Build.0 = Debug|x64
 		{47779171-DD11-49CA-A0ED-7776E537F10F}.Debug|x86.ActiveCfg = Debug|Win32
