@@ -19,6 +19,8 @@ bool EraseCmdHandler::sanityCheckPassed(int lba, string data)
 
 void EraseCmdHandler::execute(int lba, string data)
 {
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Erase called");
 	// update command buffer only
 	CommandBuffer::getInstance().updateCommandBuffer(CmdHandler::getOpcode(), lba, data);
 

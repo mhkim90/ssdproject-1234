@@ -9,8 +9,8 @@ CommandBuffer::CommandBuffer()
 {
 	string cmdBuf[MAX_BUFFER_COUNT];
 	// open and read file first from buffer.txt to cmdBuf
-	FileManager::getInstance().initFile(COMMAND_BUFFER_FILE);
-	FileManager::getInstance().openFile(COMMAND_BUFFER_FILE, cmdBuf, cmdBackupCount);
+	FileManager::getInstance().initBuffer(COMMAND_BUFFER_FILE);
+	FileManager::getInstance().loadBuffer(COMMAND_BUFFER_FILE, cmdBuf, cmdBackupCount);
 	ParseCmdBuf(cmdBuf);
 }
 
@@ -63,7 +63,7 @@ void CommandBuffer::updateCommandBuffer(CmdOpcode opcode, int lba, string data)
 }
 
 bool CommandBuffer::needFlush() {
-	return cmdList.size() == MAX_BUFFER_COUNT;
+	return cmdList.size() >= MAX_BUFFER_COUNT;
 }
 
 void CommandBuffer::flushBuffer() {
@@ -177,8 +177,8 @@ void CommandBuffer::updateLastEraseCmd(int lba, std::string data)
 
 bool CommandBuffer::ableToCombineErase(int lba, std::string data)
 {
-	return cmdList.back().lba <= lba + stoi(data) - 1
-		&& cmdList.back().lba + stoi(cmdList.back().data) - 1 >= lba;
+	return (cmdList.back().lba <= lba + stoi(data) - 1
+		&& cmdList.back().lba + stoi(cmdList.back().data) - 1 >= lba);
 }
 
 void CommandBuffer::addCmdtoCmdList(CmdOpcode opcode, int lba, std::string& data)
