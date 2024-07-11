@@ -16,9 +16,11 @@ EraseCommand::EraseCommand(ISSD& ssd)
 
 void EraseCommand::execute(const vector<string>& args)
 {
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Erase Execute()");
+
 	verifyArgsCount(args);
 
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Erase " + args[0] + " " + args[1] + " Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "LBA: " + args[0] + ", Size: " + args[1]);
 	verifyFormatAddress(args[0]);
 	verifyFormatAddress(args[1]);
 	int addr = stoi(args[0]);
