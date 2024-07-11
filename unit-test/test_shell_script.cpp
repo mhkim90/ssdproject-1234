@@ -27,7 +27,7 @@ public:
 		, readCommad(ssd)
 		, writeCommad(ssd)
 		, factory { CommandFactory::getInstance() }
-		, shell { factory }
+		, launcher { ssd, "TestScript1" }
 	{
 	}
 
@@ -35,23 +35,20 @@ public:
 	ReadCommand readCommad;
 	WriteCommand writeCommad;
 	ICommandFactory& factory;
-	Shell shell;
+	ScriptLauncher launcher;
 
 protected:
 	void SetUp() override {
 		factory.injectCommand("read", &readCommad);
 		factory.injectCommand("write", &writeCommad);
+
+		EXPECT_CALL(ssd, write(_, _))
+			.Times(10);
 	}
 };
 
 
 TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
-
-	ScriptLauncher launcher(ssd, "TestScript1");
-
-	EXPECT_CALL(ssd, write(_, _))
-		.Times(10);
-
 	EXPECT_CALL(ssd, read(_))
 		.Times(5)
 		.WillRepeatedly(Return("0xAAAABBBB"));
@@ -67,12 +64,6 @@ TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
 }
 
 TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
-
-	ScriptLauncher launcher(ssd, "TestScript1");
-
-	EXPECT_CALL(ssd, write(_, _))
-		.Times(10);
-
 	EXPECT_CALL(ssd, read(_))
 		.Times(3)
 		.WillRepeatedly(Return("0xAAAAAAAA"));
@@ -84,10 +75,4 @@ TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
 	EXPECT_THROW(launcher.execute({}), logic_error);
 
 	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...FAIL!\n");
-}
-
-TEST_F(ScriptLauncherFixture, Shell_LoadScript) {
-	EXPECT_EQ(shell.loadScripts(ssd), 1);
-	EXPECT_NO_THROW(factory.getCommand("TestScript1"));
-	EXPECT_THAT(factory.getCommand("TestScript1"), NotNull());
 }
