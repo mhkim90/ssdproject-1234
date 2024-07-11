@@ -18,9 +18,7 @@ protected:
 
 private:
 	std::filesystem::path current_path;
-	std::string directory_path = "\\..\\x64\\Debug";
 	std::string app_name = "\\ssd.exe";
-	std::string result_path = "";
 	std::string result_name = "\\result.txt";
 	ILogger& logger;
 

@@ -62,6 +62,17 @@ TEST_F(LoggerFixture, ConsoleTest) {
 	EXPECT_EQ(end_idx - begin_idx - 1, m_name_buffer - name.size());
 }
 
+TEST_F(LoggerFixture, LongFuncNameTest) {
+	std::string long_name = "abcdeabcdeabcdeabcdeabcde()";
+	testing::internal::CaptureStdout();
+	logger.printLog(PRINT_TYPE::CONSOLE, long_name, msg);
+	std::string captured_out = testing::internal::GetCapturedStdout();
+	size_t begin_idx = captured_out.find_last_of(")");
+	size_t end_idx = captured_out.find_last_of(":");
+	std::cout << captured_out << std::endl;
+	EXPECT_EQ(end_idx - begin_idx - 1, 0);
+}
+
 TEST_F(LoggerFixture, FileTest) {
 	for (int i = 0; i < m_max_line; i++) {
 		logger.printLog(PRINT_TYPE::FILE, name, msg);

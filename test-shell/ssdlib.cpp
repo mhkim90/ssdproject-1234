@@ -15,7 +15,7 @@ ISSD& SSDLib::getInstance()
 }
 
 std::string SSDLib::getAppPath() {
-	return current_path.string() + directory_path + app_name;
+	return current_path.string() + app_name;
 }
 
 void SSDLib::write(int addr, const std::string& value)
@@ -34,8 +34,7 @@ std::string SSDLib::read(int addr)
 		std::to_string(addr);
 	execute(command);
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Read()");
-	return getValue(current_path.string() + result_path +
-		result_name);
+	return getValue(current_path.string() + result_name);
 }
 
 void SSDLib::erase(int addr, int size)
