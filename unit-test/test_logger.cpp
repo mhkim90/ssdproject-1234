@@ -7,8 +7,8 @@
 
 class LoggerFixture : public ::testing::Test {
 public:
-	std::string module_name = "gtest";
-	ILogger& logger = Logger::getInstance(module_name);
+	std::string log_directory = "gtest";
+	ILogger& logger = Logger::getInstance(log_directory);
 	std::string name = "func()";
 	std::string msg = "test message";
 	const int m_name_buffer = 30;
@@ -34,6 +34,11 @@ public:
 			return true;
 		}
 		return false;
+	}
+
+protected:
+	void SetUp() override {
+		logger.setDirectory(log_directory);
 	}
 
 private:
@@ -64,7 +69,7 @@ TEST_F(LoggerFixture, FileTest) {
 	
 	std::vector<std::string> file_names;
 	for (const auto& dir_entry : 
-		std::filesystem::directory_iterator{ module_name }) {
+		std::filesystem::directory_iterator{ log_directory }) {
 		file_names.push_back(dir_entry.path().string());
 	}
 	EXPECT_TRUE(checkFiles(file_names));

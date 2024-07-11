@@ -9,6 +9,7 @@ public:
 		const std::string& func_name,
 		const std::string& message) override;
 
+	void setDirectory(const std::string& log_directory) override;
 
 private:
 	Logger(const std::string& log_directory);
