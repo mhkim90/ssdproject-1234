@@ -1,4 +1,7 @@
 #include "ScriptLauncher.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 ScriptLauncher::ScriptLauncher(ISSD& ssd, const string& scriptName)
 	: ScriptBase(ssd, scriptName)
@@ -12,6 +15,11 @@ void ScriptLauncher::execute(const vector<string>& args)
 const string& ScriptLauncher::getHelp()
 {
 	return _help;
+}
+
+void ScriptLauncher::loadScript()
+{
+
 }
 
 ScriptLauncher::Invoker::Builder::Builder()

@@ -16,6 +16,8 @@ public:
 	virtual void execute(const vector<string>& args) override;
 	virtual const string& getHelp() override;
 
+	void loadScript();
+
 private:
 	class Invoker {
 	public:
