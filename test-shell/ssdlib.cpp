@@ -7,22 +7,10 @@ SSDLib::SSDLib()
 	current_path = std::filesystem::current_path();
 }
 
-SSDLib::SSDLib(const std::string& directory_path)
-	: directory_path{ directory_path } {
-	current_path = std::filesystem::current_path();
-}
-
-SSDLib::SSDLib(const std::string& directory_path, const std::string& app_name)
-	: directory_path{ directory_path }
-	, app_name{ app_name } {
-	current_path = std::filesystem::current_path();
-}
-
-SSDLib::SSDLib(const std::string& directory_path, const std::string& app_name, const std::string& result_path)
-	: directory_path{ directory_path }
-	, app_name{ app_name }
-	, result_path{ result_path } {
-	current_path = std::filesystem::current_path();
+ISSD& SSDLib::getInstance()
+{
+	static SSDLib instance;
+	return instance;
 }
 
 void SSDLib::write(int addr, const std::string& value)
@@ -30,7 +18,7 @@ void SSDLib::write(int addr, const std::string& value)
 	std::string command = current_path.string() +
 		directory_path + app_name + " W " +
 		std::to_string(addr) + " " + value;
-	system(command.c_str());
+	execute(command);
 }
 
 std::string SSDLib::read(int addr)
@@ -38,7 +26,7 @@ std::string SSDLib::read(int addr)
 	std::string command = current_path.string() +
 		directory_path + app_name + " R " +
 		std::to_string(addr);
-	system(command.c_str());
+	execute(command);
 	return getValue(current_path.string() + result_path +
 		result_name);
 }
@@ -48,20 +36,25 @@ void SSDLib::erase(int addr, int size)
 	std::string command = current_path.string() +
 		directory_path + app_name + " E " +
 		std::to_string(addr) + " " + std::to_string(size);
-	system(command.c_str());
+	execute(command);
 }
 
 void SSDLib::flush()
 {
 	std::string command = current_path.string() +
 		directory_path + app_name + " F ";
-	system(command.c_str());
+	execute(command);
 }
 
 std::string SSDLib::getResult()
 {
 	return getValue(current_path.string() + result_path +
 		result_name);
+}
+
+void SSDLib::execute(const std::string& command_str)
+{
+	system(command_str.c_str());
 }
 
 std::string SSDLib::getValue(const std::string& result_path)
