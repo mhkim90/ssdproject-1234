@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <set>
 #include "SSDConfig.h"
 #include "FileManager.h"
 
@@ -16,6 +17,18 @@ public:
 	void ParseCmdBuf(string* cmdBuf);
 
 	void updateCommandBuffer(CmdOpcode opcode, int lba, string data);
+
+	void addCmdtoCmdList(CmdOpcode opcode, int lba, std::string& data);
+
+	bool IsMergedWithBufferedCommands(CmdOpcode opcode, int& lba, std::string& data);
+
+	bool checkWriteIgnorable(int i, CmdOpcode opcode, int& lba, int eraseRange);
+
+	bool checkDuplicatedWrite(int i, int& lba);
+
+	void updateLastEraseCmd(int lba, std::string data);
+
+	bool ableToCombineErase(int lba, std::string data);
 
 	bool needFlush();
 
