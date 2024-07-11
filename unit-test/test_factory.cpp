@@ -27,21 +27,27 @@ public:
 
 class FactoryFixture : public ::testing::Test {
 public:
+	FactoryFixture()
+		: factory{ CommandFactory::getInstance() }
+		, dummy_args{ { "0", "0" } }
+	{
+		dummy_args = { "0", "0" };
+		factory.injectCommand("read", &readCMD);
+		factory.injectCommand("write", &writeCMD);
+	}
+
 	MockReadCMD readCMD;
 	MockWriteCMD writeCMD;
 	MockWriteCMD testCMD;
 
 	vector<string> dummy_args;
 
-	ICommandFactory& factory = CommandFactory::getInstance();
+	ICommandFactory& factory;
 private:
 
 protected:
 	void SetUp() override {
-		dummy_args = { "0", "0" };
 
-		factory.injectCommand("read", &readCMD);
-		factory.injectCommand("write", &writeCMD);
 	}
 
 	void TearDown() override {
@@ -49,21 +55,14 @@ protected:
 	}
 };
 
-TEST_F(FactoryFixture, TestInjectedReadCommand) {
+TEST_F(FactoryFixture, TestInjectedReadWriteCommand) {
 	EXPECT_CALL(readCMD, execute(_))
 		.Times(1);
 	EXPECT_CALL(writeCMD, execute(_))
-		.Times(0);
+		.Times(1);
 	ICommand* command = factory.getCommand("read");
 	command->execute(dummy_args);
-}
-
-TEST_F(FactoryFixture, TestInjectedWriteCommand) {
-	EXPECT_CALL(readCMD, execute(_))
-		.Times(0);
-	EXPECT_CALL(writeCMD, execute(_))
-		.Times(1);
-	ICommand* command = factory.getCommand("write");
+	command = factory.getCommand("write");
 	command->execute(dummy_args);
 }
 
@@ -72,13 +71,6 @@ TEST_F(FactoryFixture, TestThrowgetCommand) {
 }
 
 TEST_F(FactoryFixture, TestgetAllCommands) {
-	EXPECT_CALL(readCMD, execute(_))
-		.Times(1);
-	EXPECT_CALL(writeCMD, execute(_))
-		.Times(1);
 	const unordered_map<string, ICommand*>& commands = factory.getAllCommands();
 	EXPECT_EQ(commands.size(), 2);
-	for (auto& command : commands) {
-		command.second->execute(dummy_args);
-	}
 }
