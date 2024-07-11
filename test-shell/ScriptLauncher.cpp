@@ -3,6 +3,8 @@
 #include <fstream>
 #include <filesystem>
 #include <stdexcept>
+#include <numeric>
+#include <functional>
 #include "command_factory.h"
 
 using json = nlohmann::json;
@@ -60,7 +62,7 @@ ScriptLauncher& ScriptLauncher::load()
 			auto invoker = Invoker::Builder::newInstance()->cmd(seqNode["cmd"])
 				.args(seqNode["args"].get<vector<string>>())
 				.tryCnt(seqNode["tryCnt"])
-				.verify(seqNode["verify"].is_null() ? nullptr : seqNode["verify"].get<string>().c_str())
+				.verify(seqNode["verify"].get<vector<string>>())
 				.build();
 
 			_seq.push_back(invoker);
@@ -104,10 +106,9 @@ ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::tryCnt(unsig
 	return *this;
 }
 
-ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::verify(const char* value)
+ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::verify(const vector<string>& value)
 {
-	if (nullptr == value) return *this;
-	_verify = shared_ptr<string>{ new string {value} };
+	_verify = shared_ptr<vector<string>>{ new vector<string> {value} };
 	return *this;
 }
 
@@ -155,12 +156,30 @@ void ScriptLauncher::Invoker::endStreamCapture()
 void ScriptLauncher::Invoker::verify()
 {
 	if (_verify == nullptr) return;
-	if ((*_verify) == _osstream.str()) return;
+	if (_verify->empty()) return;
+
+	vector<string> actual;
+	istringstream isstream{ _osstream.str() };
+	string buffer;
+	while (getline(isstream, buffer, '\n')) {
+		if (buffer.empty()) continue;
+		actual.push_back(buffer);
+	}
+
+	if ((*_verify) == actual) return;
+
+	auto joindVerify = accumulate(next(_verify->begin()), _verify->end(),
+		(*_verify)[0],
+		[](const string& a, const string& b) { return a + '\n' + b; });
+
+	auto joindActual = accumulate(next(actual.begin()), actual.end(),
+		actual[0],
+		[](const string& a, const string& b) { return a + '\n' + b; });
 
 	throw logic_error(
 		"verify failed!\n---check value---\n"
-		+ (*_verify)
+		+ joindVerify
 		+ "\n---logic value---\n"
-		+ _osstream.str()
+		+ joindActual
 	);
 }

@@ -4,13 +4,13 @@
       "cmd": "write",
       "args": ["0", "0xAAAABBBB"],
       "tryCnt": 1,
-      "verify": null
+      "verify": []
     },
     {
       "cmd": "read",
       "args": ["0"],
       "tryCnt": 1,
-      "verify": "0xAAAABBBB\n"
+      "verify": [ "0xAAAABBBB" ]
     }
   ],
   "help": "HELP MESSAGE"

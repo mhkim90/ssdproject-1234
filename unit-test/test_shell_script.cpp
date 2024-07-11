@@ -33,23 +33,19 @@ public:
 	ReadCommand readCommad;
 	WriteCommand writeCommad;
 	ICommandFactory& factory;
-	shared_ptr<ScriptLauncher> launcher;
 
 protected:
 	void SetUp() override {
 		factory.injectCommand("read", &readCommad);
 		factory.injectCommand("write", &writeCommad);
-
-		launcher = shared_ptr<ScriptLauncher>{
-			new ScriptLauncher(ssd
-				, ::UnitTest::GetInstance()->current_test_info()->name() // test_name 주입
-			)
-		};
 	}
 };
 
 
-TEST_F(ScriptLauncherFixture, TestScript1) {
+TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
+
+	ScriptLauncher launcher(ssd, "TestScript1");
+
 	EXPECT_CALL(ssd, write(_, _))
 		.Times(1);
 
@@ -57,12 +53,33 @@ TEST_F(ScriptLauncherFixture, TestScript1) {
 		.Times(1)
 		.WillRepeatedly(Return("0xAAAABBBB"));
 	
-	EXPECT_NO_THROW(launcher->load());
-	EXPECT_EQ(launcher->getHelp(), "HELP MESSAGE");
+	EXPECT_NO_THROW(launcher.load());
+	EXPECT_EQ(launcher.getHelp(), "HELP MESSAGE");
 
 	internal::CaptureStdout();
 
-	EXPECT_NO_THROW(launcher->execute({}));
+	EXPECT_NO_THROW(launcher.execute({}));
 
 	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...Pass\n");
+}
+
+TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
+
+	ScriptLauncher launcher(ssd, "TestScript1");
+
+	EXPECT_CALL(ssd, write(_, _))
+		.Times(1);
+
+	EXPECT_CALL(ssd, read(_))
+		.Times(1)
+		.WillRepeatedly(Return("0xAAAAAAAA"));
+	
+	EXPECT_NO_THROW(launcher.load());
+	EXPECT_EQ(launcher.getHelp(), "HELP MESSAGE");
+
+	internal::CaptureStdout();
+
+	EXPECT_THROW(launcher.execute({}), logic_error);
+
+	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...FAIL!\n");
 }
