@@ -13,18 +13,20 @@ ISSD& SSDLib::getInstance()
 	return instance;
 }
 
+std::string SSDLib::getAppPath() {
+	return current_path.string() + directory_path + app_name;
+}
+
 void SSDLib::write(int addr, const std::string& value)
 {
-	std::string command = current_path.string() +
-		directory_path + app_name + " W " +
+	std::string command = getAppPath() + " W " +
 		std::to_string(addr) + " " + value;
 	execute(command);
 }
 
 std::string SSDLib::read(int addr)
 {
-	std::string command = current_path.string() +
-		directory_path + app_name + " R " +
+	std::string command = getAppPath() + " R " +
 		std::to_string(addr);
 	execute(command);
 	return getValue(current_path.string() + result_path +
@@ -33,23 +35,15 @@ std::string SSDLib::read(int addr)
 
 void SSDLib::erase(int addr, int size)
 {
-	std::string command = current_path.string() +
-		directory_path + app_name + " E " +
+	std::string command = getAppPath() + " E " +
 		std::to_string(addr) + " " + std::to_string(size);
 	execute(command);
 }
 
 void SSDLib::flush()
 {
-	std::string command = current_path.string() +
-		directory_path + app_name + " F ";
+	std::string command = getAppPath() + " F ";
 	execute(command);
-}
-
-std::string SSDLib::getResult()
-{
-	return getValue(current_path.string() + result_path +
-		result_name);
 }
 
 void SSDLib::execute(const std::string& command_str)

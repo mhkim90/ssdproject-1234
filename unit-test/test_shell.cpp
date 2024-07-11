@@ -23,7 +23,6 @@ public:
 	MOCK_METHOD(string, read, (int), (override));
 	MOCK_METHOD(void, erase, (int, int), (override));
 	MOCK_METHOD(void, flush, (), (override));
-	MOCK_METHOD(string, getResult, (), (override));
 };
 
 class MockCommand : public ICommand {
