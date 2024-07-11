@@ -1,31 +1,13 @@
-#include <string>
-#include "SSDConfig.h"
-#include "CmdHandler.h"
-#include "FileManager.cpp"
-#include "ReadCmdHandler.cpp"
-#include "WriteCmdHandler.cpp"
-#include "Exception.cpp"
-using namespace std;
+#include "SSDManager.h"
 
-class SSDManager
+void SSDManager::runCommand(int lba, string data)
 {
-public:
-	SSDManager(CmdHandler *cmd) : cmdHandler(cmd)
+	if (true == cmdHandler->sanityCheckPassed(lba, data))
 	{
+		cmdHandler->execute(lba, data);
 	}
-
-	void runCommand(int lba, string data = "")
+	else
 	{
-		if (true == cmdHandler->sanityCheckPassed(lba, data))
-		{
-			cmdHandler->execute(lba, data);
-		}
-		else
-		{
-			throw LbaRangeOverException();
-		}
+		throw LbaRangeOverException();
 	}
-
-private:
-	CmdHandler *cmdHandler;
-};
+}

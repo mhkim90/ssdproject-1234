@@ -1,74 +1,55 @@
-#include "command.h"
-#include "Printer.cpp"
-#include <stdexcept>
+#include "ReadCommand.h"
 
-class ReadCommand : public ICommand {
-public:
-	ReadCommand(ISSD& ssd) :ssd{ &ssd } {}
-
-	void injectSSD(ISSD& ssd) override
-	{
-		this->ssd = &ssd;
-	}
-
-	void execute(const vector<string>& args) override
-	{
-		Printer& printer = Printer::getInstance();
-		int addr = stoi(args[0]);
-		validationCheck(addr);
-		printer.print(ssd->read(addr));
-	}
-
-	const string& getHelp() override
-	{
-		return strHelp;
-	}
-
-private:
-	ISSD* ssd;
-	const int LBA_MIN_VAL = 0;
-	const int LBA_MAX_VAL = 99;
-	const string strHelp = "Reads the value written at LBA and displays it on the screen.\n\
-		[Example] read LBA\n\
+ReadCommand::ReadCommand(ISSD& ssd)
+	: CommandBase(ssd, 1)
+	, _HELP_MESSAGE{string{"Reads the value written at LBA and displays it on the screen.\n\
+		[Example] read [LBA]\n\
 		[Parameters]\n\
 		- LBA: LBA area value to read(0~99)\n\
-		[Returns] Displays the data read from LBA.\n";
+		[Returns] Displays the data read from LBA.\n"}}
+{
+}
 
-	void validationCheck(int addr) {
-		if (addr < LBA_MIN_VAL || addr > LBA_MAX_VAL) {
-			throw std::invalid_argument("잘못된 LBA 값 입니다.");
-		}
-	}
-};
+void ReadCommand::execute(const vector<string>& args)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Read Execute()");
 
-class FullReadCommand : public ICommand {
-public:
-	FullReadCommand(ISSD& ssd) :ssd{ &ssd } {}
-	void injectSSD(ISSD& ssd) override
-	{
-		this->ssd = &ssd;
-	}
+	verifyArgsCount(args);
 
-	void execute(const vector<string>& args) override
-	{
-		Printer& printer = Printer::getInstance();
-		for (int i = LBA_MIN_VAL; i <= LBA_MAX_VAL; i++) {
-			printer.print(ssd->read(i));
-		}
-	}
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "LBA: " + args[0]);
 
-	const string& getHelp() override
-	{
-		return strHelp;
-	}
+	verifyFormatAddress(args[0]);
+	int addr = stoi(args[0]);
+	verifyAddressRange(addr);
+	std::cout << getSSD().read(addr) << "\n";
 
-private:
-	ISSD* ssd;
-	const int LBA_MIN_VAL = 0;
-	const int LBA_MAX_VAL = 99;
-	const string strHelp = "Reads and displays values from LBA 0 to 99 on the screen.\n\
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
+}
+
+const string& ReadCommand::getHelp()
+{
+	return _HELP_MESSAGE;
+}
+
+FullReadCommand::FullReadCommand(ISSD& ssd)
+	: CommandBase(ssd)
+	, _HELP_MESSAGE{ string{"Reads and displays values from LBA 0 to 99 on the screen.\n\
 		[Example] fullread\n\
 		[Parameter] None\n\
-		[Returns] Displays the data read from each LBA.\n";
+		[Returns] Displays the data read from each LBA.\n"} }
+{
+}
 
-};
+void FullReadCommand::execute(const vector<string>& args)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start FullRead Execute()");
+
+	for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
+		std::cout << getSSD().read(i) << "\n";
+	}
+}
+
+const string& FullReadCommand::getHelp()
+{
+	return _HELP_MESSAGE;
+}

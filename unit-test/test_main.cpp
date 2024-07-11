@@ -1,24 +1,27 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include <iostream>
-#include <string>
-#include <vector>
 
-using namespace std;
-using namespace testing;
+/*Test target cpp files*/
+#include "../test-shell/command.cpp"
+#include "../test-shell/WriteCommand.cpp"
+#include "../test-shell/ReadCommand.cpp"
+#include "../test-shell/TestApp1Command.cpp"
+#include "../test-shell/TestApp2Command.cpp"
+#include "../test-shell/EraseRangeCommand.cpp"
+#include "../test-shell/EraseCommand.cpp"
+#include "../test-shell/FlushCommand.cpp"
+#include "../test-shell/command_factory.cpp"
+#include "../test-shell/shell.cpp"
+#include "../test-shell/ssdlib.cpp"
+#include "../test-shell/ScriptLauncher.cpp"
 
-class SSDFixture : public testing::Test {
-public:
+#include "../ssd/CmdHandlerFactory.cpp"
+#include "../ssd/SSDManager.cpp"
+#include "../ssd/FileManager.cpp"
+#include "../ssd/CommandBuffer.cpp"
+#include "../ssd/WriteCmdHandler.cpp"
+#include "../ssd/ReadCmdHandler.cpp"
+#include "../ssd/EraseCmdHandler.cpp"
+#include "../ssd/FlushCmdHandler.cpp"
 
-private:
-
-protected:
-	void SetUp() override {
-
-	}
-};
-
-TEST_F(SSDFixture, basicWriteTest) {
-	EXPECT_EQ(1, 1);
-	EXPECT_TRUE(true);
-}
+#include "../logger/Logger.cpp"

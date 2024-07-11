@@ -1,32 +1,30 @@
-#include <iostream>
-#include "CmdHandler.h"
-#include "ReadCmdHandler.cpp"
-#include "WriteCmdHandler.cpp"
+#include "CmdHandlerFactory.h"
 
-class CmdHandlerFactory
+CmdHandlerFactory& CmdHandlerFactory::getInstance()
 {
-public:
-    static CmdHandlerFactory& getInstance()
+    static CmdHandlerFactory instance{};
+    return instance;
+}
+
+CmdHandler* CmdHandlerFactory::createCmdHandler(CmdOpcode opcode)
+{
+    CmdHandler* cmdHandler = nullptr;
+    if (opcode == READ_CMD)
     {
-        static CmdHandlerFactory instance{};
-        return instance;
+        cmdHandler = new ReadCmdHandler();
+    }
+    else if (opcode == WRITE_CMD)
+    {
+        cmdHandler = new WriteCmdHandler();
+    }
+    else if (opcode == ERASE_CMD)
+    {
+        cmdHandler = new EraseCmdHandler();
+    }
+    else if (opcode == FLUSH_CMD)
+    {
+        cmdHandler = new FlushCmdHandler();
     }
 
-    CmdHandler* createCmdHandler(CmdOpcode opcode)
-    {
-        CmdHandler* cmdHandler = nullptr;
-        if (opcode == READ_CMD)
-        {
-            cmdHandler = new ReadCmdHandler();
-        }
-        else if (opcode == WRITE_CMD)
-        {
-            cmdHandler = new WriteCmdHandler();
-        }
-        return cmdHandler;
-    }
-
-private:
-    CmdHandlerFactory() {}
-
-};
+    return cmdHandler;
+}

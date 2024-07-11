@@ -3,7 +3,7 @@
 
 #include "../test-shell/ssd.h"
 #include "../test-shell/shell.h"
-#include "../test-shell/ReadCommand.cpp"
+#include "../test-shell/ReadCommand.h"
 
 #include <iostream>
 #include <string>
@@ -15,6 +15,8 @@ class SSDMock : public ISSD {
 public:
 	MOCK_METHOD(void, write, (int addr, const string& value), (override));
 	MOCK_METHOD(string, read, (int addr), (override));
+	MOCK_METHOD(void, erase, (int addr, int size), (override));
+	MOCK_METHOD(void, flush, (), (override));
 };
 
 class ReadCommandFixture : public ::testing::Test {
@@ -27,7 +29,7 @@ public:
 	const int Fail_LBA = 101;
 	const string TEST_DATA = "0x12345678";
 	const string strHelp = "Reads the value written at LBA and displays it on the screen.\n\
-		[Example] read LBA\n\
+		[Example] read [LBA]\n\
 		[Parameters]\n\
 		- LBA: LBA area value to read(0~99)\n\
 		[Returns] Displays the data read from LBA.\n";
@@ -36,7 +38,6 @@ private:
 
 protected:
 	void SetUp() override {
-		// TODO: hotfix 반영 부분 수정 필요
 		normalArgs = { to_string(Success_LBA) };
 		abnormalArgs = { to_string(Fail_LBA),  };
 	}
@@ -80,6 +81,13 @@ TEST_F(ReadCommandFixture, Shell_Read_Execute_Fail) {
 
 TEST_F(ReadCommandFixture, Shell_Read_GetHelp) {
 	EXPECT_EQ(strHelp, command.getHelp());
+}
+
+TEST_F(ReadCommandFixture, Shell_FullRead_Invalid_Arguments_Length) {
+	EXPECT_CALL(ssdMock, read)
+		.Times(0);
+
+	EXPECT_THROW(command.execute({}), invalid_argument);
 }
 
 TEST_F(FullReadCommandFixture, Shell_FullRead_Execute_Success) {

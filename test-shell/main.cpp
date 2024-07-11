@@ -1,29 +1,20 @@
+#include "ssdlib.h"
 #include "shell.h"
-#include "command_factory.cpp"
-#include "ReadCommand.cpp"
-#include "WriteCommand.cpp"
-#include "TestApp1Command.cpp"
-#include "TestApp2Command.cpp"
-#include "ssdlib.cpp"
+#include "command_factory.h"
 
-int main() {
+int main(int argc, char* argv[]) {
 	ICommandFactory& factory = CommandFactory::getInstance();
-	std::string path = "\\..\\x64\\Debug";
-	std::string app_name = "\\ssd.exe";
-	std::string result_path = "";
-	ISSD* ssd = new SSDLib(path, app_name, result_path);
-
-	ICommand* fullReadCMD = new FullReadCommand(*ssd);
-	ICommand* fullWriteCMD = new FullwriteCommand(*ssd);
-
-	factory.injectCommand("read", new ReadCommand(*ssd));
-	factory.injectCommand("write", new WriteCommand(*ssd));
-	factory.injectCommand("fullread", new FullReadCommand(*ssd));
-	factory.injectCommand("fullwrite", new FullwriteCommand(*ssd));
-	factory.injectCommand("testapp1", new TestApp1(*ssd,
-		*fullReadCMD, *fullWriteCMD));
-	factory.injectCommand("testapp2", new TestApp2Command(*ssd));
+	ISSD& ssd = SSDLib::getInstance();
+	factory.initialize(&ssd);
 
 	Shell* shell = new Shell(factory);
+
+	if (argc > 1) {
+		shell->runSequence(argv[1]);
+		return 0;
+	}
+
 	shell->run();
-}
+	
+	return 0;
+}	

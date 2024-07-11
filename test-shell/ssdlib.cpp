@@ -1,69 +1,74 @@
+#include "ssdlib.h"
 #include <iostream>
-#include <windows.h>
-#include <string>
 #include <fstream>
-#include "ssd.h"
 
-class SSDLib : public ISSD {
-public:
-	SSDLib() {
-		GetCurrentDirectoryA(256, current_path);
+SSDLib::SSDLib()
+	: logger(Logger::getInstance("shell"))
+{
+	current_path = std::filesystem::current_path();
+}
+
+ISSD& SSDLib::getInstance()
+{
+	static SSDLib instance;
+	return instance;
+}
+
+std::string SSDLib::getAppPath() {
+	return current_path.string() + app_name;
+}
+
+void SSDLib::write(int addr, const std::string& value)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Write " + std::to_string(addr) + " " + value);
+	std::string command = getAppPath() + " W " +
+		std::to_string(addr) + " " + value;
+	execute(command);
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Write()");
+}
+
+std::string SSDLib::read(int addr)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Read " + std::to_string(addr));
+	std::string command = getAppPath() + " R " +
+		std::to_string(addr);
+	execute(command);
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Read()");
+	return getValue(current_path.string() + result_name);
+}
+
+void SSDLib::erase(int addr, int size)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Erase " + std::to_string(addr) + " " + std::to_string(size));
+	std::string command = getAppPath() + " E " +
+		std::to_string(addr) + " " + std::to_string(size);
+	execute(command);
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Erase()");
+}
+
+void SSDLib::flush()
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Flush()");
+	std::string command = getAppPath() + " F ";
+	execute(command);
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Flush()");
+}
+
+void SSDLib::execute(const std::string& command_str)
+{
+	system(command_str.c_str());
+}
+
+std::string SSDLib::getValue(const std::string& result_path)
+{
+	std::ifstream result(result_path);
+	std::string value;
+
+	if (!result.is_open()) {
+		return "";
 	}
 
-	SSDLib(const std::string& directory_path)
-		: directory_path { directory_path } {
-		GetCurrentDirectoryA(256, current_path);
-	}
+	getline(result, value, '\n');
 
-	SSDLib(const std::string& directory_path,
-		const std::string& app_name)
-		: directory_path{ directory_path }
-		, app_name{ app_name } {
-		GetCurrentDirectoryA(256, current_path);
-	}
-
-	SSDLib(const std::string& directory_path,
-		const std::string& app_name,
-		const std::string& result_path)
-		: directory_path{ directory_path }
-		, app_name{ app_name } 
-		, result_path{ result_path } {
-		GetCurrentDirectoryA(256, current_path);
-	}
-
-	void write(int addr, const std::string& value) override {
-		std::string command = std::string(current_path) + 
-			directory_path + app_name + " W " +
-			std::to_string(addr) + " " + value;
-		system(command.c_str());
-	}
-
-	std::string read(int addr) override {
-		std::string command = std::string(current_path) +
-			directory_path + app_name + " R " +
-			std::to_string(addr);
-		system(command.c_str());
-		return getValue(std::string(current_path) + result_path +
-						result_name);
-	}
-
-private:
-	char current_path[256];
-	std::string directory_path = "\\..\\x64\\Debug";
-	std::string app_name = "\\ssd.exe";
-	std::string result_path = directory_path;
-	std::string result_name = "\\result.txt";
-
-	std::string getValue(const std::string& result_path) {
-		std::ifstream result(result_path);
-		std::string value;
-
-		if (!result.is_open()) {
-			return "";
-		}
-
-		getline(result, value, '\n');
-
-		return value;
-	}
-};
+	return value;
+}

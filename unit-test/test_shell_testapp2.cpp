@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../test-shell/TestApp2Command.cpp"
+#include "../test-shell/TestApp2Command.h"
 
 using namespace testing;
 
@@ -11,6 +11,8 @@ class SsdMock : public ISSD {
 public:
 	MOCK_METHOD(void, write, (int addr, const string& value), (override));
 	MOCK_METHOD(string, read, (int addr), (override));
+	MOCK_METHOD(void, erase, (int addr, int size), (override));
+	MOCK_METHOD(void, flush, (), (override));
 };
 
 class TestApp2Fixture : public ::testing::Test {
@@ -58,7 +60,7 @@ TEST_F(TestApp2Fixture, TestApp2TestSuccess) {
 	ta2Cmd.execute(arg);
 
 	// assert
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "SUCCESS\n");
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp2 --- Run...Pass\n");
 }
 
 
@@ -89,10 +91,13 @@ TEST_F(TestApp2Fixture, TestApp2TestFailure) {
 		}
 	}
 
-	ta2Cmd.execute(arg);
-
-	// assert
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "FAIL\n");
+	try {
+		ta2Cmd.execute(arg);
+	}
+	catch (std::logic_error&) {
+		// assert
+		EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp2 --- Run...FAIL!\n");
+	}
 }
 
 TEST_F(TestApp2Fixture, TestApp2TestHelp) {

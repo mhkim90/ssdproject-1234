@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\packages\gmock.1.11.0\lib\native\src\gtest\src\gtest_main.cc" />
+    <ClCompile Include="test_commnad_buffer.cpp" />
+    <ClCompile Include="test_factory.cpp" />
+    <ClCompile Include="ssd_command_test.cpp" />
+    <ClCompile Include="ssd_manager_test.cpp" />
+    <ClCompile Include="test_logger.cpp" />
+    <ClCompile Include="test_main.cpp" />
+    <ClCompile Include="test_shell.cpp" />
+    <ClCompile Include="test_shell_eraseRange.cpp" />
+    <ClCompile Include="test_shell_read.cpp" />
+    <ClCompile Include="test_shell_testapp1.cpp" />
+    <ClCompile Include="test_shell_testapp2.cpp" />
+    <ClCompile Include="test_shell_write.cpp" />
+    <ClCompile Include="test_ssdlib.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gtest\gtest-all.cc" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gmock\gmock-all.cc" />
+    <ClCompile Include="test_shell_script.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="run_list.lst">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="TestScript1.json">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{276f2074-887a-42ae-a169-df878e1193ff}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

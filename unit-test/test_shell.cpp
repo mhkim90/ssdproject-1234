@@ -1,12 +1,29 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "../test-shell/shell.cpp"
+#include "../test-shell/shell.h"
+#include "../test-shell/ssd.h"
+#include "../test-shell/ReadCommand.h"
+#include "../test-shell/WriteCommand.h"
+#include "../test-shell/TestApp1Command.h"
+#include "../test-shell/TestApp2Command.h"
+#include "../test-shell/FlushCommand.h"
+#include "../test-shell/EraseCommand.h"
+#include "../test-shell/EraseRangeCommand.h"
+#include "../test-shell/command_factory.h"
 #include <unordered_map>
 #include <string>
 
 
 using namespace std;
 using namespace testing;
+
+class MockSSD : public ISSD {
+public:
+	MOCK_METHOD(void, write, (int, const string&), (override));
+	MOCK_METHOD(string, read, (int), (override));
+	MOCK_METHOD(void, erase, (int, int), (override));
+	MOCK_METHOD(void, flush, (), (override));
+};
 
 class MockCommand : public ICommand {
 public:
@@ -21,6 +38,7 @@ public:
 	MOCK_METHOD(void, injectCommand, (const string&, ICommand*), (override));
 	MOCK_METHOD(ICommand*, getCommand, (const string&), (override));
 	MOCK_METHOD((const unordered_map<string, ICommand*>&), getAllCommands, (), (const override));
+	MOCK_METHOD(void, initialize, (ISSD*), (override));
 	unordered_map<string, ICommand*> _commands;
 };
 
@@ -40,6 +58,11 @@ public:
 
 	string getOutput() {
 		return _osstream.str();
+	}
+
+	string makeOutputFormat(const string& value) {
+		if (value.empty()) return SHELL_GUIDE;
+		return SHELL_GUIDE + value + SHELL_GUIDE;
 	}
 
 	MockCommand mockCommand;
@@ -64,6 +87,8 @@ protected:
 	}
 
 private:
+	static constexpr char* SHELL_GUIDE = "SHELL > ";
+
 	istringstream _isstream;
 	ostringstream _osstream;
 	streambuf* _inOldStreamBuf;
@@ -118,7 +143,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_EMPTY) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
+	EXPECT_EQ(getOutput(), makeOutputFormat("") + makeOutputFormat(""));
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_UNKNOWN) {
@@ -130,7 +155,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_INVALID_COMMAND_UNKNOWN) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "INVALID COMMAND\n");
+	EXPECT_EQ(getOutput(), makeOutputFormat("INVALID COMMAND\n"));
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
@@ -138,7 +163,7 @@ TEST_F(ShellFixutre, COMMAND_RUN_EXIT) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "");
+	EXPECT_EQ(getOutput(), makeOutputFormat(""));
 }
 
 TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
@@ -154,5 +179,58 @@ TEST_F(ShellFixutre, COMMAND_RUN_HELP) {
 
 	shell.run();
 
-	EXPECT_EQ(getOutput(), "< Shell Help >\ncommand\t\t: HELP MESSAGE\n");
+	EXPECT_EQ(getOutput(), makeOutputFormat("< Help >\ncommand\t\t: HELP MESSAGE\n"));
+}
+
+TEST_F(ShellFixutre, RUN_SEQUENCE_INVALID_FILE_PATH) {
+	EXPECT_THROW(shell.loadSequence("unknown.list"), invalid_argument);
+	EXPECT_THROW(shell.loadSequence(""), invalid_argument);
+	EXPECT_THROW(shell.loadSequence("."), invalid_argument);
+}
+
+TEST_F(ShellFixutre, LOAD_SEQ) {
+	EXPECT_NO_THROW(shell.loadSequence("run_list.lst"));
+	EXPECT_EQ(shell.getSequence().size(), 2);
+	EXPECT_THAT(shell.getSequence(), Contains("testapp1"));
+	EXPECT_THAT(shell.getSequence(), Contains("testapp2"));
+}
+
+class ShellRunSeqFixutre : public Test {
+public:
+	ShellRunSeqFixutre()
+		: factory{ CommandFactory::getInstance() }
+		, shell{ CommandFactory::getInstance() }
+		, cmdTestApp1(mockSSD)
+		, cmdTestApp2(mockSSD)
+	{
+		factory.injectCommand("testapp1", &cmdTestApp1);
+		factory.injectCommand("testapp2", &cmdTestApp2);
+	}
+
+	Shell shell;
+	ICommandFactory& factory;
+	TestApp1Command cmdTestApp1;
+	TestApp2Command cmdTestApp2;
+	MockSSD mockSSD;
+};
+
+TEST_F(ShellRunSeqFixutre, RUN_SEQ) {
+	int readCallCount = 0;
+
+	EXPECT_CALL(mockSSD, write(_, _))
+		.Times(286);
+
+	EXPECT_CALL(mockSSD, read(_))
+		.WillRepeatedly(InvokeWithoutArgs([&readCallCount]() {
+			if (readCallCount < 100) {
+				++readCallCount;
+				return string{ "0xAAAABBBB" };
+			}
+			return string{ "0x12345678" };
+		}));
+
+	internal::CaptureStdout();
+	EXPECT_NO_THROW(shell.runSequence("run_list.lst"));
+
+	EXPECT_EQ(internal::GetCapturedStdout(), "testapp1 --- Run...Pass\ntestapp2 --- Run...Pass\n");
 }

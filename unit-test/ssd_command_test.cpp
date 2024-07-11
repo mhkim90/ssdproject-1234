@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 #include "../ssd/CmdHandler.h"
-#include "../ssd/WriteCmdHandler.cpp"
-#include "../ssd/ReadCmdHandler.cpp"
+#include "../ssd/WriteCmdHandler.h"
+#include "../ssd/ReadCmdHandler.h"
+#include "../ssd/EraseCmdHandler.h"
 using namespace std;
 using namespace testing;
 

@@ -3,9 +3,9 @@
 
 #include "../test-shell/ssd.h"
 #include "../test-shell/shell.h"
-#include "../test-shell/ReadCommand.cpp"
-#include "../test-shell/WriteCommand.cpp"
-#include "../test-shell/TestApp1Command.cpp"
+#include "../test-shell/ReadCommand.h"
+#include "../test-shell/WriteCommand.h"
+#include "../test-shell/TestApp1Command.h"
 
 #include <iostream>
 #include <string>
@@ -17,14 +17,14 @@ class SSDMock : public ISSD {
 public:
 	MOCK_METHOD(void, write, (int addr, const string& value), (override));
 	MOCK_METHOD(string, read, (int addr), (override));
+	MOCK_METHOD(void, erase, (int addr, int size), (override));
+	MOCK_METHOD(void, flush, (), (override));
 };
 
 class TestApp1Fixture : public testing::Test {
 public:
 	SSDMock ssdMock;
-	FullReadCommand read{ ssdMock };
-	FullwriteCommand write{ ssdMock };
-	TestApp1 testApp1{ ssdMock, read, write };
+	TestApp1Command testApp1{ ssdMock };
 
 	const int LBA_MIN_VAL = 0;
 	const int LBA_MAX_VAL = 99;
@@ -69,7 +69,7 @@ TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Success) {
 
 	testing::internal::CaptureStdout();
 	testApp1.execute({ });
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "SUCCESS\n");
+	EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp1 --- Run...Pass\n");
 }
 
 TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
@@ -80,8 +80,12 @@ TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Fail) {
 		.WillOnce(Return(TEST_VAL_DIFF));
 
 	testing::internal::CaptureStdout();
-	testApp1.execute({ });
-	EXPECT_EQ(testing::internal::GetCapturedStdout(), "FAIL\n");
+	try {
+		testApp1.execute({ });
+	}
+	catch (std::logic_error&) {
+		EXPECT_EQ(testing::internal::GetCapturedStdout(), "testapp1 --- Run...FAIL!\n");
+	}
 }
 
 TEST_F(TestApp1Fixture, Shell_TestApp1_GetHelp) {

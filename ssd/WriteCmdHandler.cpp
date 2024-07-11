@@ -1,34 +1,27 @@
-#pragma once
-#include "CmdHandler.h"
-#include <iostream>
-using namespace std; 
+#include "WriteCmdHandler.h"
 
-class WriteCmdHandler : public CmdHandler
+WriteCmdHandler::WriteCmdHandler() {
+
+	CmdHandler::setOpcode(CmdOpcode::WRITE_CMD);
+}
+
+bool WriteCmdHandler::sanityCheckPassed(int lba, string data)
 {
-public:
-	WriteCmdHandler() {
-
-		CmdHandler::setOpcode(CmdOpcode::WRITE_CMD);
-	}
-
-	bool sanityCheckPassed(int lba, string data) override
+	// lba range check first
+	if (true == CmdHandler::sanityCheckPassed(lba, data))
 	{
-		// lba range check first
-		if (true == CmdHandler::sanityCheckPassed(lba, data))
-		{
-			// then write command should have data as input parameter
-			if (data.size() == 0) return false;
-			
-			return true;
-		}
+		// then write command should have data as input parameter
+		if (data.size() == 0) return false;
+
+		return true;
 	}
+	return false;
+}
 
-	void execute(int lba, string data) override
-	{
-		FileManager::getInstance().openNand();
+void WriteCmdHandler::execute(int lba, string data)
+{
+	// update command buffer only
+	CommandBuffer::getInstance().updateCommandBuffer(CmdHandler::getOpcode(), lba, data);
 
-		FileManager::getInstance().updateNand(lba, data);
-
-		FileManager::getInstance().writeNand();
-	}
-};
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Write Executed");
+}

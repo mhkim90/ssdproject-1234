@@ -1,0 +1,17 @@
+{
+  "seq": [
+    {
+      "cmd": "write",
+      "args": ["0", "0xAAAABBBB"],
+      "tryCnt": 1,
+      "verify": null
+    },
+    {
+      "cmd": "read",
+      "args": ["0"],
+      "tryCnt": 1,
+      "verify": "0xAAAABBBB\n"
+    }
+  ],
+  "help": "HELP MESSAGE"
+}

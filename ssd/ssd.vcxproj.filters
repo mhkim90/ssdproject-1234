@@ -13,39 +13,75 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\CmdHandler">
+      <UniqueIdentifier>{16d0420c-cc2b-43a2-bdce-bb8e75d00cba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\CmdHandler">
+      <UniqueIdentifier>{aa5f908d-1e45-4a7a-9020-5fde3d1d621c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CmdHandler.h">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ReadCmdHandler.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="WriteCmdHandler.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SSDManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Exception.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="FileManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CmdHandlerFactory.cpp">
+    <ClCompile Include="CommandBuffer.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdHandlerFactory.cpp">
+      <Filter>소스 파일\CmdHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="EraseCmdHandler.cpp">
+      <Filter>소스 파일\CmdHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="FlushCmdHandler.cpp">
+      <Filter>소스 파일\CmdHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadCmdHandler.cpp">
+      <Filter>소스 파일\CmdHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="WriteCmdHandler.cpp">
+      <Filter>소스 파일\CmdHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdHandler.h">
+      <Filter>헤더 파일\CmdHandler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SSDConfig.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="CommandBuffer.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="FileManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Exception.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDConfig.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdHandlerFactory.h">
+      <Filter>헤더 파일\CmdHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="EraseCmdHandler.h">
+      <Filter>헤더 파일\CmdHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="FlushCmdHandler.h">
+      <Filter>헤더 파일\CmdHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadCmdHandler.h">
+      <Filter>헤더 파일\CmdHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="WriteCmdHandler.h">
+      <Filter>헤더 파일\CmdHandler</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

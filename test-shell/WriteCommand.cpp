@@ -1,98 +1,73 @@
-#include <string>
-#include <stdexcept>
-#include <regex>
-#include "command.h"
+#include "WriteCommand.h"
 
-class WriteCommand : public ICommand {
-public:
-	const int START_LBA = 0;
-	const int END_LBA = 99;
-
-	WriteCommand(ISSD& ssd) : ssd{ ssd } {}
-
-	void injectSSD(ISSD& ssd) override
-	{
-		this->ssd = ssd;
-	}
-
-	void execute(const vector<string>& args) override
-	{
-		int addr = stoi(args[0]);
-		std::string value = args[1];
-
-		checkAddressValidity(addr);
-		checkValueValidity(value);
-
-		ssd.write(addr, value);
-	}
-
-	const string& getHelp() override
-	{
-		return WRITE_HELP;
-	}
-
-	void checkAddressValidity(int addr) {
-		if (addr < START_LBA || addr > END_LBA) {
-			throw std::invalid_argument("addr is out of range");
-		}
-	}
-
-	void checkValueValidity(string value) {
-		std::regex reg("0x[0-9A-F]{8}$");
-		if (!regex_match(value, reg))
-			throw std::invalid_argument("value is not in A~F, 0~9");
-	}
-
-	ISSD& getSsd() {
-		return ssd;
-	}
-
-private:
-	ISSD& ssd;
-	const string WRITE_HELP = "write Value at LBA address\n\
+WriteCommand::WriteCommand(ISSD& ssd, int argsCount)
+	: CommandBase(ssd, argsCount)
+	, WRITE_HELP{ string{"write Value at LBA address\n\
 		[Example] write [LBA] [Value]\n\
 		[Parameters]\n\
 		- LBA: address (0~99)\n\
 		- Value: a value to be recorded\n\
-		[Returns] none\n";
-	
-};
+		[Returns] none\n"} }
+{
+}
 
-class FullwriteCommand : public WriteCommand {
-public:
-	FullwriteCommand(ISSD& ssd) : WriteCommand{ ssd } {}
+void WriteCommand::execute(const vector<string>& args)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Write Execute()");
 
-	void injectSSD(ISSD& ssd) override
-	{
-		WriteCommand::injectSSD(ssd);
-	}
+	verifyArgsCount(args);
 
-	void execute(const vector<string>& args) override
-	{
-		std::string value = args[0];
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "LBA: " + args[0] + ", Value: " + args[1]);
+	verifyFormatAddress(args[0]);
+	verifyFormatValue(args[1]);
 
-		checkValueValidity(value);
+	int addr = stoi(args[0]);
+	const std::string& value = args[1];
 
-		writeAtAllSsdField(value);
-	}
+	verifyAddressRange(addr);
 
-	void writeAtAllSsdField(std::string& value)
-	{
-		for (int addr = START_LBA; addr <= END_LBA; addr++) {
-			getSsd().write(addr, value);
-		}
-	}
+	getSSD().write(addr, value);
 
-	const string& getHelp() override
-	{
-		return FULLWRITE_HELP;
-	}
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
+}
 
-private:
-	const string FULLWRITE_HELP = "Perform write from address 0 to 99.\n\
-		[Example] fullwrite [any] [Value]\n\
+const string& WriteCommand::getHelp()
+{
+	return WRITE_HELP;
+}
+
+FullWriteCommand::FullWriteCommand(ISSD& ssd, int argsCount)
+	: CommandBase(ssd, argsCount)
+	, FULLWRITE_HELP{ string{"Perform write from address 0 to 99.\n\
+		[Example] fullwrite [Value]\n\
 		[Parameters]\n\
-		- any\n\
 		- Value: a value to be recorded\n\
-		[Returns] none\n";
-};
+		[Returns] none\n"} }
+{
+}
+
+void FullWriteCommand::execute(const vector<string>& args)
+{
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start FullWrite Execute()");
+
+	verifyArgsCount(args);
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Value: " + args[0]);
+
+	const std::string& value = args[0];
+	verifyFormatValue(value);
+
+	writeAtAllSsdField(value);
+}
+
+void FullWriteCommand::writeAtAllSsdField(const std::string& value)
+{
+	for (int addr = _ADDR_RANGE_MIN; addr <= _ADDR_RANGE_MAX; addr++) {
+		getSSD().write(addr, value);
+	}
+}
+
+const string& FullWriteCommand::getHelp()
+{
+	return FULLWRITE_HELP;
+}
