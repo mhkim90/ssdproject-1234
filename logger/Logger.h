@@ -26,7 +26,6 @@ private:
 	void saveLog(const std::string& output);
 
 	std::string m_log_directory;
-	std::string m_past_log_file_name = "";
 	const int m_name_buffer = 30;
 	const int m_ten_kb = 10 * 1024;
 	const std::string m_file_name = "\\latest.log";
