@@ -13,9 +13,9 @@ WriteCommand::WriteCommand(ISSD& ssd, int argsCount)
 
 void WriteCommand::execute(const vector<string>& args)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Write " + args[0] + " " + args[1] + " Execute()");
-
 	verifyArgsCount(args);
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Write " + args[0] + " " + args[1] + " Execute()");
 	verifyFormatAddress(args[0]);
 	verifyFormatValue(args[1]);
 
