@@ -13,9 +13,11 @@ WriteCommand::WriteCommand(ISSD& ssd, int argsCount)
 
 void WriteCommand::execute(const vector<string>& args)
 {
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Write Execute()");
+
 	verifyArgsCount(args);
 
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Write " + args[0] + " " + args[1] + " Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "LBA: " + args[0] + ", Value: " + args[1]);
 	verifyFormatAddress(args[0]);
 	verifyFormatValue(args[1]);
 
@@ -46,9 +48,11 @@ FullWriteCommand::FullWriteCommand(ISSD& ssd, int argsCount)
 
 void FullWriteCommand::execute(const vector<string>& args)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start FullWrite " + args[0] + " Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start FullWrite Execute()");
 
 	verifyArgsCount(args);
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Value: " + args[0]);
 
 	const std::string& value = args[0];
 	verifyFormatValue(value);
