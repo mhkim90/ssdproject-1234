@@ -33,9 +33,10 @@ public:
 
 	const std::unordered_map<std::string, ICommand*>& getAllCommands() const override;
 
-private:
+protected:
 	CommandFactory();
 
+private:
 	CommandFactory(const CommandFactory&) = delete;
 	CommandFactory& operator=(const CommandFactory&) = delete;
 

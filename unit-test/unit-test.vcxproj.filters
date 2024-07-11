@@ -17,10 +17,14 @@
     <ClCompile Include="test_ssdlib.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gtest\gtest-all.cc" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\gmock\gmock-all.cc" />
+    <ClCompile Include="test_shell_script.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="run_list.lst">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="TestScript1.json">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>

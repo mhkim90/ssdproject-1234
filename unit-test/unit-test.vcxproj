@@ -49,7 +49,8 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"
+xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -71,7 +72,8 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"
+xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,7 +93,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"
+xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -114,7 +117,8 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"</Command>
+      <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"
+xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -128,6 +132,7 @@
     <ClCompile Include="test_shell.cpp" />
     <ClCompile Include="test_shell_eraseRange.cpp" />
     <ClCompile Include="test_shell_read.cpp" />
+    <ClCompile Include="test_shell_script.cpp" />
     <ClCompile Include="test_shell_testapp1.cpp" />
     <ClCompile Include="test_shell_testapp2.cpp" />
     <ClCompile Include="test_shell_write.cpp" />
@@ -136,6 +141,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="run_list.lst" />
+    <None Include="TestScript1.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

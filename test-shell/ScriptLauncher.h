@@ -16,7 +16,7 @@ public:
 	virtual void execute(const vector<string>& args) override;
 	virtual const string& getHelp() override;
 
-	void loadScript();
+	ScriptLauncher& load();
 
 private:
 	class Invoker {
@@ -45,7 +45,7 @@ private:
 		Invoker();
 		void beginStreamCapture();
 		void endStreamCapture();
-		bool verify();
+		void verify();
 
 		string _cmd;
 		vector<string> _args;
@@ -56,7 +56,7 @@ private:
 		streambuf* _befoBuffer;
 	};
 
-
+	const string _scriptFilePath;
 	string _help;
 	list<shared_ptr<Invoker>> _seq;
 };

@@ -28,9 +28,8 @@ void CommandFactory::initialize(ISSD* ssd)
 
 void CommandFactory::injectCommand(const std::string& name, ICommand* command)
 {
-	if (commands.count(name) == 0) {
-		commands.insert({ name, command });
-	}
+	if (command == nullptr) return;
+	commands[name] = command;
 }
 
 ICommand* CommandFactory::getCommand(const string& command)
