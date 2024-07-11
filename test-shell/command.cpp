@@ -67,3 +67,8 @@ void ScriptBase::printResult(bool isPass)
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Exception: Logic Error");
 	throw std::logic_error("Failed of Script!");
 }
+
+const string& ScriptBase::getScriptName()
+{
+	return _SCRIPT_NAME;
+}

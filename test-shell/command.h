@@ -54,6 +54,7 @@ public:
 protected:
 	void printRun() const;
 	void printResult(bool isPass);
+	const string& getScriptName();
 
 private:
 	const string _SCRIPT_NAME;
