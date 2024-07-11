@@ -9,8 +9,8 @@ CommandBuffer::CommandBuffer()
 {
 	string cmdBuf[MAX_BUFFER_COUNT];
 	// open and read file first from buffer.txt to cmdBuf
-	FileManager::getInstance().initFile(COMMAND_BUFFER_FILE);
-	FileManager::getInstance().openFile(COMMAND_BUFFER_FILE, cmdBuf, cmdBackupCount);
+	FileManager::getInstance().initBuffer(COMMAND_BUFFER_FILE);
+	FileManager::getInstance().loadBuffer(COMMAND_BUFFER_FILE, cmdBuf, cmdBackupCount);
 	ParseCmdBuf(cmdBuf);
 }
 
@@ -50,70 +50,9 @@ void CommandBuffer::updateCommandBuffer(CmdOpcode opcode, int lba, string data)
 {
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "total command buffer pool cmd count so far: " + to_string(cmdList.size()));
 
-	bool commandBuffered = false;
 
-	// erase + erase case,  merge erase
-	if (opcode == CmdOpcode::ERASE_CMD && !cmdList.empty()) {
-
-		if (cmdList.back().opcode == CmdOpcode::ERASE_CMD) {
-			if (cmdList.back().lba <= lba + stoi(data) - 1 && cmdList.back().lba + stoi(cmdList.back().data) - 1 >= lba) {
-				int startLBA = min(cmdList.back().lba, lba);
-				int endLBA = max(lba + stoi(data) - 1, cmdList.back().lba + stoi(cmdList.back().data) - 1);
-				cmdList.back().lba = startLBA;
-				cmdList.back().data = to_string(endLBA + 1 - startLBA);
-				commandBuffered = true;
-			}
-		}
-	}
-
-	if (!commandBuffered) {
-		// Ignore write 1
-		bool writeIgnored = false;
-		for (int i = 0; i < cmdList.size(); i++) {
-			if (cmdList[i].opcode == CmdOpcode::WRITE_CMD && cmdList[i].lba == lba) {
-				cmdList.erase(cmdList.begin() + i);
-				writeIgnored = true;
-			}
-		}
-
-		if (writeIgnored) {
-			IoDataStruct item;
-			item.opcode = opcode;
-			item.lba = lba;
-			item.data = data;
-			cmdList.push_back(item);
-			commandBuffered = true;
-		}
-
-		// Ignore write 2
-		bool writeIgnored2 = false;
-		int eraseRange = stoi(data);
-		for (int i = 0; i < cmdList.size(); i++) {
-
-			if (cmdList[i].opcode == CmdOpcode::WRITE_CMD && opcode == CmdOpcode::ERASE_CMD
-				&& cmdList[i].lba >= lba && cmdList[i].lba < lba + eraseRange) {
-				cmdList.erase(cmdList.begin() + i);
-				writeIgnored2 = true;
-			}
-		}
-
-		if (writeIgnored) {
-			IoDataStruct item;
-			item.opcode = opcode;
-			item.lba = lba;
-			item.data = data;
-			cmdList.push_back(item);
-			commandBuffered = true;
-		}
-	}
-
-
-	if (commandBuffered == false) {
-		IoDataStruct item;
-		item.opcode = opcode;
-		item.lba = lba;
-		item.data = data;
-		cmdList.push_back(item);
+	if (false == IsMergedWithBufferedCommands(opcode, lba, data)) {
+		addCmdtoCmdList(opcode, lba, data);
 	}
 
 	FileManager::getInstance().writeFile(COMMAND_BUFFER_FILE, cmdList);
@@ -124,7 +63,7 @@ void CommandBuffer::updateCommandBuffer(CmdOpcode opcode, int lba, string data)
 }
 
 bool CommandBuffer::needFlush() {
-	return cmdList.size() == MAX_BUFFER_COUNT;
+	return cmdList.size() >= MAX_BUFFER_COUNT;
 }
 
 void CommandBuffer::flushBuffer() {
@@ -176,3 +115,77 @@ vector<IoDataStruct>& CommandBuffer::getCmdList()
 	return cmdList;
 }
 
+bool CommandBuffer::IsMergedWithBufferedCommands(CmdOpcode opcode, int& lba, std::string& data)
+{
+	// merge erase
+	if (cmdList.empty())
+		return false;
+
+	if (opcode == CmdOpcode::ERASE_CMD && cmdList.back().opcode == CmdOpcode::ERASE_CMD) {
+		if (ableToCombineErase(lba, data)) {
+			updateLastEraseCmd(lba, data);
+			return true;
+		}
+	}
+
+	// Ignore write 1
+	int eraseRange = stoi(data);
+	bool writeIgnored = false;
+	set<int> eraseable;
+	for (int i = 0; i < cmdList.size(); i++) {
+		if (checkDuplicatedWrite(i, lba)) {
+			eraseable.insert(i);
+			writeIgnored = true;
+		}
+
+		if (checkWriteIgnorable(i, opcode, lba, eraseRange)) {
+			eraseable.insert(i);
+			writeIgnored = true;
+		}
+	}
+
+	for (int eraseIndex : eraseable) {
+		cmdList.erase(cmdList.begin() + eraseIndex);
+	}
+
+	if (writeIgnored) {
+		addCmdtoCmdList(opcode, lba, data);
+		return true;
+	}
+
+	return false;
+}
+
+bool CommandBuffer::checkWriteIgnorable(int i, CmdOpcode opcode, int& lba, int eraseRange)
+{
+	return cmdList[i].opcode == CmdOpcode::WRITE_CMD && opcode == CmdOpcode::ERASE_CMD
+		&& cmdList[i].lba >= lba && cmdList[i].lba < lba + eraseRange;
+}
+
+bool CommandBuffer::checkDuplicatedWrite(int i, int& lba)
+{
+	return cmdList[i].opcode == CmdOpcode::WRITE_CMD && cmdList[i].lba == lba;
+}
+
+void CommandBuffer::updateLastEraseCmd(int lba, std::string data)
+{
+	int startLBA = min(cmdList.back().lba, lba);
+	int endLBA = max(lba + stoi(data) - 1, cmdList.back().lba + stoi(cmdList.back().data) - 1);
+	cmdList.back().lba = startLBA;
+	cmdList.back().data = to_string(endLBA + 1 - startLBA);
+}
+
+bool CommandBuffer::ableToCombineErase(int lba, std::string data)
+{
+	return (cmdList.back().lba <= lba + stoi(data) - 1
+		&& cmdList.back().lba + stoi(cmdList.back().data) - 1 >= lba);
+}
+
+void CommandBuffer::addCmdtoCmdList(CmdOpcode opcode, int lba, std::string& data)
+{
+	IoDataStruct item;
+	item.opcode = opcode;
+	item.lba = lba;
+	item.data = data;
+	cmdList.push_back(item);
+}

@@ -103,6 +103,8 @@ void FileManager::updateNand(int lba, string data) {
 void FileManager::eraseNand(int lba, string data) {
 	int range = stoi(data);
 	for (int i = 0; i < range; i++) {
+		if (lba + i > MAX_LBA)
+			break;
 		buf[lba + i] = INIT_DATA;
 	}
 }
@@ -120,9 +122,15 @@ void FileManager::flushNand(vector<IoDataStruct> cmdList) {
 		}
 	}
 	writeNand();
+
+	clearBuffer();
 }
 
-void FileManager::openFile(const string file_name, string* buf, int& cmdBackupCount)
+void FileManager::clearBuffer() {
+	remove("buffer.txt");
+}
+
+void FileManager::loadBuffer(const string file_name, string* buf, int& cmdBackupCount)
 {
 	// ready to file read
 	ifstream readFile(file_name);
@@ -143,7 +151,7 @@ void FileManager::openFile(const string file_name, string* buf, int& cmdBackupCo
 	readFile.close();
 }
 
-void FileManager::initFile(const string file_name) {
+void FileManager::initBuffer(const string file_name) {
 	// set file as zero
 	ifstream checkFile(file_name);
 

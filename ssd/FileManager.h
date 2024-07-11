@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
 #include <iostream>
+#include <stdio.h>
 #include "SSDConfig.h"
 
 using namespace std;
@@ -28,9 +29,11 @@ public:
 
 	void flushNand(vector<IoDataStruct> cmdList);
 
-	void openFile(const string file_name, string* buf, int& cmdBackupCount);
+	void clearBuffer();
 
-	void initFile(const string file_name);
+	void loadBuffer(const string file_name, string* buf, int& cmdBackupCount);
+
+	void initBuffer(const string file_name);
 
 protected:
 	ILogger& logger = Logger::getInstance("ssd");
@@ -39,5 +42,5 @@ private:
 	FileManager() {}
 	FileManager(const FileManager&) = delete;
 
-	string buf[1000];
+	string buf[LBA_COUNT];
 };
