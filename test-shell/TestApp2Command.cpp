@@ -15,7 +15,7 @@ TestApp2Command::TestApp2Command(ISSD& ssd)
 
 void TestApp2Command::execute(const vector<string>& args)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start TestApp2 Execute()");
 
 	std::string  agingString = "0xAAAABBBB";
 	std::string  originString = "0x12345678";

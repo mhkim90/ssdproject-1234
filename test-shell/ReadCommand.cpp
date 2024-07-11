@@ -12,7 +12,7 @@ ReadCommand::ReadCommand(ISSD& ssd)
 
 void ReadCommand::execute(const vector<string>& args)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Read " + args[0] + " Execute()");
 
 	verifyArgsCount(args);
 	verifyFormatAddress(args[0]);
@@ -39,7 +39,7 @@ FullReadCommand::FullReadCommand(ISSD& ssd)
 
 void FullReadCommand::execute(const vector<string>& args)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start FullRead Execute()");
 
 	for (int i = _ADDR_RANGE_MIN; i <= _ADDR_RANGE_MAX; i++) {
 		std::cout << getSSD().read(i) << "\n";

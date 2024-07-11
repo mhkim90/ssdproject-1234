@@ -1,3 +1,4 @@
+#include <string>
 #include "EraseCommand.h"
 
 EraseCommand::EraseCommand(ISSD& ssd)
@@ -15,7 +16,7 @@ EraseCommand::EraseCommand(ISSD& ssd)
 
 void EraseCommand::execute(const vector<string>& args)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Erase " + args[0] + " " + args[1] + " Execute()");
 
 	verifyArgsCount(args);
 	verifyFormatAddress(args[0]);

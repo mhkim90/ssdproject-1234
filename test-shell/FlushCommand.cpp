@@ -11,7 +11,7 @@ FlushCommand::FlushCommand(ISSD& ssd)
 
 void FlushCommand::execute(const vector<string>& args)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Flush Execute()");
 
 	verifyArgsCount(args);
 	getSSD().flush();

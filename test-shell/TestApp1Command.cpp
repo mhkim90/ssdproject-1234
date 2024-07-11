@@ -13,7 +13,7 @@ TestApp1Command::TestApp1Command(ISSD & ssd)
 
 void TestApp1Command::execute(const vector<string>& args)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Execute()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start TestApp1 Execute()");
 
 	printRun();
 	for (int addr = _ADDR_RANGE_MIN; addr <= _ADDR_RANGE_MAX; addr++) {
