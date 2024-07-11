@@ -12,9 +12,10 @@ ReadCommand::ReadCommand(ISSD& ssd)
 
 void ReadCommand::execute(const vector<string>& args)
 {
+	verifyArgsCount(args);
+
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Read " + args[0] + " Execute()");
 
-	verifyArgsCount(args);
 	verifyFormatAddress(args[0]);
 	int addr = stoi(args[0]);
 	verifyAddressRange(addr);
