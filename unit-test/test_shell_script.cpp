@@ -39,5 +39,10 @@ TEST(Script_Launcher_Test, TestScript1) {
 	
 	EXPECT_NO_THROW(launcher.load());
 	EXPECT_EQ(launcher.getHelp(), "HELP MESSAGE");
+
+	internal::CaptureStdout();
+
 	EXPECT_NO_THROW(launcher.execute({}));
+
+	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...Pass\n");
 }
