@@ -36,9 +36,9 @@ void EraseCommand::execute(const vector<string>& args)
 			getSSD().erase(tmpAddr, tmpSize);
 			tmpSize = 0;
 		}
-
-		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 	}
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 }
 
 const string& EraseCommand::getHelp()

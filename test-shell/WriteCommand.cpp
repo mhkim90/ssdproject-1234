@@ -25,6 +25,8 @@ void WriteCommand::execute(const vector<string>& args)
 	verifyAddressRange(addr);
 
 	getSSD().write(addr, value);
+
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 }
 
 const string& WriteCommand::getHelp()

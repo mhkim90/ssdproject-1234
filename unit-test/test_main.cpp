@@ -9,6 +9,7 @@
 #include "../test-shell/TestApp2Command.cpp"
 #include "../test-shell/EraseRangeCommand.cpp"
 #include "../test-shell/EraseCommand.cpp"
+#include "../test-shell/FlushCommand.cpp"
 #include "../test-shell/command_factory.cpp"
 #include "../test-shell/shell.cpp"
 #include "../test-shell/ssdlib.cpp"

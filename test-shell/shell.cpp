@@ -9,6 +9,7 @@ using namespace std;
 
 Shell::Shell(ICommandFactory& factory)
 	: _factory { factory }
+	, logger{ Logger::getInstance("shell") }
 {
 }
 
@@ -34,6 +35,7 @@ vector<string> Shell::parsingCommandStr(const string& str)
 
 void Shell::run()
 {
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Run()");
 	while (true) {
 		cout << "SHELL > ";
 		
@@ -42,7 +44,10 @@ void Shell::run()
 
 		try {
 			vector<string> parsed = parsingCommandStr(commandStr);
-			if (parsed.front() == "exit") return;
+			if (parsed.front() == "exit") {
+				logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Quit Program");
+				return;
+			}
 			if (parsed.front() == "help") {
 				help();
 				continue;
@@ -55,10 +60,12 @@ void Shell::run()
 			cout << ex.what() << endl;
 		}
 	}
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Run()");
 }
 
 void Shell::runSequence(const string& filePath)
 {
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start RunSequence()");
 	try {
 		loadSequence(filePath);
 	}
@@ -82,6 +89,7 @@ void Shell::runSequence(const string& filePath)
 		}
 		_sequence.pop_front();
 	}
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End RunSequence()");
 }
 
 void Shell::help()
@@ -100,12 +108,14 @@ void Shell::help()
 
 void Shell::loadSequence(const string& filePath)
 {
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start LoadSequence()");
 	_sequence = {};
 
 	verifySequenceFilePath(filePath);
 
 	ifstream ifile{ filePath };
-	if (ifile.fail()) throw invalid_argument("Faild of file open.");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Exception: Invalid Argument");
+	if (ifile.fail()) throw invalid_argument("Failed of file open.");
 
 	stringstream streamBuffer;
 	streamBuffer << ifile.rdbuf();
@@ -118,6 +128,7 @@ void Shell::loadSequence(const string& filePath)
 		if (readBuffer.empty()) continue;
 		_sequence.push_back(readBuffer);
 	}
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End LoadSequence()");
 }
 
 const list<string>& Shell::getSequence() const
@@ -128,7 +139,9 @@ const list<string>& Shell::getSequence() const
 void Shell::verifySequenceFilePath(const string& filePath) const
 {
 	if (filesystem::is_directory(filePath))
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Exception: Invalid Argument");
 		throw invalid_argument("The file path could not be found.");
 	if (filesystem::exists(filePath) == false)
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Exception: Invalid Argument");
 		throw invalid_argument("The file path could not be found.");
 }

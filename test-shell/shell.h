@@ -26,6 +26,7 @@ public:
 
 protected:
 	void verifySequenceFilePath(const string& filePath) const;
+	ILogger& logger;
 
 private:
 	ICommandFactory& _factory;
