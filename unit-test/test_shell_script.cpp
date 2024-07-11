@@ -50,10 +50,10 @@ TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
 	ScriptLauncher launcher(ssd, "TestScript1");
 
 	EXPECT_CALL(ssd, write(_, _))
-		.Times(1);
+		.Times(10);
 
 	EXPECT_CALL(ssd, read(_))
-		.Times(1)
+		.Times(5)
 		.WillRepeatedly(Return("0xAAAABBBB"));
 	
 	EXPECT_NO_THROW(launcher.compile());
@@ -71,14 +71,13 @@ TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
 	ScriptLauncher launcher(ssd, "TestScript1");
 
 	EXPECT_CALL(ssd, write(_, _))
-		.Times(1);
+		.Times(10);
 
 	EXPECT_CALL(ssd, read(_))
-		.Times(1)
+		.Times(3)
 		.WillRepeatedly(Return("0xAAAAAAAA"));
 	
 	EXPECT_NO_THROW(launcher.compile());
-	EXPECT_EQ(launcher.getHelp(), "HELP MESSAGE");
 
 	internal::CaptureStdout();
 

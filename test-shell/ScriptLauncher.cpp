@@ -59,8 +59,15 @@ ScriptLauncher& ScriptLauncher::compile()
 
 		_help = jdata["help"];
 		for (auto& seqNode : jdata["seq"]) {
+			Args args{};
+			args.address.begin = seqNode["args"]["address"]["begin"];
+			args.address.end = seqNode["args"]["address"]["end"];
+
+			const auto& valueNode = seqNode["args"]["value"];
+			if (valueNode.is_null() == false) args.value = valueNode;
+
 			auto invoker = Invoker::Builder::newInstance()->cmd(seqNode["cmd"])
-				.args(seqNode["args"].get<vector<string>>())
+				.args(args)
 				.tryCnt(seqNode["tryCnt"])
 				.verify(seqNode["verify"].get<vector<string>>())
 				.build();
@@ -94,7 +101,7 @@ ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::cmd(const st
 	return *this;
 }
 
-ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::args(const vector<string>& value)
+ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::args(const Args& value)
 {
 	_args = value;
 	return *this;
@@ -129,7 +136,11 @@ void ScriptLauncher::Invoker::invoke()
 	beginStreamCapture();
 	for (unsigned int cnt = 0; cnt < _tryCnt; ++cnt) {
 		ICommand* command = factory.getCommand(_cmd);
-		command->execute(_args);
+		for (unsigned int addr = _args.address.begin; addr <= _args.address.end; ++addr) {
+			vector<string> args{ to_string(addr) };
+			if (_args.value.empty() == false) args.push_back(_args.value);
+			command->execute(args);
+		}
 	}
 	endStreamCapture();
 
