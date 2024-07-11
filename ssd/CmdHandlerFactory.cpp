@@ -25,5 +25,6 @@ CmdHandler* CmdHandlerFactory::createCmdHandler(CmdOpcode opcode)
     {
         cmdHandler = new FlushCmdHandler();
     }
+
     return cmdHandler;
 }
