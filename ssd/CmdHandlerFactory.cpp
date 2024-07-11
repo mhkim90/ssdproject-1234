@@ -1,9 +1,5 @@
 #include <iostream>
 #include "CmdHandler.h"
-#include "ReadCmdHandler.h"
-#include "WriteCmdHandler.h"
-#include "EraseCmdHandler.h"
-#include "FlushCmdHandler.h"
 #include "CmdHandlerFactory.h"
 
 CmdHandlerFactory& CmdHandlerFactory::getInstance()

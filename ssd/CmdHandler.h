@@ -5,9 +5,9 @@
 #include <vector>
 #include "../logger/Logger.h"
 #include "SSDConfig.h"
-#include "FileManager.cpp"
+#include "FileManager.h"
 #include "Exception.cpp"
-#include "CommandBuffer.cpp"
+#include "CommandBuffer.h"
 
 using namespace std;
 
