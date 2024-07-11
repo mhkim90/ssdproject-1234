@@ -76,14 +76,20 @@ void Logger::saveLog(const std::string& output) {
 }
 
 std::string Logger::expandName(const std::string& func_name) const {
-	if (func_name.size() < m_name_buffer) {
+	size_t name_size_limit = 27;
+	if (func_name.size() < name_size_limit) {
 		std::string expanded_func_name = func_name;
 		for (size_t i = 0; i < m_name_buffer - func_name.size(); i++) {
 			expanded_func_name.append(" ");
 		}
 		return expanded_func_name;
 	}
-	return func_name;
+	else {
+		std::string reduced_func_name = 
+			func_name.substr(0, name_size_limit - 2);
+		reduced_func_name.append("...()");
+		return reduced_func_name;
+	}
 }
 
 std::string Logger::getPastLogFileName() {
