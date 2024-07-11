@@ -11,5 +11,4 @@ interface ISSD {
 	virtual string read(int addr) = 0;
 	virtual void erase(int addr, int size) = 0;
 	virtual void flush() = 0;
-	virtual std::string getResult() = 0;
 };
