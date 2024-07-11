@@ -189,7 +189,7 @@ TEST_F(ShellFixutre, RUN_SEQUENCE_INVALID_FILE_PATH) {
 }
 
 TEST_F(ShellFixutre, LOAD_SEQ) {
-	EXPECT_NO_THROW(shell.loadSequence("run_list.lst"));
+	EXPECT_NO_THROW(shell.loadSequence("test_run_list.lst"));
 	EXPECT_EQ(shell.getSequence().size(), 2);
 	EXPECT_THAT(shell.getSequence(), Contains("testapp1"));
 	EXPECT_THAT(shell.getSequence(), Contains("testapp2"));
