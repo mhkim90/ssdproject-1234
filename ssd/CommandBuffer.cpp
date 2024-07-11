@@ -149,8 +149,12 @@ bool CommandBuffer::IsMergedWithBufferedCommands(CmdOpcode opcode, int& lba, std
 		}
 	}
 
-	for (int eraseIndex : eraseable) {
-		cmdList.erase(cmdList.begin() + eraseIndex);
+	int erasecount = 0;
+	if (!eraseable.empty()) {
+		for (int eraseIndex : eraseable) {
+			cmdList.erase(cmdList.begin() + eraseIndex - erasecount);
+			erasecount++;
+		}
 	}
 
 	if (writeIgnored) {
