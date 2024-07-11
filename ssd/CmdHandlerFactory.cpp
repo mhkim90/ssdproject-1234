@@ -1,42 +1,35 @@
 #include <iostream>
 #include "CmdHandler.h"
-#include "ReadCmdHandler.cpp"
-#include "WriteCmdHandler.cpp"
-#include "EraseCmdHandler.cpp"
-#include "FlushCmdHandler.cpp"
+#include "ReadCmdHandler.h"
+#include "WriteCmdHandler.h"
+#include "EraseCmdHandler.h"
+#include "FlushCmdHandler.h"
+#include "CmdHandlerFactory.h"
 
-class CmdHandlerFactory
+CmdHandlerFactory& CmdHandlerFactory::getInstance()
 {
-public:
-    static CmdHandlerFactory& getInstance()
+    static CmdHandlerFactory instance{};
+    return instance;
+}
+
+CmdHandler* CmdHandlerFactory::createCmdHandler(CmdOpcode opcode)
+{
+    CmdHandler* cmdHandler = nullptr;
+    if (opcode == READ_CMD)
     {
-        static CmdHandlerFactory instance{};
-        return instance;
+        cmdHandler = new ReadCmdHandler();
     }
-
-    CmdHandler* createCmdHandler(CmdOpcode opcode)
+    else if (opcode == WRITE_CMD)
     {
-        CmdHandler* cmdHandler = nullptr;
-        if (opcode == READ_CMD)
-        {
-            cmdHandler = new ReadCmdHandler();
-        }
-        else if (opcode == WRITE_CMD)
-        {
-            cmdHandler = new WriteCmdHandler();
-        }
-        else if (opcode == ERASE_CMD)
-        {
-            cmdHandler = new EraseCmdHandler();
-        }
-        else if (opcode == FLUSH_CMD)
-        {
-            cmdHandler = new FlushCmdHandler();
-        }
-        return cmdHandler;
+        cmdHandler = new WriteCmdHandler();
     }
-
-private:
-    CmdHandlerFactory() {}
-
-};
+    else if (opcode == ERASE_CMD)
+    {
+        cmdHandler = new EraseCmdHandler();
+    }
+    else if (opcode == FLUSH_CMD)
+    {
+        cmdHandler = new FlushCmdHandler();
+    }
+    return cmdHandler;
+}

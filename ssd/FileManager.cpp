@@ -2,166 +2,161 @@
 #include <fstream>
 #include <iostream>
 #include "SSDConfig.h"
+#include "FileManager.h"
 
 using namespace std;
 
-class FileManager {
-public:
-	static FileManager& getInstance() {
-		static FileManager instance;
-		return instance;
+FileManager& FileManager::getInstance()
+{
+	static FileManager instance;
+	return instance;
+}
+
+void FileManager::initNand() {
+	// set file as zero
+	ifstream checkFile(NANDFILE);
+
+	if (checkFile.good()) {
+		checkFile.close();
+		return;
 	}
 
-	void initNand() {
-		// set file as zero
-		ifstream checkFile(NANDFILE);
+	ofstream writeFile;
+	writeFile.open(NANDFILE);
+	if (!writeFile.is_open())
+		return;
 
-		if (checkFile.good()) {
-			checkFile.close();
-			return;
-		}
-
-		ofstream writeFile;
-		writeFile.open(NANDFILE);
-		if (!writeFile.is_open())
-			return;
-
-		for (int i = 0; i < LBA_COUNT; i++) {
-			writeFile << INIT_DATA << endl;
-		}
-		writeFile.close();
+	for (int i = 0; i < LBA_COUNT; i++) {
+		writeFile << INIT_DATA << endl;
 	}
+	writeFile.close();
+}
 
-	void openNand()
-	{
-		// ready to file read
-		ifstream readFile(NANDFILE);
-		string tmp;
+void FileManager::openNand()
+{
+	// ready to file read
+	ifstream readFile(NANDFILE);
+	string tmp;
 
-		if (!readFile.is_open()) {
-			return;
-		}
-		int i = 0;
-		while (getline(readFile, tmp, '\n')) {
-			buf[i++] = tmp;
-		}
-		readFile.close();
+	if (!readFile.is_open()) {
+		return;
 	}
-
-	void writeNand() {
-		ofstream writeFile;
-		writeFile.open(NANDFILE);
-		if (!writeFile.is_open())
-			return;
-
-		for (int i = 0; i < LBA_COUNT; i++) {
-			writeFile << buf[i] << endl;
-		}
-		writeFile.close();
+	int i = 0;
+	while (getline(readFile, tmp, '\n')) {
+		buf[i++] = tmp;
 	}
+	readFile.close();
+}
 
-	void writeFile(const string file_name, vector<IoDataStruct> cmdList) {
+void FileManager::writeNand() {
+	ofstream writeFile;
+	writeFile.open(NANDFILE);
+	if (!writeFile.is_open())
+		return;
 
-		cout << "writeFile is called :" << *buf << endl;
-
-		ofstream writeFile;
-		writeFile.open(file_name);
-		if (!writeFile.is_open())
-			return;
-
-		for (auto cmd : cmdList) {
-			string tempBuffer = to_string(cmd.opcode) + " " + to_string(cmd.lba) + " " + cmd.data;
-			writeFile << tempBuffer << endl;
-		}
-		writeFile.close();
+	for (int i = 0; i < LBA_COUNT; i++) {
+		writeFile << buf[i] << endl;
 	}
+	writeFile.close();
+}
 
-	// read from nand and save it to result.txt
-	void readNand(int lba) {
-		ofstream resultFile;
-		resultFile.open(RESULTFILE);
+void FileManager::writeFile(const string file_name, vector<IoDataStruct> cmdList) {
 
-		if (!resultFile.is_open())
-			return;
+	cout << "writeFile is called :" << *buf << endl;
 
-		resultFile << buf[lba] << endl;
+	ofstream writeFile;
+	writeFile.open(file_name);
+	if (!writeFile.is_open())
+		return;
 
-		resultFile.close();
+	for (auto cmd : cmdList) {
+		string tempBuffer = to_string(cmd.opcode) + " " + to_string(cmd.lba) + " " + cmd.data;
+		writeFile << tempBuffer << endl;
 	}
+	writeFile.close();
+}
 
-	bool updateResult(string data) {
-		ofstream resultFile;
-		resultFile.open(RESULTFILE);
+// read from nand and save it to result.txt
+void FileManager::readNand(int lba) {
+	ofstream resultFile;
+	resultFile.open(RESULTFILE);
 
-		if (!resultFile.is_open())
-			return false;
+	if (!resultFile.is_open())
+		return;
 
-		resultFile << data << endl;
+	resultFile << buf[lba] << endl;
 
-		resultFile.close();
+	resultFile.close();
+}
 
-		return true;
+bool FileManager::updateResult(string data) {
+	ofstream resultFile;
+	resultFile.open(RESULTFILE);
+
+	if (!resultFile.is_open())
+		return false;
+
+	resultFile << data << endl;
+
+	resultFile.close();
+
+	return true;
+}
+
+void FileManager::updateNand(int lba, string data) {
+	buf[lba] = data;
+}
+
+void FileManager::eraseNand(int lba, string data) {
+	int range = stoi(data);
+	for (int i = 0; i < range; i++) {
+		buf[lba + i] = INIT_DATA;
 	}
+}
 
-	void updateNand(int lba, string data) {
-		buf[lba] = data;
-	}	
-	
-	void eraseNand(int lba, string data) {
-		int range = stoi(data);
-		for (int i = 0; i < range; i++) {
-			buf[lba+i] = INIT_DATA;
+void FileManager::flushNand(vector<IoDataStruct> cmdList) {
+	// do flush
+	openNand();
+	for (auto cmd : cmdList) {
+		if (cmd.opcode == WRITE_CMD) {
+			updateNand(cmd.lba, cmd.data);
 		}
-	}	
-	
-	void flushNand(vector<IoDataStruct> cmdList) {
-		// do flush
-		openNand();
-		for (auto cmd : cmdList) {
-			if (cmd.opcode == WRITE_CMD) {
-				updateNand(cmd.lba, cmd.data);
-			}
-			else if (cmd.opcode == ERASE_CMD) {
-				// do erase
-				eraseNand(cmd.lba, cmd.data);
-			}
-		}
-		writeNand();
-	}
-
-	void openFile(const string file_name, string* buf,int &cmdBackupCount)
-	{
-		cout << "open file has to be called for once" << endl;
-		// ready to file read
-		ifstream readFile(file_name);
-
-		if (!readFile.is_open()) {
-			return;
-		}
-
-		// save data to buf
-		int buf_index = 0;
-		string data;
-		while (getline(readFile, data, '\n')) {
-			buf[buf_index++] = data;
-			cmdBackupCount++;
-			cout << "openFile str :" << buf[buf_index - 1] << endl;
-		}
-
-		readFile.close();
-	}
-
-	void initFile(const string file_name) {
-		// set file as zero
-		ifstream checkFile(file_name);
-
-		if (checkFile.good()) {
-			checkFile.close();
-			return;
+		else if (cmd.opcode == ERASE_CMD) {
+			// do erase
+			eraseNand(cmd.lba, cmd.data);
 		}
 	}
+	writeNand();
+}
 
-private:
-	FileManager() {}
-	string buf[1000];
-};
+void FileManager::openFile(const string file_name, string* buf, int& cmdBackupCount)
+{
+	cout << "open file has to be called for once" << endl;
+	// ready to file read
+	ifstream readFile(file_name);
+
+	if (!readFile.is_open()) {
+		return;
+	}
+
+	// save data to buf
+	int buf_index = 0;
+	string data;
+	while (getline(readFile, data, '\n')) {
+		buf[buf_index++] = data;
+		cmdBackupCount++;
+		cout << "openFile str :" << buf[buf_index - 1] << endl;
+	}
+
+	readFile.close();
+}
+
+void FileManager::initFile(const string file_name) {
+	// set file as zero
+	ifstream checkFile(file_name);
+
+	if (checkFile.good()) {
+		checkFile.close();
+		return;
+	}
+}

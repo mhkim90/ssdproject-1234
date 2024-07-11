@@ -3,8 +3,8 @@
 #include <vector>
 #include <stdexcept>
 #include "SSDManager.cpp"
-#include "CmdHandlerFactory.cpp"
-#include "CommandBuffer.cpp"
+#include "CmdHandlerFactory.h"
+#include "CommandBuffer.h"
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 
     FileManager::getInstance().initNand();
 
-    CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+    CmdHandlerFactory &factory = CmdHandlerFactory::getInstance();
 
     if (*argv[1] == 'R' || *argv[1] == 'r')
     {

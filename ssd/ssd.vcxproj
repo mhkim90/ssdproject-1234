@@ -148,7 +148,14 @@
     <ClCompile Include="WriteCmdHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CmdHandlerFactory.h" />
+    <ClInclude Include="CommandBuffer.h" />
+    <ClInclude Include="EraseCmdHandler.h" />
+    <ClInclude Include="FileManager.h" />
+    <ClInclude Include="FlushCmdHandler.h" />
+    <ClInclude Include="ReadCmdHandler.h" />
     <ClInclude Include="SSDConfig.h" />
+    <ClInclude Include="WriteCmdHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

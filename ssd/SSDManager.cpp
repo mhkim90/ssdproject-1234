@@ -1,12 +1,7 @@
 #include <string>
 #include "SSDConfig.h"
 #include "CmdHandler.h"
-#include "FileManager.cpp"
-#include "ReadCmdHandler.cpp"
-#include "WriteCmdHandler.cpp"
-#include "EraseCmdHandler.cpp"
 #include "Exception.cpp"
-using namespace std;
 
 class SSDManager
 {

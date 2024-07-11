@@ -1,30 +1,25 @@
 #pragma once
 #include "CmdHandler.h"
-#include <iostream>
-using namespace std;
+#include "FlushCmdHandler.h"
 
-class FlushCmdHandler : public CmdHandler
+FlushCmdHandler::FlushCmdHandler() {
+
+	CmdHandler::setOpcode(CmdOpcode::FLUSH_CMD);
+}
+
+bool FlushCmdHandler::sanityCheckPassed(int lba, string data)
 {
-public:
-	FlushCmdHandler() {
-
-		CmdHandler::setOpcode(CmdOpcode::FLUSH_CMD);
-	}
-
-	bool sanityCheckPassed(int lba, string data) override
+	// lba range check first
+	if (true == CmdHandler::sanityCheckPassed(0, "0"))
 	{
-		// lba range check first
-		if (true == CmdHandler::sanityCheckPassed(0, "0"))
-		{
-			return true;
-		}
-		return false;
+		return true;
 	}
+	return false;
+}
 
-	void execute(int lba, string data) override
-	{
-		CommandBuffer::getInstance().flushBuffer();
+void FlushCmdHandler::execute(int lba, string data)
+{
+	CommandBuffer::getInstance().flushBuffer();
 
-		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Flush Executed");
-	}
-};
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Flush Executed");
+}
