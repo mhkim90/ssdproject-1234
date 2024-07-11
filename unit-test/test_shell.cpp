@@ -230,7 +230,7 @@ TEST_F(ShellRunSeqFixutre, RUN_SEQ) {
 		}));
 
 	internal::CaptureStdout();
-	EXPECT_NO_THROW(shell.runSequence("run_list.lst"));
+	EXPECT_NO_THROW(shell.runSequence("test_run_list.lst"));
 
 	EXPECT_EQ(internal::GetCapturedStdout(), "testapp1 --- Run...Pass\ntestapp2 --- Run...Pass\n");
 }
