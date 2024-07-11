@@ -22,7 +22,7 @@ void ScriptLauncher::execute(const vector<string>& args)
 
 	try {
 		for (auto& invoker : _seq) {
-			invoker->run();
+			invoker->invoke();
 		}
 	}
 	catch (exception& ex) {
@@ -39,7 +39,7 @@ const string& ScriptLauncher::getHelp()
 	return _help;
 }
 
-ScriptLauncher& ScriptLauncher::load()
+ScriptLauncher& ScriptLauncher::compile()
 {
 	_seq.clear();
 
@@ -122,7 +122,7 @@ shared_ptr<ScriptLauncher::Invoker> ScriptLauncher::Invoker::Builder::build()
 	return rst;
 }
 
-void ScriptLauncher::Invoker::run()
+void ScriptLauncher::Invoker::invoke()
 {
 	auto& factory = CommandFactory::getInstance();
 

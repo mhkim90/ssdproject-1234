@@ -56,7 +56,7 @@ TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
 		.Times(1)
 		.WillRepeatedly(Return("0xAAAABBBB"));
 	
-	EXPECT_NO_THROW(launcher.load());
+	EXPECT_NO_THROW(launcher.compile());
 	EXPECT_EQ(launcher.getHelp(), "HELP MESSAGE");
 
 	internal::CaptureStdout();
@@ -77,7 +77,7 @@ TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
 		.Times(1)
 		.WillRepeatedly(Return("0xAAAAAAAA"));
 	
-	EXPECT_NO_THROW(launcher.load());
+	EXPECT_NO_THROW(launcher.compile());
 	EXPECT_EQ(launcher.getHelp(), "HELP MESSAGE");
 
 	internal::CaptureStdout();

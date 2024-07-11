@@ -16,12 +16,12 @@ public:
 	virtual void execute(const vector<string>& args) override;
 	virtual const string& getHelp() override;
 
-	ScriptLauncher& load();
+	ScriptLauncher& compile();
 
 private:
 	class Invoker {
 	public:
-		void run();
+		void invoke();
 
 		class Builder {
 		public:

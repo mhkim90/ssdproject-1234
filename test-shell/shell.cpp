@@ -148,7 +148,7 @@ unsigned int Shell::loadScripts(ISSD& ssd)
 			auto scriptName = entry.path().stem().string();
 			auto* launcher = new ScriptLauncher(ssd, scriptName);
 			try {
-				launcher->load();
+				launcher->compile();
 				_factory.injectCommand(scriptName, launcher);
 				rst++;
 			}
