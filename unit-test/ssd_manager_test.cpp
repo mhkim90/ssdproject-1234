@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include "../ssd/CmdHandler.h"
-#include "../ssd/SSDManager.cpp"
-#include "../ssd/CmdHandlerFactory.cpp"
+#include "../ssd/SSDManager.h"
+#include "../ssd/CmdHandlerFactory.h"
 
 using namespace std;
 using namespace testing;
@@ -76,7 +76,7 @@ TEST_F(SSD_IO_Fixture, dataShouldNotSendData) {
 
 // invalid opcode test
 TEST_F(SSD_IO_Fixture, checkInvalidOpcode) {
-	CmdHandlerFactory factory = CmdHandlerFactory::getInstance();
+	CmdHandlerFactory& factory = CmdHandlerFactory::getInstance();
 	CmdHandler* cmdHandler = factory.createCmdHandler(MAX_NUM_OF_CMD);
 	EXPECT_EQ(cmdHandler, nullptr);
 }

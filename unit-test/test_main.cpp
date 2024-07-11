@@ -13,3 +13,12 @@
 #include "../test-shell/command_factory.cpp"
 #include "../test-shell/shell.cpp"
 #include "../test-shell/ssdlib.cpp"
+
+#include "../ssd/CmdHandlerFactory.cpp"
+#include "../ssd/SSDManager.cpp"
+#include "../ssd/FileManager.cpp"
+#include "../ssd/CommandBuffer.cpp"
+#include "../ssd/WriteCmdHandler.cpp"
+#include "../ssd/ReadCmdHandler.cpp"
+#include "../ssd/EraseCmdHandler.cpp"
+#include "../ssd/FlushCmdHandler.cpp"
