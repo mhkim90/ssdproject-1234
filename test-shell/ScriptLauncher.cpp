@@ -10,7 +10,7 @@ using namespace std;
 
 ScriptLauncher::ScriptLauncher(ISSD& ssd, const string& scriptName)
 	: ScriptBase(ssd, scriptName)
-	, _scriptFilePath { ".\\script\\" + scriptName + ".json" }
+	, _scriptFilePath { ".\\" + scriptName + ".json" }
 {
 }
 
