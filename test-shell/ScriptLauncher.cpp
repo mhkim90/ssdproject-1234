@@ -170,11 +170,10 @@ void ScriptLauncher::Invoker::verify()
 
 	auto joindVerify = accumulate(next(_verify->begin()), _verify->end(),
 		(*_verify)[0],
-		[](const string& a, const string& b) { return a + '\n' + b; });
-
+		[](const string& a, const string& b) { return a + ',' + b; });
 	auto joindActual = accumulate(next(actual.begin()), actual.end(),
 		actual[0],
-		[](const string& a, const string& b) { return a + '\n' + b; });
+		[](const string& a, const string& b) { return a + ',' + b; });
 
 	throw logic_error(
 		"verify failed!\n---check value---\n"
