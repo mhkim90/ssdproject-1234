@@ -53,14 +53,15 @@ int Logger::getFileSize(const std::string& file_path) {
 
 void Logger::saveLog(const std::string& output) {
 	if (getFileSize(m_log_directory + m_file_name) > m_ten_kb) {
-		std::string previous_file_path =
-			m_log_directory + m_past_log_file_name;
-
-		if (m_past_log_file_name != "" &&
-			std::filesystem::exists(previous_file_path + ".log")) {
-			std::filesystem::rename(
-				previous_file_path + ".log",
-				previous_file_path + ".zip");
+		for (const auto& file :
+			std::filesystem::directory_iterator{ m_log_directory }) {
+			std::string file_name = file.path().string();
+			if (file_name.find(".log") != -1 &&
+				file_name.find("latest.log") == -1) {
+				std::filesystem::rename(
+					file_name,
+					file_name.substr(0,file_name.size() - 4) + ".zip");
+			}
 		}
 
 		m_past_log_file_name = getPastLogFileName();
