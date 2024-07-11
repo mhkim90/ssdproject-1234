@@ -405,3 +405,4 @@ FodyWeavers.xsd
 buffer.txt
 nand.txt
 result.txt
+test-shell/*.exe
