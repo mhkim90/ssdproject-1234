@@ -14,10 +14,11 @@ EraseRangeCommand::EraseRangeCommand(ISSD& ssd, int argsCount)
 
 void EraseRangeCommand::execute(const vector<string>& args)
 {
+	verifyArgsCount(args);
+
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__,
 		"Start EraseRange " + args[0] + " " + args[1] + " Execute()");
 
-	verifyArgsCount(args);
 	verifyFormatAddress(args[0]);
 	verifyFormatAddress(args[1]);
 
