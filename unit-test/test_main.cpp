@@ -22,3 +22,5 @@
 #include "../ssd/ReadCmdHandler.cpp"
 #include "../ssd/EraseCmdHandler.cpp"
 #include "../ssd/FlushCmdHandler.cpp"
+
+#include "../logger/Logger.cpp"

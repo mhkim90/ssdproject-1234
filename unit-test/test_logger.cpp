@@ -1,13 +1,13 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "../logger/Logger.cpp"
 #include <filesystem>
 #include <vector>
 #include <fstream>
+#include "../logger/Logger.h"
 
 class LoggerFixture : public ::testing::Test {
 public:
-	std::string log_directory = "gtest";
+	std::string log_directory = "ssd";
 	ILogger& logger = Logger::getInstance(log_directory);
 	std::string name = "func()";
 	std::string msg = "test message";
@@ -38,7 +38,7 @@ public:
 
 protected:
 	void SetUp() override {
-		logger.setDirectory(log_directory);
+		logger.resetDirectory(log_directory);
 	}
 
 private:
@@ -69,7 +69,6 @@ TEST_F(LoggerFixture, LongFuncNameTest) {
 	std::string captured_out = testing::internal::GetCapturedStdout();
 	size_t begin_idx = captured_out.find_last_of(")");
 	size_t end_idx = captured_out.find_last_of(":");
-	std::cout << captured_out << std::endl;
 	EXPECT_EQ(end_idx - begin_idx - 1, 0);
 }
 

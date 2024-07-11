@@ -3,13 +3,13 @@
 
 class Logger : public ILogger {
 public:
-	static Logger& getInstance(const std::string& log_directory);
+	static ILogger& getInstance(const std::string& log_directory);
 
 	void printLog(PRINT_TYPE type,
 		const std::string& func_name,
 		const std::string& message) override;
 
-	void setDirectory(const std::string& log_directory) override;
+	void resetDirectory(const std::string& log_directory) override;
 
 private:
 	Logger(const std::string& log_directory);
