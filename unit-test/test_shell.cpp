@@ -1,8 +1,15 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "../test-shell/shell.cpp"
+#include "../test-shell/shell.h"
 #include "../test-shell/ssd.h"
-#include "../test-shell/command_factory.cpp"
+#include "../test-shell/ReadCommand.h"
+#include "../test-shell/WriteCommand.h"
+#include "../test-shell/TestApp1Command.h"
+#include "../test-shell/TestApp2Command.h"
+#include "../test-shell/FlushCommand.h"
+#include "../test-shell/EraseCommand.h"
+#include "../test-shell/EraseRangeCommand.h"
+#include "../test-shell/command_factory.h"
 #include <unordered_map>
 #include <string>
 
@@ -193,7 +200,7 @@ class ShellRunSeqFixutre : public Test {
 public:
 	ShellRunSeqFixutre()
 		: factory{ CommandFactory::getInstance() }
-		, shell(factory)
+		, shell{ CommandFactory::getInstance() }
 		, cmdTestApp1(mockSSD)
 		, cmdTestApp2(mockSSD)
 	{
@@ -202,19 +209,26 @@ public:
 	}
 
 	Shell shell;
-	CommandFactory& factory;
+	ICommandFactory& factory;
 	TestApp1Command cmdTestApp1;
 	TestApp2Command cmdTestApp2;
 	MockSSD mockSSD;
 };
 
 TEST_F(ShellRunSeqFixutre, RUN_SEQ) {
-	EXPECT_CALL(mockSSD, read(_))
-		.Times(100)
-		.WillRepeatedly(Return("0xAAAABBBB"));
+	int readCallCount = 0;
+
+	EXPECT_CALL(mockSSD, write(_, _))
+		.Times(286);
 
 	EXPECT_CALL(mockSSD, read(_))
-		.WillRepeatedly(Return("0x12345678"));
+		.WillRepeatedly(InvokeWithoutArgs([&readCallCount]() {
+			if (readCallCount < 100) {
+				++readCallCount;
+				return string{ "0xAAAABBBB" };
+			}
+			return string{ "0x12345678" };
+		}));
 
 	internal::CaptureStdout();
 	EXPECT_NO_THROW(shell.runSequence("run_list.lst"));

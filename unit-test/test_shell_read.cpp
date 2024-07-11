@@ -3,7 +3,7 @@
 
 #include "../test-shell/ssd.h"
 #include "../test-shell/shell.h"
-#include "../test-shell/ReadCommand.cpp"
+#include "../test-shell/ReadCommand.h"
 
 #include <iostream>
 #include <string>

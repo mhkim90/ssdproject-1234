@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "../logger/Logger.h"
+#include "../logger/Logger.cpp"
 #include <filesystem>
 #include <vector>
 #include <fstream>

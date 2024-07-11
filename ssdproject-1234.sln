@@ -14,9 +14,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test-shell", "test-shell\te
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit-test", "unit-test\unit-test.vcxproj", "{4C554216-3BBB-421F-B0CB-8221E7613369}"
-	ProjectSection(ProjectDependencies) = postProject
-		{47779171-DD11-49CA-A0ED-7776E537F10F} = {47779171-DD11-49CA-A0ED-7776E537F10F}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루션 항목", "{5E5B0382-8A69-40F8-AD3D-DCA6310F5A1D}"
 	ProjectSection(SolutionItems) = preProject

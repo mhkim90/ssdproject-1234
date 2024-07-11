@@ -23,43 +23,21 @@ interface ICommand {
 
 class CommandBase : public ICommand {
 public:
-	CommandBase(ISSD& ssd, int verifyArgsCount = 0)
-		: _ssd{ ssd }
-		, _VERIFY_ARGS_COUNT{ verifyArgsCount }
-	{
-	}
+	CommandBase(ISSD& ssd, int verifyArgsCount = 0);
 	virtual void execute(const vector<string>& args) override = 0;
 	virtual const string& getHelp() override = 0;
 
-	virtual void injectSSD(ISSD& ssd) override {
-		_ssd = ssd;
-	}
+	virtual void injectSSD(ISSD& ssd) override;
 protected:
-	inline void verifyArgsCount(const vector<string>& args) const {
-		if ((int)args.size() >= _VERIFY_ARGS_COUNT) return;
-		throw std::invalid_argument("Not enough arguments. Check help.");
-	}
-	inline void verifyFormatAddress(const string& arg) const {
-		static std::regex REGEX{ "^[0-9]+$" };
-		if (std::regex_match(arg, REGEX)) return;
-		throw std::invalid_argument("Invalid arguments. Check help.");
-	}
-	inline void verifyFormatValue(const string& arg) const {
-		static std::regex REGEX{ "^0x[0-9A-Z]{8}$" };
-		if (std::regex_match(arg, REGEX)) return;
-		throw std::invalid_argument("Invalid arguments. Check help.");
-	}
-	inline void verifyAddressRange(int addr) const {
-		if (_ADDR_RANGE_MIN <= addr && addr <= _ADDR_RANGE_MAX) return;
-		throw std::invalid_argument("Invalid arguments. Check help.");
-	}
-	inline ISSD& getSSD() const {
-		return _ssd;
-	}
+	void verifyArgsCount(const vector<string>& args) const;
+	void verifyFormatAddress(const string& arg) const;
+	void verifyFormatValue(const string& arg) const;
+	void verifyAddressRange(int addr) const;
+	ISSD& getSSD() const;
 
 	static constexpr int _ADDR_RANGE_MIN = 0;
 	static constexpr int _ADDR_RANGE_MAX = 99;
-	ILogger& logger = Logger::getInstance("shell");
+	ILogger& logger;
 
 private:
 	ISSD& _ssd;
@@ -68,24 +46,14 @@ private:
 
 class ScriptBase : public CommandBase {
 public:
-	ScriptBase(ISSD& ssd, const string& scriptName)
-		: CommandBase(ssd), _SCRIPT_NAME{ scriptName } {
-
-	}
+	ScriptBase(ISSD& ssd, const string& scriptName);
 
 	virtual void execute(const vector<string>& args) override = 0;
 	virtual const string& getHelp() override = 0;
 
 protected:
-	inline void printRun() const {
-		std::cout << _SCRIPT_NAME << " --- Run...";
-	}
-
-	inline void printResult(bool isPass) const {
-		std::cout << (isPass ? "Pass" : "FAIL!") << std::endl;
-		if (isPass) return;
-		throw std::logic_error("Faild of Script!");
-	}
+	void printRun() const;
+	void printResult(bool isPass);
 
 private:
 	const string _SCRIPT_NAME;
