@@ -20,7 +20,7 @@ std::string SSDLib::getAppPath() {
 
 void SSDLib::write(int addr, const std::string& value)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Write()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Write " + std::to_string(addr) + " " + value);
 	std::string command = getAppPath() + " W " +
 		std::to_string(addr) + " " + value;
 	execute(command);
@@ -29,7 +29,7 @@ void SSDLib::write(int addr, const std::string& value)
 
 std::string SSDLib::read(int addr)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Read()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Read " + std::to_string(addr));
 	std::string command = getAppPath() + " R " +
 		std::to_string(addr);
 	execute(command);
@@ -39,7 +39,7 @@ std::string SSDLib::read(int addr)
 
 void SSDLib::erase(int addr, int size)
 {
-	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Erase()");
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Erase " + std::to_string(addr) + " " + std::to_string(size));
 	std::string command = getAppPath() + " E " +
 		std::to_string(addr) + " " + std::to_string(size);
 	execute(command);
