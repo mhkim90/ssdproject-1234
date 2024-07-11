@@ -142,24 +142,19 @@ const list<string>& Shell::getSequence() const
 unsigned int Shell::loadScripts(ISSD& ssd)
 {
 	unsigned int rst = 0;
-	vector<string> scripts;
+
 	for (const auto& entry : filesystem::directory_iterator(".\\")) {
 		if (entry.is_regular_file() && entry.path().extension() == ".json") {
-			scripts.push_back(entry.path().stem().string());
-		}
-	}
-
-	if (scripts.empty()) return rst;
-
-	for (const auto& name : scripts) {
-		auto* launcher = new ScriptLauncher(ssd, name);
-		try {
-			launcher->load();
-			_factory.injectCommand(name, launcher);
-			rst++;
-		}
-		catch (exception&) {
-			delete launcher;
+			auto scriptName = entry.path().stem().string();
+			auto* launcher = new ScriptLauncher(ssd, scriptName);
+			try {
+				launcher->load();
+				_factory.injectCommand(scriptName, launcher);
+				rst++;
+			}
+			catch (exception&) {
+				delete launcher;
+			}
 		}
 	}
 
