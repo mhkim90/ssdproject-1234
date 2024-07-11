@@ -7,6 +7,10 @@
 #include <fstream>
 
 Logger::Logger(const std::string& log_directory) {
+	setDirectory(log_directory);
+}
+
+void Logger::setDirectory(const std::string& log_directory) {
 	m_log_directory = log_directory;
 	if (std::filesystem::exists(m_log_directory)) {
 		std::filesystem::remove_all(m_log_directory);
