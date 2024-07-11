@@ -19,7 +19,6 @@ public:
 	MOCK_METHOD(string, read, (int addr), (override));
 	MOCK_METHOD(void, erase, (int addr, int size), (override));
 	MOCK_METHOD(void, flush, (), (override));
-	MOCK_METHOD(string, getResult, (), (override));
 };
 
 class TestApp1Fixture : public testing::Test {

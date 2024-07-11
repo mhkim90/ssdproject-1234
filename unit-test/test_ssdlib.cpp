@@ -39,3 +39,11 @@ TEST_F(SSDLibFixture, READ_TEST) {
 TEST_F(SSDLibFixture, WRITE_TEST) {
 	EXPECT_NO_THROW(mockSSD.write(0, "0x00000000"));
 }
+
+TEST_F(SSDLibFixture, ERASE_TEST) {
+	EXPECT_NO_THROW(mockSSD.erase(0, 1));
+}
+
+TEST_F(SSDLibFixture, FLUSH_TEST) {
+	EXPECT_NO_THROW(mockSSD.flush());
+}

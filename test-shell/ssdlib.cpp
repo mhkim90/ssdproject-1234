@@ -14,11 +14,14 @@ ISSD& SSDLib::getInstance()
 	return instance;
 }
 
+std::string SSDLib::getAppPath() {
+	return current_path.string() + directory_path + app_name;
+}
+
 void SSDLib::write(int addr, const std::string& value)
 {
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Write()");
-	std::string command = current_path.string() +
-		directory_path + app_name + " W " +
+	std::string command = getAppPath() + " W " +
 		std::to_string(addr) + " " + value;
 	execute(command);
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Write()");
@@ -27,8 +30,7 @@ void SSDLib::write(int addr, const std::string& value)
 std::string SSDLib::read(int addr)
 {
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Read()");
-	std::string command = current_path.string() +
-		directory_path + app_name + " R " +
+	std::string command = getAppPath() + " R " +
 		std::to_string(addr);
 	execute(command);
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Read()");
@@ -39,8 +41,7 @@ std::string SSDLib::read(int addr)
 void SSDLib::erase(int addr, int size)
 {
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Erase()");
-	std::string command = current_path.string() +
-		directory_path + app_name + " E " +
+	std::string command = getAppPath() + " E " +
 		std::to_string(addr) + " " + std::to_string(size);
 	execute(command);
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Erase()");
@@ -49,16 +50,9 @@ void SSDLib::erase(int addr, int size)
 void SSDLib::flush()
 {
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Start Flush()");
-	std::string command = current_path.string() +
-		directory_path + app_name + " F ";
+	std::string command = getAppPath() + " F ";
 	execute(command);
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Flush()");
-}
-
-std::string SSDLib::getResult()
-{
-	return getValue(current_path.string() + result_path +
-		result_name);
 }
 
 void SSDLib::execute(const std::string& command_str)
