@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <filesystem>
 #include <fstream>
+#include "ScriptLauncher.h"
 
 using namespace std;
 
@@ -136,6 +137,33 @@ void Shell::loadSequence(const string& filePath)
 const list<string>& Shell::getSequence() const
 {
 	return _sequence;
+}
+
+unsigned int Shell::loadScripts(ISSD& ssd)
+{
+	unsigned int rst = 0;
+	vector<string> scripts;
+	for (const auto& entry : filesystem::directory_iterator(".\\")) {
+		if (entry.is_regular_file() && entry.path().extension() == ".json") {
+			scripts.push_back(entry.path().stem().string());
+		}
+	}
+
+	if (scripts.empty()) return rst;
+
+	for (const auto& name : scripts) {
+		auto* launcher = new ScriptLauncher(ssd, name);
+		try {
+			launcher->load();
+			_factory.injectCommand(name, launcher);
+			rst++;
+		}
+		catch (exception&) {
+			delete launcher;
+		}
+	}
+
+	return rst;
 }
 
 void Shell::verifySequenceFilePath(const string& filePath) const

@@ -7,6 +7,7 @@
 #include "../test-shell/ReadCommand.h"
 #include "../test-shell/WriteCommand.h"
 #include "../test-shell/ScriptLauncher.h"
+#include "../test-shell/shell.h"
 
 using namespace std;
 using namespace testing;
@@ -26,6 +27,7 @@ public:
 		, readCommad(ssd)
 		, writeCommad(ssd)
 		, factory { CommandFactory::getInstance() }
+		, shell { factory }
 	{
 	}
 
@@ -33,6 +35,7 @@ public:
 	ReadCommand readCommad;
 	WriteCommand writeCommad;
 	ICommandFactory& factory;
+	Shell shell;
 
 protected:
 	void SetUp() override {
@@ -82,4 +85,10 @@ TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
 	EXPECT_THROW(launcher.execute({}), logic_error);
 
 	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...FAIL!\n");
+}
+
+TEST_F(ScriptLauncherFixture, Shell_LoadScript) {
+	EXPECT_EQ(shell.loadScripts(ssd), 1);
+	EXPECT_NO_THROW(factory.getCommand("TestScript1"));
+	EXPECT_THAT(factory.getCommand("TestScript1"), NotNull());
 }
