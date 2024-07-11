@@ -99,7 +99,7 @@ bool CommandBuffer::searchPassedLatestDataForRead(int lba)
 		}
 		else if (cmdList[i].opcode == ERASE_CMD)
 		{
-			if (true == IsEraseLbaRangeIncluded(lba, cmdList[i].lba, stoi(cmdList[i].data)))
+			if (true == IsEraseLbaRangeIncluded(lba, cmdList[i].lba, cmdList[i].lba + stoi(cmdList[i].data)))
 			{
 				data = INIT_DATA;
 				searchResult = true;
