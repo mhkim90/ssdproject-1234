@@ -1,8 +1,5 @@
 #pragma once
-#pragma once
 #include "CmdHandler.h"
-#include <iostream>
-using namespace std;
 
 class WriteCmdHandler : public CmdHandler
 {

@@ -1,10 +1,3 @@
-#pragma once
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include "SSDConfig.h"
-#include "FileManager.h"
 #include "CommandBuffer.h"
 
 CommandBuffer& CommandBuffer::getInstance() {
@@ -73,32 +66,45 @@ void CommandBuffer::updateCommandBuffer(CmdOpcode opcode, int lba, string data)
 
 	if (!commandBuffered) {
 		// Ignore write 1
+		bool writeIgnored = false;
 		for (int i = 0; i < cmdList.size(); i++) {
-
 			if (cmdList[i].opcode == CmdOpcode::WRITE_CMD && cmdList[i].lba == lba) {
-				cmdList[i].data = data;
-
-				commandBuffered = true;
+				cmdList.erase(cmdList.begin() + i);
+				writeIgnored = true;
 			}
 		}
 
+		if (writeIgnored) {
+			IoDataStruct item;
+			item.opcode = opcode;
+			item.lba = lba;
+			item.data = data;
+			cmdList.push_back(item);
+			commandBuffered = true;
+		}
+
 		// Ignore write 2
+		bool writeIgnored2 = false;
 		int eraseRange = stoi(data);
 		for (int i = 0; i < cmdList.size(); i++) {
 
 			if (cmdList[i].opcode == CmdOpcode::WRITE_CMD && opcode == CmdOpcode::ERASE_CMD
 				&& cmdList[i].lba >= lba && cmdList[i].lba < lba + eraseRange) {
 				cmdList.erase(cmdList.begin() + i);
-				IoDataStruct item;
-				item.opcode = opcode;
-				item.lba = lba;
-				item.data = data;
-				cmdList.push_back(item);
-				commandBuffered = true;
+				writeIgnored2 = true;
 			}
 		}
 
+		if (writeIgnored) {
+			IoDataStruct item;
+			item.opcode = opcode;
+			item.lba = lba;
+			item.data = data;
+			cmdList.push_back(item);
+			commandBuffered = true;
+		}
 	}
+
 
 	if (commandBuffered == false) {
 		IoDataStruct item;

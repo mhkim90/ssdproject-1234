@@ -1,8 +1,4 @@
-#pragma once
-#include "CmdHandler.h"
 #include "EraseCmdHandler.h"
-#include <iostream>
-using namespace std;
 
 EraseCmdHandler::EraseCmdHandler() {
 	CmdHandler::setOpcode(CmdOpcode::ERASE_CMD);

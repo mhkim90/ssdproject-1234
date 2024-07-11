@@ -1,5 +1,3 @@
-#include <iostream>
-#include "CmdHandler.h"
 #include "CmdHandlerFactory.h"
 
 CmdHandlerFactory& CmdHandlerFactory::getInstance()

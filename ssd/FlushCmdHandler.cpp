@@ -1,5 +1,3 @@
-#pragma once
-#include "CmdHandler.h"
 #include "FlushCmdHandler.h"
 
 FlushCmdHandler::FlushCmdHandler() {

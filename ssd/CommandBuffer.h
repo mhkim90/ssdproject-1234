@@ -1,11 +1,11 @@
 #pragma once
-#pragma once
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 #include "SSDConfig.h"
 #include "FileManager.h"
+
 using namespace std;
 
 class CommandBuffer

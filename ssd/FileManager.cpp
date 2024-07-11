@@ -1,10 +1,4 @@
-#pragma once
-#include <fstream>
-#include <iostream>
-#include "SSDConfig.h"
 #include "FileManager.h"
-
-using namespace std;
 
 FileManager& FileManager::getInstance()
 {

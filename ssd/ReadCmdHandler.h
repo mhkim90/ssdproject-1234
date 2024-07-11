@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "CmdHandler.h"
 
 class ReadCmdHandler : public CmdHandler

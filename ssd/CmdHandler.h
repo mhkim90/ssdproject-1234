@@ -6,7 +6,7 @@
 #include "../logger/Logger.h"
 #include "SSDConfig.h"
 #include "FileManager.h"
-#include "Exception.cpp"
+#include "Exception.h"
 #include "CommandBuffer.h"
 
 using namespace std;

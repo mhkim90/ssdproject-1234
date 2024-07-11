@@ -1,8 +1,4 @@
-#pragma once
-#include "CmdHandler.h"
 #include "WriteCmdHandler.h"
-#include <iostream>
-using namespace std; 
 
 WriteCmdHandler::WriteCmdHandler() {
 
