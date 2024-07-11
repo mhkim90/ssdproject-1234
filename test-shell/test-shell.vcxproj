@@ -189,6 +189,7 @@
     <ClInclude Include="EraseCommand.h" />
     <ClInclude Include="EraseRangeCommand.h" />
     <ClInclude Include="FlushCommand.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="ScriptLauncher.h" />
     <ClInclude Include="shell.h" />
