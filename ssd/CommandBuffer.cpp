@@ -50,16 +50,21 @@ void CommandBuffer::updateCommandBuffer(CmdOpcode opcode, int lba, string data)
 {
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "total command buffer pool cmd count so far: " + to_string(cmdList.size()));
 
-
-	if (false == IsMergedWithBufferedCommands(opcode, lba, data)) {
-		addCmdtoCmdList(opcode, lba, data);
-	}
-
-	FileManager::getInstance().writeFile(COMMAND_BUFFER_FILE, cmdList);
-
-	if (needFlush()) {
+	if (opcode == CmdOpcode::FLUSH_CMD) {
 		flushBuffer();
 	}
+	else {
+		if (false == IsMergedWithBufferedCommands(opcode, lba, data)) {
+			addCmdtoCmdList(opcode, lba, data);
+		}
+
+		FileManager::getInstance().writeFile(COMMAND_BUFFER_FILE, cmdList);
+
+		if (needFlush()) {
+			flushBuffer();
+		}
+	}
+
 }
 
 bool CommandBuffer::needFlush() {

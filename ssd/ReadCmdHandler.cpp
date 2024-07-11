@@ -26,6 +26,7 @@ void ReadCmdHandler::execute(int lba, string data)
 	// otherwise, read nand data and save to result file
 	if (false == CommandBuffer::getInstance().searchPassedLatestDataForRead(lba))
 	{
+
 		FileManager::getInstance().openNand();
 
 		FileManager::getInstance().readNand(lba);
