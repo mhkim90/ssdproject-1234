@@ -29,6 +29,9 @@ public:
 
 	vector<IoDataStruct>& getCmdList();
 
+protected:
+	ILogger& logger = Logger::getInstance("ssd");
+
 private:
 	CommandBuffer();
 	CommandBuffer(const CommandBuffer&) = delete;

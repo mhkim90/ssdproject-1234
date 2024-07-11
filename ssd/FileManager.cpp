@@ -55,8 +55,7 @@ void FileManager::writeNand() {
 }
 
 void FileManager::writeFile(const string file_name, vector<IoDataStruct> cmdList) {
-
-	cout << "writeFile is called :" << *buf << endl;
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "writeFile is called :" + *buf);
 
 	ofstream writeFile;
 	writeFile.open(file_name);
@@ -125,7 +124,6 @@ void FileManager::flushNand(vector<IoDataStruct> cmdList) {
 
 void FileManager::openFile(const string file_name, string* buf, int& cmdBackupCount)
 {
-	cout << "open file has to be called for once" << endl;
 	// ready to file read
 	ifstream readFile(file_name);
 
@@ -139,7 +137,7 @@ void FileManager::openFile(const string file_name, string* buf, int& cmdBackupCo
 	while (getline(readFile, data, '\n')) {
 		buf[buf_index++] = data;
 		cmdBackupCount++;
-		cout << "openFile str :" << buf[buf_index - 1] << endl;
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "saved file contents :" + buf[buf_index - 1]);
 	}
 
 	readFile.close();

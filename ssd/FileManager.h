@@ -32,6 +32,9 @@ public:
 
 	void initFile(const string file_name);
 
+protected:
+	ILogger& logger = Logger::getInstance("ssd");
+
 private:
 	FileManager() {}
 	FileManager(const FileManager&) = delete;

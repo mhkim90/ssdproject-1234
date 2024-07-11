@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../logger/Logger.h"
 #include "SSDConfig.h"
 #include "FileManager.h"
 #include "Exception.h"

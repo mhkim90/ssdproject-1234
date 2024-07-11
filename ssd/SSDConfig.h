@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-
+#include "../logger/Logger.h"
 using namespace std;
 
 const string NANDFILE = "nand.txt";

@@ -36,21 +36,23 @@ void CommandBuffer::ParseCmdBuf(string* cmdBuf)
 		cmdList.push_back(dataStruct);
 	}
 
-	cout << "****** print cmd List *******" << endl;
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "****** print cmd List *******");
+
 	for (const auto& cmd : cmdList) {
-		std::cout << "opcode: " << cmd.opcode << ", lba : " << cmd.lba
-			<< ", data: " << cmd.data << std::endl;
+		string msg = "opcode: " + to_string(cmd.opcode) + ", lba : " + to_string(cmd.lba) + ", data: " + cmd.data;
+		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, msg);
 	}
 }
 
+// buffer.txt will be saved "[opcode] [lba] [data]" format
+// [data] could be size in erase case, data in write case
 void CommandBuffer::updateCommandBuffer(CmdOpcode opcode, int lba, string data)
 {
-	cout << "total command buffer pool cmd count : " << cmdList.size() << endl;
-	// buffer.txt will be saved "[opcode] [lba] [data]" format
-	// [data] could be size in erase case, data in write case
+	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "total command buffer pool cmd count so far: " + to_string(cmdList.size()));
+
 	bool commandBuffered = false;
 
-	// merge erase
+	// erase + erase case,  merge erase
 	if (opcode == CmdOpcode::ERASE_CMD && !cmdList.empty()) {
 
 		if (cmdList.back().opcode == CmdOpcode::ERASE_CMD) {
