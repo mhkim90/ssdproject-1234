@@ -11,6 +11,8 @@ Shell::Shell(ICommandFactory& factory)
 	: _factory { factory }
 	, logger{ Logger::getInstance("shell") }
 {
+	logger.resetDirectory("shell");
+	logger.resetDirectory("ssd");
 }
 
 inline string Shell::waitForCommand() {

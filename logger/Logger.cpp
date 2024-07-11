@@ -7,18 +7,18 @@
 #include <fstream>
 
 Logger::Logger(const std::string& log_directory) {
-	setDirectory(log_directory);
-}
-
-void Logger::setDirectory(const std::string& log_directory) {
 	m_log_directory = log_directory;
-	if (std::filesystem::exists(m_log_directory)) {
-		std::filesystem::remove_all(m_log_directory);
-	}
 	std::filesystem::create_directory(m_log_directory);
 }
 
-Logger& Logger::getInstance(const std::string& log_directory) {
+void Logger::resetDirectory(const std::string& log_directory) {
+	if (std::filesystem::exists(log_directory)) {
+		std::filesystem::remove_all(log_directory);
+	}
+	std::filesystem::create_directory(log_directory);
+}
+
+ILogger& Logger::getInstance(const std::string& log_directory) {
 	static Logger instance(log_directory);
 	return instance;
 }
