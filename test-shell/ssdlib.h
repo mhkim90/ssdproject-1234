@@ -15,6 +15,8 @@ public:
 
 protected:
 	SSDLib();
+	SSDLib(const SSDLib&) = delete;
+	SSDLib& operator =(const SSDLib&) = delete;
 
 private:
 	std::filesystem::path current_path;

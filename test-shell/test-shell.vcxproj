@@ -175,6 +175,7 @@
     <ClCompile Include="EraseRangeCommand.cpp" />
     <ClCompile Include="FlushCommand.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ScriptLauncher.cpp" />
     <ClCompile Include="shell.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="TestApp1Command.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="EraseRangeCommand.h" />
     <ClInclude Include="FlushCommand.h" />
     <ClInclude Include="ReadCommand.h" />
+    <ClInclude Include="ScriptLauncher.h" />
     <ClInclude Include="shell.h" />
     <ClInclude Include="ssd.h" />
     <ClInclude Include="ssdlib.h" />

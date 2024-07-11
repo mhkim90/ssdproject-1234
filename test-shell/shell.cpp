@@ -138,10 +138,12 @@ const list<string>& Shell::getSequence() const
 
 void Shell::verifySequenceFilePath(const string& filePath) const
 {
-	if (filesystem::is_directory(filePath))
+	if (filesystem::is_directory(filePath)) {
 		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Exception: Invalid Argument");
 		throw invalid_argument("The file path could not be found.");
-	if (filesystem::exists(filePath) == false)
+	}
+	if (filesystem::exists(filePath) == false) {
 		logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "Exception: Invalid Argument");
 		throw invalid_argument("The file path could not be found.");
+	}
 }
