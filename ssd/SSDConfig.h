@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-
+#include "../logger/Logger.h"
 using namespace std;
 
 const string NANDFILE = "nand.txt";
@@ -13,6 +13,16 @@ const int MIN_LBA = 0;
 const int MAX_LBA = 99;
 const int MAX_ERASE_COUNT = 10;
 const int MAX_BUFFER_COUNT = 10;
+
+#define DEBUG_MODE 1
+#define TRACE(message) \
+    do { \
+        if (DEBUG_MODE) { \
+            std::ostringstream oss; \
+            oss << message; \
+            std::cout << oss.str() << std::endl; \
+        } \
+    } while (0)
 
 enum CmdOpcode
 {

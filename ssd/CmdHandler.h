@@ -3,11 +3,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../logger/Logger.h"
 #include "SSDConfig.h"
-#include "FileManager.cpp"
-#include "Exception.cpp"
-#include "CommandBuffer.cpp"
+#include "FileManager.h"
+#include "Exception.h"
+#include "CommandBuffer.h"
 
 using namespace std;
 
