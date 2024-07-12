@@ -152,6 +152,7 @@ ScriptLauncher::Invoker::Invoker()
 
 void ScriptLauncher::Invoker::beginStreamCapture()
 {
+	_osstream = {};
 	_befoBuffer = cout.rdbuf();
 	cout.set_rdbuf(_osstream.rdbuf());
 }

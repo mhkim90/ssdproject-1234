@@ -41,16 +41,15 @@ protected:
 	void SetUp() override {
 		factory.injectCommand("read", &readCommad);
 		factory.injectCommand("write", &writeCommad);
-
-		EXPECT_CALL(ssd, write(_, _))
-			.Times(10);
 	}
 };
 
 
 TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
+	EXPECT_CALL(ssd, write(_, _))
+		.Times(20);
 	EXPECT_CALL(ssd, read(_))
-		.Times(5)
+		.Times(10)
 		.WillRepeatedly(Return("0xAAAABBBB"));
 	
 	EXPECT_NO_THROW(launcher.compile());
@@ -59,11 +58,14 @@ TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
 	internal::CaptureStdout();
 
 	EXPECT_NO_THROW(launcher.execute({}));
+	EXPECT_NO_THROW(launcher.execute({}));
 
-	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...Pass\n");
+	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...Pass\nTestScript1 --- Run...Pass\n");
 }
 
 TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
+	EXPECT_CALL(ssd, write(_, _))
+		.Times(10);
 	EXPECT_CALL(ssd, read(_))
 		.Times(3)
 		.WillRepeatedly(Return("0xAAAAAAAA"));
