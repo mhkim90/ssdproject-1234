@@ -1,4 +1,9 @@
 #include "CommandBuffer.h"
+#include <iostream>
+#include <algorithm>
+#include <deque>
+
+
 
 CommandBuffer& CommandBuffer::getInstance() {
 	static CommandBuffer instance;
@@ -136,24 +141,35 @@ bool CommandBuffer::IsMergedWithBufferedCommands(CmdOpcode opcode, int& lba, std
 	// Ignore write 1
 	int eraseRange = stoi(data);
 	bool writeIgnored = false;
-	set<int> eraseable;
+	std::deque<int> eraseable;
 	for (int i = 0; i < cmdList.size(); i++) {
-		if (checkDuplicatedWrite(i, lba)) {
-			eraseable.insert(i);
+		if (checkDuplicatedWrite(opcode, i, lba)) {
+			eraseable.push_back(i);
+		
 			writeIgnored = true;
 		}
 
 		if (checkWriteIgnorable(i, opcode, lba, eraseRange)) {
-			eraseable.insert(i);
+			eraseable.push_back(i);
 			writeIgnored = true;
 		}
+	}
+
+	// eraseable 벡터를 정렬하여 역순으로 삭제 수행
+	if (!eraseable.empty())
+	{
+		std::sort(eraseable.begin(), eraseable.end(), std::greater<int>());
 	}
 
 	int erasecount = 0;
 	if (!eraseable.empty()) {
 		for (int eraseIndex : eraseable) {
-			cmdList.erase(cmdList.begin() + eraseIndex - erasecount);
+			if (cmdList.size() == 0 || eraseable.empty()) break;
+
+			cmdList.erase(cmdList.begin() + eraseIndex);
 			erasecount++;
+	
+			eraseable.pop_front();
 		}
 	}
 
@@ -171,9 +187,9 @@ bool CommandBuffer::checkWriteIgnorable(int i, CmdOpcode opcode, int& lba, int e
 		&& cmdList[i].lba >= lba && cmdList[i].lba < lba + eraseRange;
 }
 
-bool CommandBuffer::checkDuplicatedWrite(int i, int& lba)
+bool CommandBuffer::checkDuplicatedWrite(CmdOpcode opcode, int i, int& lba)
 {
-	return cmdList[i].opcode == CmdOpcode::WRITE_CMD && cmdList[i].lba == lba;
+	return opcode == CmdOpcode::WRITE_CMD && cmdList[i].opcode == CmdOpcode::WRITE_CMD && cmdList[i].lba == lba;
 }
 
 void CommandBuffer::updateLastEraseCmd(int lba, std::string data)
