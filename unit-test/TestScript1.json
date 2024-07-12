@@ -2,15 +2,46 @@
   "seq": [
     {
       "cmd": "write",
-      "args": ["0", "0xAAAABBBB"],
+      "args": {
+        "address": {
+          "begin": 0,
+          "end": 9
+        },
+        "value": "0xAAAABBBB"
+      },
       "tryCnt": 1,
-      "verify": null
+      "verify": []
     },
     {
       "cmd": "read",
-      "args": ["0"],
+      "args": {
+        "address": {
+          "begin": 1,
+          "end": 3
+        },
+        "value": null
+      },
       "tryCnt": 1,
-      "verify": "0xAAAABBBB\n"
+      "verify": [
+        "0xAAAABBBB",
+        "0xAAAABBBB",
+        "0xAAAABBBB"
+      ]
+    },
+    {
+      "cmd": "read",
+      "args": {
+        "address": {
+          "begin": 9,
+          "end": 9
+        },
+        "value": null
+      },
+      "tryCnt": 2,
+      "verify": [
+        "0xAAAABBBB",
+        "0xAAAABBBB"
+      ]
     }
   ],
   "help": "HELP MESSAGE"

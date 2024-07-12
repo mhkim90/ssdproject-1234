@@ -7,6 +7,7 @@
 #include "../test-shell/ReadCommand.h"
 #include "../test-shell/WriteCommand.h"
 #include "../test-shell/ScriptLauncher.h"
+#include "../test-shell/shell.h"
 
 using namespace std;
 using namespace testing;
@@ -19,25 +20,61 @@ public:
 	MOCK_METHOD(void, flush, (), (override));
 };
 
+class ScriptLauncherFixture : public Test {
+public:
+	ScriptLauncherFixture()
+		: ssd{}
+		, readCommad(ssd)
+		, writeCommad(ssd)
+		, factory { CommandFactory::getInstance() }
+		, launcher { ssd, "TestScript1" }
+	{
+	}
 
-TEST(Script_Launcher_Test, TestScript1) {
 	MockSSD ssd;
+	ReadCommand readCommad;
+	WriteCommand writeCommad;
+	ICommandFactory& factory;
+	ScriptLauncher launcher;
+
+protected:
+	void SetUp() override {
+		factory.injectCommand("read", &readCommad);
+		factory.injectCommand("write", &writeCommad);
+	}
+};
+
+
+TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
 	EXPECT_CALL(ssd, write(_, _))
-		.Times(1);
-
+		.Times(20);
 	EXPECT_CALL(ssd, read(_))
-		.Times(1)
+		.Times(10)
 		.WillRepeatedly(Return("0xAAAABBBB"));
-
-	ReadCommand readCommad(ssd);
-	WriteCommand writeCommad(ssd);
-	ICommandFactory& factory = CommandFactory::getInstance();
-	factory.injectCommand("read", &readCommad);
-	factory.injectCommand("write", &writeCommad);
 	
-	ScriptLauncher launcher(ssd, "TestScript1");
-	
-	EXPECT_NO_THROW(launcher.load());
+	EXPECT_NO_THROW(launcher.compile());
 	EXPECT_EQ(launcher.getHelp(), "HELP MESSAGE");
+
+	internal::CaptureStdout();
+
 	EXPECT_NO_THROW(launcher.execute({}));
+	EXPECT_NO_THROW(launcher.execute({}));
+
+	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...Pass\nTestScript1 --- Run...Pass\n");
+}
+
+TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
+	EXPECT_CALL(ssd, write(_, _))
+		.Times(10);
+	EXPECT_CALL(ssd, read(_))
+		.Times(3)
+		.WillRepeatedly(Return("0xAAAAAAAA"));
+	
+	EXPECT_NO_THROW(launcher.compile());
+
+	internal::CaptureStdout();
+
+	EXPECT_THROW(launcher.execute({}), logic_error);
+
+	EXPECT_EQ(internal::GetCapturedStdout(), "TestScript1 --- Run...FAIL!\n");
 }

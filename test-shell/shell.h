@@ -23,12 +23,14 @@ public:
 	void help();
 	void loadSequence(const string& filePath);
 	const list<string>& getSequence() const;
+	unsigned int loadScripts(ISSD& ssd);
 
 protected:
 	void verifySequenceFilePath(const string& filePath) const;
 	ILogger& logger;
 
 private:
+
 	ICommandFactory& _factory;
 	list<string> _sequence;
 };

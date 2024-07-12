@@ -43,6 +43,8 @@ void TestApp2Command::execute(const vector<string>& args)
 
 	printResult(true);
 
+	getSSD().flush();
+
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Execute()");
 }
 
