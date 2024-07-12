@@ -152,8 +152,9 @@ unsigned int Shell::loadScripts(ISSD& ssd)
 				_factory.injectCommand(scriptName, launcher);
 				rst++;
 			}
-			catch (exception&) {
+			catch (exception& ex) {
 				delete launcher;
+				logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, scriptName + " compile failed -> " + ex.what());
 			}
 		}
 	}
