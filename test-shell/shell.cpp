@@ -62,6 +62,9 @@ void Shell::run()
 		catch (invalid_argument& ex) {
 			cout << ex.what() << endl;
 		}
+		catch (exception& ex) {
+			logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, commandStr + " -> " + ex.what());
+		}
 	}
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Run()");
 }
