@@ -92,6 +92,12 @@ shared_ptr<ScriptLauncher::Invoker::Builder> ScriptLauncher::Invoker::Builder::n
 	return shared_ptr<Builder>{new Builder()};
 }
 
+ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::name(const string& value)
+{
+	_name = value;
+	return *this;
+}
+
 ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::cmd(const string& value)
 {
 	_cmd = value;
@@ -142,6 +148,11 @@ void ScriptLauncher::Invoker::invoke()
 	endStreamCapture();
 
 	verify();
+}
+
+const string& ScriptLauncher::Invoker::getName()
+{
+	return _name;
 }
 
 ScriptLauncher::Invoker::Invoker()
