@@ -50,7 +50,9 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"
-xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
+xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"
+del /q /f "$(ProjectDir)*.txt"
+del /q /f "$(OutDir)*.txt"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -73,7 +75,9 @@ xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"
-xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
+xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"
+del /q /f "$(ProjectDir)*.txt"
+del /q /f "$(OutDir)*.txt"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,7 +98,9 @@ xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"
-xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
+xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"
+del /q /f "$(ProjectDir)*.txt"
+del /q /f "$(OutDir)*.txt"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -118,7 +124,9 @@ xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "$(ProjectDir)*.lst" "$(OutDir)"
-xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
+xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"
+del /q /f "$(ProjectDir)*.txt"
+del /q /f "$(OutDir)*.txt"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

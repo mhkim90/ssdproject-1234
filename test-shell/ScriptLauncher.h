@@ -25,15 +25,18 @@ private:
 			unsigned int end;
 		} address;
 		string value;
+		bool used;
 	};
 
 	class Invoker {
 	public:
 		void invoke();
+		const string& getName();
 
 		class Builder {
 		public:
 			static shared_ptr<Builder> newInstance();
+			Builder& name(const string& value);
 			Builder& cmd(const string& value);
 			Builder& args(const Args& value);
 			Builder& tryCnt(unsigned int value);
@@ -43,6 +46,7 @@ private:
 		private:
 			Builder();
 
+			string _name;
 			string _cmd;
 			Args _args;
 			unsigned int _tryCnt;
@@ -55,6 +59,7 @@ private:
 		void endStreamCapture();
 		void verify();
 
+		string _name;
 		string _cmd;
 		Args _args;
 		unsigned int _tryCnt;

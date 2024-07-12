@@ -6,6 +6,7 @@
 #include "../test-shell/command_factory.h"
 #include "../test-shell/ReadCommand.h"
 #include "../test-shell/WriteCommand.h"
+#include "../test-shell/FlushCommand.h"
 #include "../test-shell/ScriptLauncher.h"
 #include "../test-shell/shell.h"
 
@@ -26,6 +27,7 @@ public:
 		: ssd{}
 		, readCommad(ssd)
 		, writeCommad(ssd)
+		, flushCommad(ssd)
 		, factory { CommandFactory::getInstance() }
 		, launcher { ssd, "TestScript1" }
 	{
@@ -34,6 +36,7 @@ public:
 	MockSSD ssd;
 	ReadCommand readCommad;
 	WriteCommand writeCommad;
+	FlushCommand flushCommad;
 	ICommandFactory& factory;
 	ScriptLauncher launcher;
 
@@ -41,6 +44,7 @@ protected:
 	void SetUp() override {
 		factory.injectCommand("read", &readCommad);
 		factory.injectCommand("write", &writeCommad);
+		factory.injectCommand("flush", &flushCommad);
 	}
 };
 
@@ -51,6 +55,8 @@ TEST_F(ScriptLauncherFixture, TestScript1_NORMAL) {
 	EXPECT_CALL(ssd, read(_))
 		.Times(10)
 		.WillRepeatedly(Return("0xAAAABBBB"));
+	EXPECT_CALL(ssd, flush)
+		.Times(2);
 	
 	EXPECT_NO_THROW(launcher.compile());
 	EXPECT_EQ(launcher.getHelp(), "HELP MESSAGE");
@@ -69,6 +75,8 @@ TEST_F(ScriptLauncherFixture, TestScript1_VERIFY_FAIL) {
 	EXPECT_CALL(ssd, read(_))
 		.Times(3)
 		.WillRepeatedly(Return("0xAAAAAAAA"));
+	EXPECT_CALL(ssd, flush())
+		.Times(0);
 	
 	EXPECT_NO_THROW(launcher.compile());
 
