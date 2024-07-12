@@ -55,6 +55,8 @@ TEST_F(TestApp2Fixture, TestApp2TestSuccess) {
 			EXPECT_CALL(ssdMock, read(lba))
 				.WillRepeatedly(Return("0x12345678"));
 		}
+
+		EXPECT_CALL(ssdMock, flush());
 	}
 
 	ta2Cmd.execute(arg);

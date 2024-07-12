@@ -229,6 +229,9 @@ TEST_F(ShellRunSeqFixutre, RUN_SEQ) {
 		return string{ "0x12345678" };
 			}));
 
+	EXPECT_CALL(mockSSD, flush())
+		.Times(2);
+
 	internal::CaptureStdout();
 	EXPECT_NO_THROW(shell.runSequence("test_run_list.lst"));
 

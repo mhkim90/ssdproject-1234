@@ -66,6 +66,7 @@ protected:
 TEST_F(TestApp1Fixture, Shell_TestApp1_Execute_Success) {
 	string expected = fullWrite(TEST_VAL);
 	fullRead(TEST_VAL);
+	EXPECT_CALL(ssdMock, flush());
 
 	testing::internal::CaptureStdout();
 	testApp1.execute({ });
