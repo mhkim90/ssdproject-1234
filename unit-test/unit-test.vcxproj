@@ -140,7 +140,7 @@ xcopy /Y "$(ProjectDir)*.json" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="run_list.lst" />
+    <None Include="test_run_list.lst" />
     <None Include="TestScript1.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

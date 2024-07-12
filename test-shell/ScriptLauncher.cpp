@@ -3,6 +3,8 @@
 #include <fstream>
 #include <filesystem>
 #include <stdexcept>
+#include <numeric>
+#include <functional>
 #include "command_factory.h"
 
 using json = nlohmann::json;
@@ -20,7 +22,7 @@ void ScriptLauncher::execute(const vector<string>& args)
 
 	try {
 		for (auto& invoker : _seq) {
-			invoker->run();
+			invoker->invoke();
 		}
 	}
 	catch (exception& ex) {
@@ -37,7 +39,7 @@ const string& ScriptLauncher::getHelp()
 	return _help;
 }
 
-ScriptLauncher& ScriptLauncher::load()
+ScriptLauncher& ScriptLauncher::compile()
 {
 	_seq.clear();
 
@@ -57,20 +59,24 @@ ScriptLauncher& ScriptLauncher::load()
 
 		_help = jdata["help"];
 		for (auto& seqNode : jdata["seq"]) {
+			Args args{};
+			args.address.begin = seqNode["args"]["address"]["begin"];
+			args.address.end = seqNode["args"]["address"]["end"];
+
+			const auto& valueNode = seqNode["args"]["value"];
+			if (valueNode.is_null() == false) args.value = valueNode;
+
 			auto invoker = Invoker::Builder::newInstance()->cmd(seqNode["cmd"])
-				.args(seqNode["args"].get<vector<string>>())
+				.args(args)
 				.tryCnt(seqNode["tryCnt"])
-				.verify(seqNode["verify"].is_null() ? nullptr : seqNode["verify"].get<string>().c_str())
+				.verify(seqNode["verify"].get<vector<string>>())
 				.build();
 
 			_seq.push_back(invoker);
 		}
 	}
-	catch (exception& ex) {
-		throw logic_error{ ex.what() };
-	}
-	catch (...) {
-		throw logic_error("script json data load failed.");
+	catch (exception&) {
+		throw logic_error("script json data compile failed.");
 	}
 
 	return *this;
@@ -92,7 +98,7 @@ ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::cmd(const st
 	return *this;
 }
 
-ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::args(const vector<string>& value)
+ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::args(const Args& value)
 {
 	_args = value;
 	return *this;
@@ -104,10 +110,9 @@ ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::tryCnt(unsig
 	return *this;
 }
 
-ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::verify(const char* value)
+ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::verify(const vector<string>& value)
 {
-	if (nullptr == value) return *this;
-	_verify = shared_ptr<string>{ new string {value} };
+	_verify = shared_ptr<vector<string>>{ new vector<string> {value} };
 	return *this;
 }
 
@@ -121,14 +126,18 @@ shared_ptr<ScriptLauncher::Invoker> ScriptLauncher::Invoker::Builder::build()
 	return rst;
 }
 
-void ScriptLauncher::Invoker::run()
+void ScriptLauncher::Invoker::invoke()
 {
 	auto& factory = CommandFactory::getInstance();
 
 	beginStreamCapture();
 	for (unsigned int cnt = 0; cnt < _tryCnt; ++cnt) {
 		ICommand* command = factory.getCommand(_cmd);
-		command->execute(_args);
+		for (unsigned int addr = _args.address.begin; addr <= _args.address.end; ++addr) {
+			vector<string> args{ to_string(addr) };
+			if (_args.value.empty() == false) args.push_back(_args.value);
+			command->execute(args);
+		}
 	}
 	endStreamCapture();
 
@@ -155,12 +164,29 @@ void ScriptLauncher::Invoker::endStreamCapture()
 void ScriptLauncher::Invoker::verify()
 {
 	if (_verify == nullptr) return;
-	if ((*_verify) == _osstream.str()) return;
+	if (_verify->empty()) return;
+
+	vector<string> actual;
+	istringstream isstream{ _osstream.str() };
+	string buffer;
+	while (getline(isstream, buffer, '\n')) {
+		if (buffer.empty()) continue;
+		actual.push_back(buffer);
+	}
+
+	if ((*_verify) == actual) return;
+
+	auto joindVerify = accumulate(next(_verify->begin()), _verify->end(),
+		(*_verify)[0],
+		[](const string& a, const string& b) { return a + ',' + b; });
+	auto joindActual = accumulate(next(actual.begin()), actual.end(),
+		actual[0],
+		[](const string& a, const string& b) { return a + ',' + b; });
 
 	throw logic_error(
 		"verify failed!\n---check value---\n"
-		+ (*_verify)
+		+ joindVerify
 		+ "\n---logic value---\n"
-		+ _osstream.str()
+		+ joindActual
 	);
 }

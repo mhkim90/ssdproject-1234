@@ -7,14 +7,15 @@ int main(int argc, char* argv[]) {
 	ISSD& ssd = SSDLib::getInstance();
 	factory.initialize(&ssd);
 
-	Shell* shell = new Shell(factory);
+	Shell shell{ factory };
+	shell.loadScripts(ssd);
 
 	if (argc > 1) {
-		shell->runSequence(argv[1]);
+		shell.runSequence(argv[1]);
 		return 0;
 	}
 
-	shell->run();
+	shell.run();
 	
 	return 0;
 }	

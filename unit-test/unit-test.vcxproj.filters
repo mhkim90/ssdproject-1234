@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="run_list.lst">
+    <None Include="test_run_list.lst">
       <Filter>리소스 파일</Filter>
     </None>
     <None Include="TestScript1.json">

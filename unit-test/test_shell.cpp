@@ -189,7 +189,7 @@ TEST_F(ShellFixutre, RUN_SEQUENCE_INVALID_FILE_PATH) {
 }
 
 TEST_F(ShellFixutre, LOAD_SEQ) {
-	EXPECT_NO_THROW(shell.loadSequence("run_list.lst"));
+	EXPECT_NO_THROW(shell.loadSequence("test_run_list.lst"));
 	EXPECT_EQ(shell.getSequence().size(), 2);
 	EXPECT_THAT(shell.getSequence(), Contains("testapp1"));
 	EXPECT_THAT(shell.getSequence(), Contains("testapp2"));
@@ -222,15 +222,21 @@ TEST_F(ShellRunSeqFixutre, RUN_SEQ) {
 
 	EXPECT_CALL(mockSSD, read(_))
 		.WillRepeatedly(InvokeWithoutArgs([&readCallCount]() {
-			if (readCallCount < 100) {
-				++readCallCount;
-				return string{ "0xAAAABBBB" };
-			}
-			return string{ "0x12345678" };
-		}));
+		if (readCallCount < 100) {
+			++readCallCount;
+			return string{ "0xAAAABBBB" };
+		}
+		return string{ "0x12345678" };
+			}));
 
 	internal::CaptureStdout();
-	EXPECT_NO_THROW(shell.runSequence("run_list.lst"));
+	EXPECT_NO_THROW(shell.runSequence("test_run_list.lst"));
 
 	EXPECT_EQ(internal::GetCapturedStdout(), "testapp1 --- Run...Pass\ntestapp2 --- Run...Pass\n");
+}
+
+TEST_F(ShellRunSeqFixutre, LOAD_SCRIPTS) {
+	EXPECT_EQ(shell.loadScripts(mockSSD), 1);
+	EXPECT_NO_THROW(factory.getCommand("TestScript1"));
+	EXPECT_THAT(factory.getCommand("TestScript1"), NotNull());
 }

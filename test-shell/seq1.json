@@ -44,5 +44,5 @@
       ]
     }
   ],
-  "help": "HELP MESSAGE"
+  "help": "Write0~9 -> Read1~3 -> Read9"
 }

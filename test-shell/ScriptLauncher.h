@@ -16,29 +16,37 @@ public:
 	virtual void execute(const vector<string>& args) override;
 	virtual const string& getHelp() override;
 
-	ScriptLauncher& load();
+	ScriptLauncher& compile();
 
 private:
+	struct Args {
+		struct Address {
+			unsigned int begin;
+			unsigned int end;
+		} address;
+		string value;
+	};
+
 	class Invoker {
 	public:
-		void run();
+		void invoke();
 
 		class Builder {
 		public:
 			static shared_ptr<Builder> newInstance();
 			Builder& cmd(const string& value);
-			Builder& args(const vector<string>& value);
+			Builder& args(const Args& value);
 			Builder& tryCnt(unsigned int value);
-			Builder& verify(const char* value);
+			Builder& verify(const vector<string>& value);
 			shared_ptr<Invoker> build();
 
 		private:
 			Builder();
 
 			string _cmd;
-			vector<string> _args;
+			Args _args;
 			unsigned int _tryCnt;
-			shared_ptr<string> _verify;
+			shared_ptr<vector<string>> _verify;
 		};
 
 	private:
@@ -48,9 +56,9 @@ private:
 		void verify();
 
 		string _cmd;
-		vector<string> _args;
+		Args _args;
 		unsigned int _tryCnt;
-		shared_ptr<string> _verify;
+		shared_ptr<vector<string>> _verify;
 
 		ostringstream _osstream;
 		streambuf* _befoBuffer;
