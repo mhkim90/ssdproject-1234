@@ -29,19 +29,31 @@
       ]
     },
     {
-      "cmd": "read",
-      "args": {
-        "address": {
-          "begin": 9,
-          "end": 9
+        "cmd": "read",
+        "args": {
+            "address": {
+                "begin": 9,
+                "end": 9
+            },
+            "value": null
         },
-        "value": null
-      },
-      "tryCnt": 2,
-      "verify": [
-        "0xAAAABBBB",
-        "0xAAAABBBB"
-      ]
+        "tryCnt": 2,
+        "verify": [
+            "0xAAAABBBB",
+            "0xAAAABBBB"
+        ]
+    },
+    {
+        "cmd": "flush",
+        "args": {
+            "address": {
+                "begin": 0,
+                "end": 0
+            },
+            "value": null
+        },
+        "tryCnt": 1,
+        "verify": []
     }
   ],
   "help": "Write0~9 -> Read1~3 -> Read9"
