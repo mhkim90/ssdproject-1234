@@ -24,7 +24,7 @@ public:
 
 	bool checkWriteIgnorable(int i, CmdOpcode opcode, int& lba, int eraseRange);
 
-	bool checkDuplicatedWrite(int i, int& lba);
+	bool checkDuplicatedWrite(CmdOpcode opcode, int i, int& lba);
 
 	void updateLastEraseCmd(int lba, std::string data);
 
