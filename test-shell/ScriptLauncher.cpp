@@ -20,15 +20,15 @@ void ScriptLauncher::execute(const vector<string>& args)
 {
 	printRun();
 
-	try {
-		for (auto& invoker : _seq) {
+	for (auto& invoker : _seq) {
+		try {
 			invoker->invoke();
 		}
-	}
-	catch (exception& ex) {
-		// TODO: logger(ex.what())
-		printResult(false);
-		throw logic_error{ ex.what() };
+		catch (exception& ex) {
+			logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "seq." + invoker->getName() + " invoke failed -> " + ex.what());
+			printResult(false);
+			throw logic_error{ ex.what() };
+		}
 	}
 
 	printResult(true);
@@ -60,13 +60,18 @@ ScriptLauncher& ScriptLauncher::compile()
 		_help = jdata["help"];
 		for (auto& seqNode : jdata["seq"]) {
 			Args args{};
-			args.address.begin = seqNode["args"]["address"]["begin"];
-			args.address.end = seqNode["args"]["address"]["end"];
+			args.used = seqNode["args"]["used"].is_boolean() ? seqNode["args"]["used"].get<bool>() : false;
 
-			const auto& valueNode = seqNode["args"]["value"];
-			if (valueNode.is_null() == false) args.value = valueNode;
+			if (args.used) {
+				args.address.begin = seqNode["args"]["address"]["begin"];
+				args.address.end = seqNode["args"]["address"]["end"];
 
-			auto invoker = Invoker::Builder::newInstance()->cmd(seqNode["cmd"])
+				const auto& valueNode = seqNode["args"]["value"];
+				if (valueNode.is_null() == false) args.value = valueNode;
+			}
+
+			auto invoker = Invoker::Builder::newInstance()->name(seqNode["name"])
+				.cmd(seqNode["cmd"])
 				.args(args)
 				.tryCnt(seqNode["tryCnt"])
 				.verify(seqNode["verify"].get<vector<string>>())
@@ -90,6 +95,12 @@ ScriptLauncher::Invoker::Builder::Builder()
 shared_ptr<ScriptLauncher::Invoker::Builder> ScriptLauncher::Invoker::Builder::newInstance()
 {
 	return shared_ptr<Builder>{new Builder()};
+}
+
+ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::name(const string& value)
+{
+	_name = value;
+	return *this;
 }
 
 ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::cmd(const string& value)
@@ -119,6 +130,7 @@ ScriptLauncher::Invoker::Builder& ScriptLauncher::Invoker::Builder::verify(const
 shared_ptr<ScriptLauncher::Invoker> ScriptLauncher::Invoker::Builder::build()
 {
 	shared_ptr<Invoker> rst{ new Invoker() };
+	rst->_name = _name;
 	rst->_cmd = _cmd;
 	rst->_args = _args;
 	rst->_tryCnt = _tryCnt;
@@ -133,15 +145,26 @@ void ScriptLauncher::Invoker::invoke()
 	beginStreamCapture();
 	for (unsigned int cnt = 0; cnt < _tryCnt; ++cnt) {
 		ICommand* command = factory.getCommand(_cmd);
-		for (unsigned int addr = _args.address.begin; addr <= _args.address.end; ++addr) {
-			vector<string> args{ to_string(addr) };
-			if (_args.value.empty() == false) args.push_back(_args.value);
-			command->execute(args);
+		if (_args.used) {
+			for (unsigned int addr = _args.address.begin; addr <= _args.address.end; ++addr) {
+				vector<string> args{ to_string(addr) };
+				if (_args.value.empty() == false) args.push_back(_args.value);
+				command->execute(args);
+			}
+		}
+		else
+		{
+			command->execute({});
 		}
 	}
 	endStreamCapture();
 
 	verify();
+}
+
+const string& ScriptLauncher::Invoker::getName()
+{
+	return _name;
 }
 
 ScriptLauncher::Invoker::Invoker()

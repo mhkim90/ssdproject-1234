@@ -84,7 +84,9 @@
       <AdditionalDependencies>logger.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(OutDir)$(ProjectName).exe" "$(SolutionDir)test-shell"</Command>
+      <Command>xcopy /Y "$(OutDir)$(ProjectName).exe" "$(SolutionDir)test-shell"
+del /q /f "$(ProjectDir)*.txt"
+del /q /f "$(OutDir)*.txt"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -105,7 +107,9 @@
       <AdditionalDependencies>logger.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(OutDir)$(ProjectName).exe" "$(SolutionDir)test-shell"</Command>
+      <Command>xcopy /Y "$(OutDir)$(ProjectName).exe" "$(SolutionDir)test-shell"
+del /q /f "$(ProjectDir)*.txt"
+del /q /f "$(OutDir)*.txt"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -122,7 +126,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(OutDir)$(ProjectName).exe" "$(SolutionDir)test-shell"</Command>
+      <Command>xcopy /Y "$(OutDir)$(ProjectName).exe" "$(SolutionDir)test-shell"
+del /q /f "$(ProjectDir)*.txt"
+del /q /f "$(OutDir)*.txt"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,7 +149,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(OutDir)$(ProjectName).exe" "$(SolutionDir)test-shell"</Command>
+      <Command>xcopy /Y "$(OutDir)$(ProjectName).exe" "$(SolutionDir)test-shell"
+del /q /f "$(ProjectDir)*.txt"
+del /q /f "$(OutDir)*.txt"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

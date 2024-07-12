@@ -62,6 +62,9 @@ void Shell::run()
 		catch (invalid_argument& ex) {
 			cout << ex.what() << endl;
 		}
+		catch (exception& ex) {
+			logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, commandStr + " -> " + ex.what());
+		}
 	}
 	logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, "End Run()");
 }
@@ -152,8 +155,9 @@ unsigned int Shell::loadScripts(ISSD& ssd)
 				_factory.injectCommand(scriptName, launcher);
 				rst++;
 			}
-			catch (exception&) {
+			catch (exception& ex) {
 				delete launcher;
+				logger.printLog(PRINT_TYPE::FILE, __FUNCTION__, scriptName + " compile failed -> " + ex.what());
 			}
 		}
 	}

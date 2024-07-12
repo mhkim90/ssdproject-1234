@@ -1,25 +1,29 @@
 {
   "seq": [
     {
+      "name":  "write1",
       "cmd": "write",
       "args": {
         "address": {
           "begin": 0,
           "end": 9
         },
-        "value": "0xAAAABBBB"
+        "value": "0xAAAABBBB",
+        "used": true
       },
       "tryCnt": 1,
       "verify": []
     },
     {
+      "name": "read1",
       "cmd": "read",
       "args": {
         "address": {
           "begin": 1,
           "end": 3
         },
-        "value": null
+        "value": null,
+        "used": true
       },
       "tryCnt": 1,
       "verify": [
@@ -29,32 +33,31 @@
       ]
     },
     {
-        "cmd": "read",
-        "args": {
-            "address": {
-                "begin": 9,
-                "end": 9
-            },
-            "value": null
+      "name": "read2",
+      "cmd": "read",
+      "args": {
+        "address": {
+          "begin": 9,
+          "end": 9
         },
-        "tryCnt": 2,
-        "verify": [
-            "0xAAAABBBB",
-            "0xAAAABBBB"
-        ]
+        "value": null,
+        "used": true
+      },
+      "tryCnt": 2,
+      "verify": [
+        "0xAAAABBBB",
+        "0xAAAABBBB"
+      ]
     },
     {
-        "cmd": "flush",
-        "args": {
-            "address": {
-                "begin": 0,
-                "end": 0
-            },
-            "value": null
-        },
-        "tryCnt": 1,
-        "verify": []
+      "name": "flush",
+      "cmd": "flush",
+      "args": {
+        "used": false
+      },
+      "tryCnt": 1,
+      "verify": []
     }
   ],
-  "help": "Write0~9 -> Read1~3 -> Read9"
+  "help": "Write0~9 -> Read1~3 -> Read9 -> flush"
 }
