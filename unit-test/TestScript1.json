@@ -1,25 +1,29 @@
 {
   "seq": [
     {
+      "name": "wirte0-9",
       "cmd": "write",
       "args": {
         "address": {
           "begin": 0,
           "end": 9
         },
-        "value": "0xAAAABBBB"
+        "value": "0xAAAABBBB",
+        "used": true
       },
       "tryCnt": 1,
       "verify": []
     },
     {
+      "name": "read1-3",
       "cmd": "read",
       "args": {
         "address": {
           "begin": 1,
           "end": 3
         },
-        "value": null
+        "value": null,
+        "used": true
       },
       "tryCnt": 1,
       "verify": [
@@ -29,19 +33,30 @@
       ]
     },
     {
+      "name": "read9",
       "cmd": "read",
       "args": {
         "address": {
           "begin": 9,
           "end": 9
         },
-        "value": null
+        "value": null,
+        "used": true
       },
       "tryCnt": 2,
       "verify": [
         "0xAAAABBBB",
         "0xAAAABBBB"
       ]
+    },
+    {
+      "name": "flush",
+      "cmd": "flush",
+      "args": {
+        "used": false
+      },
+      "tryCnt": 1,
+      "verify": []
     }
   ],
   "help": "HELP MESSAGE"
